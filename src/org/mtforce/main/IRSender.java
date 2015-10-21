@@ -1,6 +1,5 @@
 package org.mtforce.main;
 
-
 public class IRSender {
 	private int start;
 	private double data;
