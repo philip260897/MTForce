@@ -2,10 +2,7 @@ package org.mtforce.sensors;
 
 public class DistanceSensor implements Sensor{
 
-	public DistanceSensor()
-	{
-		
-	}
+	
 	
 	@Override
 	public void init() {
