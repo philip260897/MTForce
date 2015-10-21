@@ -1,4 +1,6 @@
-package org.mtforce.main;
+package org.mtforce.sensors;
+
+import org.mtforce.main.GPIOManager;
 
 public class IRSender implements Sensor{
 	private int start;

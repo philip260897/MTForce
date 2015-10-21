@@ -1,4 +1,4 @@
-package org.mtforce.main;
+package org.mtforce.sensors;
 
 public interface Sensor {
 
