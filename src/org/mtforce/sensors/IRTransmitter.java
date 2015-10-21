@@ -2,7 +2,7 @@ package org.mtforce.sensors;
 
 import org.mtforce.main.GPIOManager;
 
-public class IRSender implements Sensor{
+public class IRTransmitter implements Sensor{
 	private int start;
 	private double data;
 	public double setOn() {
