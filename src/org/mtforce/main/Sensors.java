@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.mtforce.sensors.DistanceSensor;
 import org.mtforce.sensors.IRTransmitter;
+import org.mtforce.sensors.LightSensor;
 import org.mtforce.sensors.Sensor;
 
 public class Sensors 
@@ -13,11 +14,13 @@ public class Sensors
 	
 	private static DistanceSensor distanceSensor = new DistanceSensor();
 	private static IRTransmitter irTransmitter = new IRTransmitter();
+	private static LightSensor lightSensor = new LightSensor();
 	
 	public static void initialize()
 	{
 		sensorList.add(distanceSensor);
 		sensorList.add(irTransmitter);
+		sensorList.add(lightSensor);
 		
 		for(Sensor sensor : sensorList)
 			sensor.update();
@@ -29,6 +32,10 @@ public class Sensors
 			sensor.update();
 	}
 
+	public static Sensor[] getSensors() {
+		return sensorList.toArray(new Sensor[sensorList.size()]);
+	}
+	
 	public static DistanceSensor getDistanceSensor() {
 		return distanceSensor;
 	}
