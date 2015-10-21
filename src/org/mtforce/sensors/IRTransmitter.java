@@ -1,13 +1,15 @@
 package org.mtforce.sensors;
 
-import org.mtforce.main.GPIOManager;
+import org.mtforce.interfaces.GPIOManager;
 
-public class IRTransmitter implements Sensor{
+public class IRTransmitter implements Sensor
+{
 	private int start;
 	private double data;
-	public double setOn() {
-		data = GPIOManager.write();
-		return data;
+	
+	public void setOn() 
+	{
+		byte[] data = GPIOManager.write(new byte[3]);
 	}
 	
 	@Override
