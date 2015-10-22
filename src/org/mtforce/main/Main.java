@@ -1,6 +1,5 @@
 package org.mtforce.main;
 
-import org.mtforce.interfaces.SPIManager;
 import org.mtforce.sensors.Sensor;
 
 public class Main 

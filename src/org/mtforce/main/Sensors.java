@@ -29,9 +29,7 @@ public final class Sensors
 		sensorList.add(lightSensor);
 		
 		for(Sensor sensor : sensorList)
-			sensor.update();
-		
-		//SPIManager.initialize();
+			sensor.init();
 	}
 	
 	public static void updateAll()
