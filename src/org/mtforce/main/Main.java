@@ -14,7 +14,7 @@ public class Main
 			
 			
 			for(Sensor sensor : Sensors.getSensors())
-				System.out.println("Registered: "+sensor.getClass().getSimpleName());
+				System.out.println("Registeredd: "+sensor.getClass().getSimpleName());
 		}
 		catch(Exception ex)
 		{
