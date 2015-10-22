@@ -3,6 +3,7 @@ package org.mtforce.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mtforce.interfaces.SPIManager;
 import org.mtforce.sensors.DistanceSensor;
 import org.mtforce.sensors.IRTransmitter;
 import org.mtforce.sensors.LightSensor;
@@ -21,7 +22,7 @@ public final class Sensors
 		
 	}
 	
-	public static void initialize()
+	public static void initialize() throws Exception
 	{
 		sensorList.add(distanceSensor);
 		sensorList.add(irTransmitter);
@@ -29,6 +30,8 @@ public final class Sensors
 		
 		for(Sensor sensor : sensorList)
 			sensor.update();
+		
+		//SPIManager.initialize();
 	}
 	
 	public static void updateAll()
