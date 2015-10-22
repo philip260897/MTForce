@@ -8,13 +8,18 @@ import org.mtforce.sensors.IRTransmitter;
 import org.mtforce.sensors.LightSensor;
 import org.mtforce.sensors.Sensor;
 
-public class Sensors 
+public final class Sensors 
 {
 	private static List<Sensor> sensorList = new ArrayList<Sensor>();
 	
 	private static DistanceSensor distanceSensor = new DistanceSensor();
 	private static IRTransmitter irTransmitter = new IRTransmitter();
 	private static LightSensor lightSensor = new LightSensor();
+	
+	private Sensors()
+	{
+		
+	}
 	
 	public static void initialize()
 	{
