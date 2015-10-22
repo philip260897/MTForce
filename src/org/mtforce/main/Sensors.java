@@ -28,7 +28,7 @@ public final class Sensors
 		sensorList.add(lightSensor);
 		
 		for(Sensor sensor : sensorList)
-			sensor.update();
+			sensor.init();
 	}
 	
 	public static void updateAll()
