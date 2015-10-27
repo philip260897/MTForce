@@ -6,20 +6,16 @@ import com.pi4j.wiringpi.I2C;
 import com.pi4j.wiringpi.Spi;
 public class I2CManager 
 {
+	private static I2CBus bus;
+	
+    public static void initialize() throws Exception
+    {
+    	
+    }  
+    
 	public static byte[] write(byte[] packets)
 	{
 		
 		return null;
 	}
-	private static int CHANNEL = 0;
-	private static int CLOCK = 10000000;
-	
-    public static void initialize() throws Exception
-    {
-        int fd = I2C.wiringPiI2CSetup(0); //0 = Falsch
-        if (fd <= -1) {
-            throw new Exception("I2CManager initializing failed. Is it not enabled on the RPI?");
-        }
-        System.out.println(fd);
-    }   
 }
