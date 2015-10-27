@@ -8,6 +8,7 @@ import org.mtforce.interfaces.SPIManager;
 import org.mtforce.sensors.DistanceSensor;
 import org.mtforce.sensors.IRTransmitter;
 import org.mtforce.sensors.LightSensor;
+import org.mtforce.sensors.MCP23017Manager;
 import org.mtforce.sensors.Sensor;
 
 public final class Sensors 
@@ -17,6 +18,7 @@ public final class Sensors
 	private static DistanceSensor distanceSensor = new DistanceSensor();
 	private static IRTransmitter irTransmitter = new IRTransmitter();
 	private static LightSensor lightSensor = new LightSensor();
+	private static MCP23017Manager MCP23017Sensor = new MCP23017Manager();
 	
 	private Sensors()
 	{
@@ -28,6 +30,7 @@ public final class Sensors
 		sensorList.add(distanceSensor);
 		sensorList.add(irTransmitter);
 		sensorList.add(lightSensor);
+		sensorList.add(MCP23017Sensor);
 		
 		for(Sensor sensor : sensorList)
 			sensor.init();
