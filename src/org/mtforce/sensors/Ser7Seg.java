@@ -29,16 +29,18 @@ public class Ser7Seg implements Sensor
 	public void init() {
 		// TODO Auto-generated method stub
 		//initiation of the max 7219
-		maxSingle(max7219_reg_scanLimit, (byte)0x07);      
-		maxSingle(max7219_reg_decodeMode, (byte)0xff);  // using an digits
-		maxSingle(max7219_reg_shutdown, (byte)0x01);    // not in shutdown mode
-		maxSingle(max7219_reg_displayTest, (byte)0x00); // no display test
-		for (int e=1; e<=8; e++) {    // empty registers, turn all LEDs off 
-			maxSingle((byte)e,(byte)0);
-		}
-		maxSingle(max7219_reg_intensity, (byte)((byte)0x01 & (byte)0x0f));    // the first 0x0f is the value you can set
-	
+		SPIManager.write(max7219_reg_scanLimit, 	(byte)0x07);      
+		SPIManager.write(max7219_reg_decodeMode, 	(byte)0xff);  // using an digits
+		SPIManager.write(max7219_reg_shutdown, 		(byte)0x01);    // not in shutdown mode
+		SPIManager.write(max7219_reg_displayTest, 	(byte)0x00); // no display test
 		
+		for (int e=1; e<=8; e++) 
+		{ 
+			SPIManager.write((byte)e,(byte)0);
+		}
+		SPIManager.write(max7219_reg_intensity, (byte)((byte)0x01 & (byte)0x0f));    // the first 0x0f is the value you can set
+	
+
 	}
 
 	@Override
@@ -59,11 +61,6 @@ public class Ser7Seg implements Sensor
 	public int getNumber() {
 		return number;
 	}
-
-	private void maxSingle( byte reg, byte col) {     
-		byte[] packet = {reg, col};
-		SPIManager.write(packet);  
-	}
 	
 	private void printNumber(int number, int offset)
 	{
@@ -81,13 +78,13 @@ public class Ser7Seg implements Sensor
 	      i++;
 	   }
 
-	   maxSingle((byte) 1, digits[0]);
-	   maxSingle((byte) 2, digits[1]);
-	   maxSingle((byte) 3, digits[2]);
-	   maxSingle((byte) 4, digits[3]);
-	   maxSingle((byte) 5, digits[4]);
-	   maxSingle((byte) 6, digits[5]);
-	   maxSingle((byte) 7, digits[6]);
-	   maxSingle((byte) 8, digits[7]);
+	   SPIManager.write(max7219_reg_digit0, digits[0]);
+	   SPIManager.write(max7219_reg_digit1, digits[1]);
+	   SPIManager.write(max7219_reg_digit2, digits[2]);
+	   SPIManager.write(max7219_reg_digit3, digits[3]);
+	   SPIManager.write(max7219_reg_digit4, digits[4]);
+	   SPIManager.write(max7219_reg_digit5, digits[5]);
+	   SPIManager.write(max7219_reg_digit6, digits[6]);
+	   SPIManager.write(max7219_reg_digit7, digits[7]);
 	}
 }
