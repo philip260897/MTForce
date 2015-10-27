@@ -13,10 +13,25 @@ public class MCP23017Manager implements Sensor {
 //        this.bus = bus;
 //        this.deviceAddress = address;
 //    }
+	 private I2CDevice mcp23017;
+	 //Raspberry Pi's I2C bus
+	 private static final int i2cBus = 1;
+	 // Device address 
+	 private static final int address = 0x77;
+	 
+	 
 	@Override
 	public void init() {
 		try {
-			bus = I2CFactory.getInstance(I2CBus.BUS_1);
+			
+            bus = I2CFactory.getInstance(I2CBus.BUS_1);
+            System.out.println("Connected to bus OK!!!");
+
+            //get device itself
+            
+            mcp23017 = bus.getDevice(address);
+            System.out.println("Connected to device OK!!!");
+            
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -27,9 +42,10 @@ public class MCP23017Manager implements Sensor {
 	@Override
 	public void update() {
 		
-		int ret = I2C.i2cWriteByteDirect(bus.getFileDescriptor(), deviceAddress, (byte) 1);
-		int reader = I2C.i2cReadByteDirect(bus.getFileDescriptor(), deviceAddress);
-		System.out.println("Fehler?: "+ ret +" Daten" + reader);
+		//int ret = I2C.i2cWriteByteDirect(bus.getFileDescriptor(), deviceAddress, (byte) 1);
+		//int reader = I2C.i2cReadByteDirect(bus.getFileDescriptor(), deviceAddress);
+		//mcp23017.read(arg0, arg1, arg2)
+		//System.out.println("Fehler?: "+ ret +" Daten" + reader);
 		
 	}
 
