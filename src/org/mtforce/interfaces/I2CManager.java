@@ -18,7 +18,8 @@ public class I2CManager
     {
         int fd = I2C.wiringPiI2CSetup(0); //0 = Falsch
         if (fd <= -1) {
-            throw new Exception("SPIManager initializing failed.");
+            throw new Exception("I2CManager initializing failed. Is it not enabled on the RPI?");
         }
+        System.out.println(fd);
     }   
 }

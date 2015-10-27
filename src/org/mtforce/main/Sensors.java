@@ -3,6 +3,7 @@ package org.mtforce.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mtforce.interfaces.I2CManager;
 import org.mtforce.interfaces.SPIManager;
 import org.mtforce.sensors.DistanceSensor;
 import org.mtforce.sensors.IRTransmitter;
@@ -30,6 +31,9 @@ public final class Sensors
 		
 		for(Sensor sensor : sensorList)
 			sensor.init();
+		
+		SPIManager.initialize();
+		I2CManager.initialize();
 	}
 	
 	public static void updateAll()
