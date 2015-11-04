@@ -1,46 +1,63 @@
 package org.mtforce.sensors;
 
+import org.mtforce.interfaces.I2CManager;
+import org.mtforce.main.Main;
+
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 
-public class IOExpander implements Sensor
+public class IOExpander extends Disableable implements Sensor
 {
-    //I2C bus
-    private I2CBus bus;
-    // Device object
-    private I2CDevice device;
-    
-    private byte address = 0x20;
+    private int ADDRESS =	0x20;
+    private int GPIOA	=	0x14;
+   
+    private boolean ledState = false;
 	
 	@Override
 	public void init() {
-		try{
-	        bus = I2CFactory.getInstance(I2CBus.BUS_1);
-	        System.out.println("Connected to bus OK!!!");
-	
-	        //get device itself
-	        device = bus.getDevice((byte)0x20);
-	        System.out.println("Connected to device OK!!!");
-		}catch(Exception ex)
+
+		if(I2CManager.write(ADDRESS, GPIOA, 0x00)) 
 		{
-			ex.printStackTrace();
+			setEnabled(true);
+			setLedOn(ledState);
+		} 
+		else 
+		{
+			System.out.println(this.getClass().getSimpleName() + ": init error! Device not functional");
 		}
 	}
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		try{
-			System.out.println("I2c");
-		device.write(0x14, (byte) 0x01);
-		}catch(Exception ex){ex.printStackTrace();}
+		if(!isEnabled())
+			return;
+
 	}
 
+	public void setLedOn(boolean led)
+	{
+		if(!isEnabled())
+			return;
+		
+		byte value = 0x01;
+		if(!led)
+			value = 0x00;
+		ledState = led;
+		
+		I2CManager.write(ADDRESS, GPIOA, value);
+	}
+	
+	public boolean getLedOn() {
+		return ledState;
+	}
+	
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		if(!isEnabled())
+			return;
 		
+		I2CManager.write(ADDRESS, GPIOA, 0x00);
 	}
 
 }

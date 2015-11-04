@@ -7,15 +7,24 @@ import com.pi4j.wiringpi.Spi;
 public class I2CManager 
 {
 	private static I2CBus bus;
+	private static I2CDevice current;
 	
     public static void initialize() throws Exception
     {
-    	
+    	bus = I2CFactory.getInstance(I2CBus.BUS_1);
     }  
     
-	public static byte[] write(byte[] packets)
+	public static boolean write(int address, int reg, int val)
 	{
-		
-		return null;
+		try
+		{
+			current = bus.getDevice(address);
+			current.write(reg, (byte)val);
+		}
+		catch(Exception ex)
+		{
+			return false;
+		}
+		return true;
 	}
 }
