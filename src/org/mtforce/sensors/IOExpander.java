@@ -68,7 +68,7 @@ public class IOExpander extends Disableable implements Sensor
 			return;
 		
 		//Turn off the LED on shutdown
-		I2CManager.write(ADDRESS, GPIOA, 0x00);
+		I2CManager.write(ADDRESS, GPIOA, (byte)0x00);
 	}
 
 }
