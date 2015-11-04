@@ -8,23 +8,29 @@ import com.pi4j.wiringpi.I2C;
 import com.pi4j.wiringpi.Spi;
 public class I2CManager 
 {	
-	private I2CDevice device;
+	
 	private static I2CBus bus;
-	private static int deviceAddress;
+
+	private static I2CDevice current;
+
     public static void initialize() throws Exception
     {
-    	
+    	bus = I2CFactory.getInstance(I2CBus.BUS_1);
     }  
     
-//	public static byte[] write(byte[] packets)
-//	{
-//		
-//		return null;
-//	}
-	public void write(int address, byte data) throws IOException {
-        	
-			device.write(0x14, (byte) 0x01);
-           
-       
-    }
+
+	public static boolean write(byte address, byte reg, byte val)
+	{
+		try
+		{
+			current = bus.getDevice(address);
+			current.write(reg, (byte)val);
+		}
+		catch(Exception ex)
+		{
+			return false;
+		}
+		return true;
+	}
+
 }

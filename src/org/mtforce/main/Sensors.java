@@ -60,4 +60,10 @@ public final class Sensors
 	public static IRTransmitter getIrTransmitter() {
 		return irTransmitter;
 	}
+
+	public static IOExpander getIOExpander() {
+		return ipExp;
+	}
+	
+	
 }
