@@ -32,8 +32,8 @@ public class IOExpander implements Sensor
 	public void update() {
 		// TODO Auto-generated method stub
 		try{
-			System.out.println("I2c");
-		device.write(0x14, (byte) 0x01);
+			System.out.println("I2C");
+			device.write(0x14, (byte) 0x01);
 		}catch(Exception ex){ex.printStackTrace();}
 	}
 
