@@ -10,8 +10,8 @@ import com.pi4j.io.i2c.I2CFactory;
 public class IOExpander extends Disableable implements Sensor
 {
 	//Address and common register definition
-    private int ADDRESS =	0x20;
-    private int GPIOA	=	0x14;
+    private byte ADDRESS =	0x20;
+    private byte GPIOA	=	0x14;
    
     //track current LED State
     private boolean ledState = false;
@@ -22,7 +22,7 @@ public class IOExpander extends Disableable implements Sensor
 		//Gets called on Startup once. Check if Sensor is available and setEnabled(true);
 		
 		//Returns false if component not reachable
-		if(I2CManager.write(ADDRESS, GPIOA, 0x00)) 
+		if(I2CManager.write(ADDRESS, GPIOA, (byte)0x00)) 
 		{
 			setEnabled(true);
 			setLedOn(ledState);

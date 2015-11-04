@@ -14,7 +14,7 @@ public class I2CManager
     	bus = I2CFactory.getInstance(I2CBus.BUS_1);
     }  
     
-	public static boolean write(int address, int reg, int val)
+	public static boolean write(byte address, byte reg, byte val)
 	{
 		try
 		{
