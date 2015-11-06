@@ -24,6 +24,7 @@ public class SPIManager
 		try 
 		{
 			return spi.write(packets);
+			
 		}
 		catch (IOException e) 
 		{
