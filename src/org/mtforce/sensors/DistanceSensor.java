@@ -1,6 +1,6 @@
 package org.mtforce.sensors;
 
-public class DistanceSensor implements Sensor{
+public class DistanceSensor extends Sensor{
 
 	
 	

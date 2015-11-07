@@ -1,11 +1,38 @@
 package org.mtforce.sensors;
 
-public interface Sensor {
+public class Sensor 
+{
+	private boolean enabled = false;
 	
-	public void init();
+	public Sensor()
+	{
+		
+	}
 	
-	public void update();
+	public void init()
+	{
+		setEnabled(false);
+	}
 	
-	public void dispose();
+	public void update()
+	{
+		if(!isEnabled())
+			return;
+	}
 	
+	public void dispose()
+	{
+		if(!isEnabled())
+			return;
+	}
+	
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+	
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
+	}
 }

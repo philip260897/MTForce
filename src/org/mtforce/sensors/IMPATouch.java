@@ -1,6 +1,6 @@
 package org.mtforce.sensors;
 
-public class IMPATouch implements Sensor {
+public class IMPATouch extends Sensor {
 
 	@Override
 	public void init() {

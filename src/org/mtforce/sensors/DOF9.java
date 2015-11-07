@@ -1,6 +1,6 @@
 package org.mtforce.sensors;
 
-public class DOF9 implements Sensor {
+public class DOF9 extends Sensor {
 
 	@Override
 	public void init() {

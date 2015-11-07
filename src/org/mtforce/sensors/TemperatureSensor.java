@@ -1,6 +1,6 @@
 package org.mtforce.sensors;
 
-public class TemperatureSensor implements Sensor {
+public class TemperatureSensor extends Sensor {
 
 	@Override
 	public void init() {

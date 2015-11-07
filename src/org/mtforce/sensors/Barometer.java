@@ -1,6 +1,6 @@
 package org.mtforce.sensors;
 
-public class Barometer implements Sensor {
+public class Barometer extends Sensor {
 
 	@Override
 	public void init() {

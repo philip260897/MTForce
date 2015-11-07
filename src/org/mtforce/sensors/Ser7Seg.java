@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 import org.mtforce.interfaces.SPIManager;
 
-public class Ser7Seg extends Disableable implements Sensor
+public class Ser7Seg extends Sensor
 {
 	//Common register declaration 
 	private byte max7219_reg_noop        = 0x00;
@@ -50,6 +50,7 @@ public class Ser7Seg extends Disableable implements Sensor
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
+		super.update();
 		number++;
 		
 		clearDigits();
@@ -64,6 +65,7 @@ public class Ser7Seg extends Disableable implements Sensor
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		super.dispose();
 
 	}
 

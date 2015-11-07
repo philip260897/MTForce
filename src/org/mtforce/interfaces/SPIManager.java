@@ -12,7 +12,8 @@ public class SPIManager
 	
     public static void initialize() throws Exception
     {
-        spi = SpiFactory.getInstance(SpiChannel.CS0, SpiDevice.DEFAULT_SPI_SPEED, SpiDevice.DEFAULT_SPI_MODE);
+        spi = SpiFactory.getInstance(SpiChannel.CS0, 15600000, SpiDevice.DEFAULT_SPI_MODE);
+        
         if(spi == null)
         {
         	throw new Exception("SPI failed to initialize. Is it not enabled on the RPI?");

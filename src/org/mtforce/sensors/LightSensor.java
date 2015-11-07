@@ -1,6 +1,6 @@
 package org.mtforce.sensors;
 
-public class LightSensor implements Sensor{
+public class LightSensor extends Sensor{
 
 	@Override
 	public void init() {

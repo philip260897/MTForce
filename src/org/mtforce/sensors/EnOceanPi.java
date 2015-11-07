@@ -1,6 +1,6 @@
 package org.mtforce.sensors;
 
-public class EnOceanPi implements Sensor {
+public class EnOceanPi extends Sensor {
 
 	@Override
 	public void init() {

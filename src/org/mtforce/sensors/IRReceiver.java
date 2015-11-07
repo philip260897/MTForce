@@ -1,6 +1,6 @@
 package org.mtforce.sensors;
 
-public class IRReceiver implements Sensor {
+public class IRReceiver extends Sensor {
 
 	@Override
 	public void init() {
