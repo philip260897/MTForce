@@ -32,5 +32,18 @@ public class I2CManager
 		}
 		return true;
 	}
+	
+	public static int read(byte address, byte reg)
+	{
+		try
+		{
+			current = bus.getDevice(address);
+			return current.read(reg);
+		}
+		catch(Exception ex)
+		{
+			return -1;
+		}
+	}
 
 }

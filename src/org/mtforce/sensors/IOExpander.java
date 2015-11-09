@@ -15,6 +15,7 @@ public class IOExpander extends Sensor
    
     //track current LED State
     private boolean ledState = false;
+    private boolean buttonState = false;
 	
 	@Override
 	public void init() 
@@ -22,7 +23,7 @@ public class IOExpander extends Sensor
 		//Gets called on Startup once. Check if Sensor is available and setEnabled(true);
 		
 		//Returns false if component not reachable
-		if(I2CManager.write(ADDRESS, GPIOA, (byte)0x00)) 
+		if(I2CManager.write(ADDRESS, (byte)0x00, (byte)0xFE)) 
 		{
 			setEnabled(true);
 			setLedOn(ledState);
@@ -39,7 +40,10 @@ public class IOExpander extends Sensor
 		//Call this method to update specific data. Used to read from component and update tracking variables
 		super.update();
 		
-
+		byte button = (byte)(I2CManager.read(ADDRESS, (byte)0x12) & (byte)0x02);
+		buttonState = false;
+		if(button == 0x02)
+			buttonState = true;
 	}
 
 	public void setLedOn(boolean led)
@@ -58,6 +62,10 @@ public class IOExpander extends Sensor
 	
 	public boolean getLedOn() {
 		return ledState;
+	}
+	
+	public boolean getButtonState() {
+		return buttonState;
 	}
 	
 	@Override
