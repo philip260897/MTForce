@@ -2,10 +2,10 @@ package org.mtforce.main;
 
 public class Utils {
 	
-	public static byte[] getByte(int integer){
-		byte lastByte[] = new byte[4];
-		for(int i = 0; i<4; i++)
-			lastByte[i] = (byte) (integer >> 24-8*i);
-		return lastByte;
+	public static byte[] toBytes(int integer, int var){
+		byte lastByte[] = new byte[var];
+		for(int i = 0; i<var; i++){
+			lastByte[i] = (byte) (integer >> 24-8*(i+var)); // shifts right every iteration
+		}return lastByte;
 	}
 }
