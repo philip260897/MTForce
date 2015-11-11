@@ -33,6 +33,19 @@ public class I2CManager
 		return true;
 	}
 	
+	public static boolean write(byte address,  byte val)
+	{
+		try
+		{
+			current = bus.getDevice(address);
+			current.write((byte)val);
+		}
+		catch(Exception ex)
+		{
+			return false;
+		}
+		return true;
+	}	
 	public static int read(byte address, byte reg)
 	{
 		try
