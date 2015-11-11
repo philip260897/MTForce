@@ -4,7 +4,16 @@ public class Utils {
 	public static byte[] toBytes(int integer, int var){
 		byte lastByte[] = new byte[var];
 		for(int i = 0; i<var; i++){
-			lastByte[i] = (byte) (integer >> 24-8*(i+var)); // shifts right every iteration
+			lastByte[i] = (byte) (integer >> 24-8*(i+var)); // shifts right every iteration and copies in byte array
 		}return lastByte;
 	}
+	
+	public static int toInt(byte []b){
+		int combInt = 0;
+		for (int i=0; i<b.length; i++) {
+			combInt <<= 8;				// shifts Int left
+			combInt |= (int)b[i];		// bitwise-OR with int (can be replaced with "+")
+		  }	
+		return combInt;
+		}
 }
