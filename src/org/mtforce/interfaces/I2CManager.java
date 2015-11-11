@@ -8,9 +8,7 @@ import com.pi4j.wiringpi.I2C;
 import com.pi4j.wiringpi.Spi;
 public class I2CManager 
 {	
-	
 	private static I2CBus bus;
-
 	private static I2CDevice current;
 
     public static void initialize() throws Exception
