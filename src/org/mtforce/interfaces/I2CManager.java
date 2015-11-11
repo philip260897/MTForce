@@ -76,4 +76,20 @@ public class I2CManager
 		}
 	}
 
+	public static byte[] read(byte address, byte reg, int bytes)
+	{
+		byte[] b = new byte[bytes];
+		try
+		{
+			current = bus.getDevice(address);
+			b[0] = (byte) current.read(reg);
+			for(int i = 1; i < bytes; i++)
+				b[i] = (byte) current.read();
+			return b;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
 }
