@@ -46,6 +46,23 @@ public class I2CManager
 		}
 		return true;
 	}	
+	
+	public static boolean write(byte address, byte reg, byte...val)
+	{
+		try
+		{
+			current = bus.getDevice(address);
+			current.write(reg, val[0]);
+			for(int i = 1;i < val.length;i++)
+				current.write(val[i]);
+		}
+		catch(Exception ex)
+		{
+			return false;
+		}
+		return true;
+	}
+	
 	public static int read(byte address, byte reg)
 	{
 		try

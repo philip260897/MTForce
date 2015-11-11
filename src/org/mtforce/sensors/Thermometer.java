@@ -1,7 +1,12 @@
 package org.mtforce.sensors;
 
+import org.mtforce.interfaces.I2CManager;
+import org.mtforce.main.Utils;
+
 public class Thermometer extends Sensor 
 {
+	public static final byte ADDRESS		=	0x00;
+	
 	public static final int REG_CONF		=	0x00;	//CONFIG REGISTER ADDRESS
 	public static final int CONF_HYST_0 	= 	0x0000;	//Hysteresis 0.0°C
 	public static final int CONF_HYST_15 	= 	0x0200;	//Hysteresis 1.5°C
@@ -35,7 +40,15 @@ public class Thermometer extends Sensor
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		
+		if(I2CManager.write(ADDRESS, (byte)REG_CONF, Utils.toBytes(CONF_WIN_LOCK, 2))) 
+		{
+			setEnabled(true);
+			
+		} 
+		else 
+		{
+			System.out.println(this.getClass().getSimpleName() + ": init error! Device not functional");
+		} 
 	}
 
 	@Override
