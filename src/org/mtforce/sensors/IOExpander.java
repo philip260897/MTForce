@@ -2,6 +2,7 @@ package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Main;
+import org.mtforce.main.Utils;
 
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
@@ -25,8 +26,12 @@ public class IOExpander extends Sensor
 		//Returns false if component not reachable
 		if(I2CManager.write(ADDRESS, (byte)0x00, (byte)0xFE)) 
 		{
+			System.out.println("CHECK: "+checkRegister(GPIOA, 0, 1));
+			
 			setEnabled(true);
 			setLedOn(ledState);
+			
+			
 		} 
 		else 
 		{
@@ -77,4 +82,13 @@ public class IOExpander extends Sensor
 		I2CManager.write(ADDRESS, GPIOA, (byte)0x00);
 	}
 
+	private boolean checkRegister(byte reg, int value, int bcount)
+	{
+		byte[] txPacket = Utils.toBytes(value, bcount);
+		I2CManager.write(ADDRESS, reg, txPacket);
+		
+		byte[] rxPacket = I2CManager.read(ADDRESS, reg, bcount);
+		
+		return Utils.compareBytes(txPacket, rxPacket);
+	}
 }
