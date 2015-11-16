@@ -26,8 +26,7 @@ public class IOExpander extends Sensor
 		//Returns false if component not reachable
 		if(I2CManager.write(ADDRESS, (byte)0x00, (byte)0xFE)) 
 		{
-			System.out.println("CHECK: "+checkRegister(GPIOA, 0, 1));
-			
+			doCheck();
 			setEnabled(true);
 			setLedOn(ledState);
 			
@@ -80,6 +79,15 @@ public class IOExpander extends Sensor
 		
 		//Turn off the LED on shutdown
 		I2CManager.write(ADDRESS, GPIOA, (byte)0x00);
+	}
+	
+	public void doCheck()
+	{
+		for(byte b = 0; b < 15; b++)
+		{
+			boolean t = checkRegister(b, 0, 1);
+			System.out.println(b+": "+t);
+		}
 	}
 
 	private boolean checkRegister(byte reg, int value, int bcount)
