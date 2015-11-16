@@ -19,9 +19,7 @@ public class Utils {
 	public static byte isolateBits(byte b, int start, int stop){ // start must be smaller than stop
 		byte mask = 0x00;										 // start => 0, stop <= 7
 			for(int i = 0; i<=(stop-start); i++)
-			{
 				mask = (byte) ((mask << 1)+1); // creates a mask with (stop-start) times 1s
-			}
 			b = (byte) ((mask<<start) & b); // shifts 'start' times left and AND-Operator with b
 			return b;
 	}
