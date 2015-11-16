@@ -22,4 +22,14 @@ public class Utils {
 		byte mask = (byte) Math.pow(2, i);
 		return ((b & mask) != 0);
 	}
+	
+	public static boolean compareBytes(byte[] a, byte[] b)
+	{
+		if(a.length != b.length)
+			return false;
+		for(int i = 0; i < a.length; i++)
+			if(a[i] != b[i])
+				return false;
+		return true;
+	}
 }

@@ -63,4 +63,13 @@ public class Thermometer extends Sensor
 		super.dispose();
 		
 	}
+	
+	private boolean checkRegister(byte reg, int value, int bcount)
+	{
+		byte[] txPacket = Utils.toBytes(value, bcount);
+		I2CManager.write(ADDRESS, reg, txPacket);
+		
+		byte[] rxPacket = I2CManager.read(ADDRESS, reg, bcount);
+		
+	}
 }
