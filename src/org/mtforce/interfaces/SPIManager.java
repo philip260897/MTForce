@@ -8,7 +8,7 @@ import com.pi4j.io.spi.SpiFactory;
 
 public class SPIManager 
 {
-	public static SpiDevice spi = null;
+	private static SpiDevice spi = null;
 	
     public static void initialize() throws Exception
     {

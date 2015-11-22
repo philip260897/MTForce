@@ -56,7 +56,6 @@ public class Thermometer extends Sensor
 		super.update();
 		
 		byte[] data = I2CManager.read(ADDRESS, REG_TA, 2);
-		
 	}
 
 	@Override
