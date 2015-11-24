@@ -2,6 +2,8 @@ package org.mtforce.sensors;
 
 public class EnOceanPi extends Sensor {
 
+	public static final byte ADDRESS = 0x00;
+	
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
