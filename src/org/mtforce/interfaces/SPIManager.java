@@ -20,6 +20,7 @@ public class SPIManager
         }
     }   
 	
+    //Write packets to SPI data line. Returns result if no erros occure. Null on error
 	public static byte[] write(byte ...packets)
 	{
 		try 
