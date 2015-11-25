@@ -7,7 +7,6 @@ import org.mtforce.interfaces.I2CManager;
 import org.mtforce.interfaces.SPIManager;
 import org.mtforce.sensors.DistanceSensor;
 import org.mtforce.sensors.IOExpander;
-import org.mtforce.sensors.IRTransmitter;
 import org.mtforce.sensors.LightSensor;
 
 import org.mtforce.sensors.Sensor;
@@ -18,7 +17,6 @@ public final class Sensors
 	private static List<Sensor> sensorList = new ArrayList<Sensor>();
 	
 	private static DistanceSensor distanceSensor = new DistanceSensor();
-	private static IRTransmitter irTransmitter = new IRTransmitter();
 	private static LightSensor lightSensor = new LightSensor();
 	private static Ser7Seg ser7seg = new Ser7Seg();
 	private static IOExpander ipExp = new IOExpander();
@@ -31,7 +29,6 @@ public final class Sensors
 	public static void initialize() throws Exception
 	{
 		sensorList.add(distanceSensor);
-		sensorList.add(irTransmitter);
 		sensorList.add(lightSensor);
 		sensorList.add(ser7seg);
 		sensorList.add(ipExp);
@@ -55,10 +52,6 @@ public final class Sensors
 	
 	public static DistanceSensor getDistanceSensor() {
 		return distanceSensor;
-	}
-
-	public static IRTransmitter getIrTransmitter() {
-		return irTransmitter;
 	}
 
 	public static IOExpander getIOExpander() {
