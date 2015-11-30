@@ -18,6 +18,7 @@ public class IOExpander extends Sensor
     private boolean ledState = false;
     private boolean buttonState = false;
 	
+    
 	@Override
 	public void init() 
 	{
@@ -26,7 +27,7 @@ public class IOExpander extends Sensor
 		//Returns false if component not reachable
 		if(I2CManager.write(ADDRESS, (byte)0x00, (byte)0xFE)) 
 		{
-			doCheck();
+			//doCheck();
 			setEnabled(true);
 			setLedOn(ledState);
 			

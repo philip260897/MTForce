@@ -33,7 +33,7 @@ public class Ser7Seg extends Sensor
 	public void init() {
 		//initiation of the max 7219
 		SPIManager.write(max7219_reg_scanLimit, 	(byte)0x07);      
-		SPIManager.write(max7219_reg_decodeMode, 	(byte)0xdb); 	// using an digits
+		SPIManager.write(max7219_reg_decodeMode, 	(byte)0xff); 	// using an digits
 		SPIManager.write(max7219_reg_shutdown, 		(byte)0x01);	// not in shutdown mode
 		SPIManager.write(max7219_reg_displayTest, 	(byte)0x00);	// no display test
 		
@@ -53,11 +53,12 @@ public class Ser7Seg extends Sensor
 		super.update();
 		number++;
 		
-		clearDigits();
-		cal = Calendar.getInstance();
-		printNumber(cal.getTime().getHours(), 6);
-		printNumber(cal.getTime().getMinutes(), 3);
-		printNumber(cal.getTime().getSeconds(), 0);
+		//clearDigits();
+		//cal = Calendar.getInstance();
+		//printNumber(cal.getTime().getHours(), 6);
+		//printNumber(cal.getTime().getMinutes(), 3);
+		//printNumber(cal.getTime().getSeconds(), 0);
+		printNumber(number, 0);
 	}
 
 
@@ -110,7 +111,7 @@ public class Ser7Seg extends Sensor
 	      i++;
 	   }
 
-	   //updateUnusedDigits();
+	   updateUnusedDigits();
 	   
 	   SPIManager.write(max7219_reg_digit0, digits[0]);
 	   SPIManager.write(max7219_reg_digit1, digits[1]);
