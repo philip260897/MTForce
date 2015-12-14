@@ -1,11 +1,12 @@
 package org.mtforce.sensors;
 
+import org.mtforce.interfaces.I2CArduinoManager;
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Utils;
 
 public class Thermometer extends Sensor 
 {
-	public static final byte kgsADDRESS		=		0x00;	//Baustein-Adresse
+	public static final byte kgsADDRESS		=		0x20;	//Baustein-Adresse
 	
 	public static final byte kgsREG_CONF		=	0x00;	//Konfigurations-Register
 	public static final int kgsCONF_HYST_0 		= 	0x0000;	//Hysterese 0.0°C
@@ -36,15 +37,18 @@ public class Thermometer extends Sensor
 	public static final byte kgsREG_MANUF_ID	=	0x06;	//Hersteller-ID-Register
 	public static final byte kgsREG_DEV_ID		=	0x07;	//Baustein-ID-Register
 	
+	private int gDefaultConfiguration = kgsCONF_DEFAULT;
 	private double gTemperature = 0;						//Ausgelesener Temperaturwert
+	private String gManufacturerId;							//Manufacturer ID
+	private String gDeviceId;								//Device ID
 	
 	/**
-	 * Schreibt einen Testwert in das Konfigurationsregister und aktivier nach Erfolg den Sensor
+	 * Schreibt einen Testwert in das Konfigurationsregister und aktiviert nach Erfolg den Sensor
 	 */
 	@Override
 	public void init()
 	{
-		if(I2CManager.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(kgsCONF_DEFAULT, 2))) 
+		if(I2CArduinoManager.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(gDefaultConfiguration, 2))) 
 		{
 			setEnabled(true);
 		} 
@@ -91,4 +95,16 @@ public class Thermometer extends Sensor
 		
 		return Utils.compareBytes(txPacket, rxPacket);
 	}
+	
+	public void setConfiguration(int configuration)
+	{
+		I2CArduinoManager.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(configuration, 2));
+	}
+	
+	public void setDefaultConfiguration(int defaultConfiguration)
+	{
+		this.gDefaultConfiguration = defaultConfiguration;
+	}
+	
+	
 }

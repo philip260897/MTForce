@@ -1,6 +1,6 @@
 package org.mtforce.sensors;
 
-import org.mtforce.interfaces.I2CManager;
+import org.mtforce.interfaces.I2CArduinoManager;
 import org.mtforce.main.Main;
 import org.mtforce.main.Utils;
 
@@ -11,7 +11,7 @@ import com.pi4j.io.i2c.I2CFactory;
 public class IOExpander extends Sensor
 {
 	//Address and common register definition
-    private byte ADDRESS =	0x20;
+    private byte ADDRESS =	0x21;
     private byte GPIOA	=	0x14;
    
     //track current LED State
@@ -25,7 +25,7 @@ public class IOExpander extends Sensor
 		//Gets called on Startup once. Check if Sensor is available and setEnabled(true);
 		
 		//Returns false if component not reachable
-		if(I2CManager.write(ADDRESS, (byte)0x00, (byte)0xFE)) 
+		if(I2CArduinoManager.write(ADDRESS, (byte)0x00, (byte)0xFE)) 
 		{
 			//doCheck();
 			setEnabled(true);
@@ -45,7 +45,7 @@ public class IOExpander extends Sensor
 		//Call this method to update specific data. Used to read from component and update tracking variables
 		super.update();
 		
-		byte button = (byte)(I2CManager.read(ADDRESS, (byte)0x12) & (byte)0x02);
+		byte button = (byte)(I2CArduinoManager.read(ADDRESS, (byte)0x12) & (byte)0x02);
 		buttonState = false;
 		if(button == 0x02)
 			buttonState = true;
@@ -61,7 +61,7 @@ public class IOExpander extends Sensor
 		byte value = (byte) (led ? 0x01 : 0x00);
 		
 		//write value to component
-		I2CManager.write(ADDRESS, GPIOA, value);
+		I2CArduinoManager.write(ADDRESS, GPIOA, value);
 		ledState = led;
 	}
 	
@@ -79,7 +79,7 @@ public class IOExpander extends Sensor
 		super.dispose();
 		
 		//Turn off the LED on shutdown
-		I2CManager.write(ADDRESS, GPIOA, (byte)0x00);
+		I2CArduinoManager.write(ADDRESS, GPIOA, (byte)0x00);
 	}
 	
 	public void doCheck()
@@ -94,9 +94,9 @@ public class IOExpander extends Sensor
 	private boolean checkRegister(byte reg, int value, int bcount)
 	{
 		byte[] txPacket = Utils.toBytes(value, bcount);
-		I2CManager.write(ADDRESS, reg, txPacket);
+		I2CArduinoManager.write(ADDRESS, reg, txPacket);
 		
-		byte[] rxPacket = I2CManager.read(ADDRESS, reg, bcount);
+		byte[] rxPacket = I2CArduinoManager.read(ADDRESS, reg, bcount);
 		
 		return Utils.compareBytes(txPacket, rxPacket);
 	}

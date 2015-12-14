@@ -11,6 +11,7 @@ import org.mtforce.sensors.LightSensor;
 
 import org.mtforce.sensors.Sensor;
 import org.mtforce.sensors.Ser7Seg;
+import org.mtforce.sensors.Thermometer;
 
 public final class Sensors 
 {
@@ -20,6 +21,7 @@ public final class Sensors
 	private static LightSensor lightSensor = new LightSensor();
 	private static Ser7Seg ser7seg = new Ser7Seg();
 	private static IOExpander ipExp = new IOExpander();
+	private static Thermometer thermometer = new Thermometer();
 	
 	private Sensors()
 	{
@@ -32,6 +34,7 @@ public final class Sensors
 		sensorList.add(lightSensor);
 		sensorList.add(ser7seg);
 		sensorList.add(ipExp);
+		sensorList.add(thermometer);
 		
 		SPIManager.initialize();
 		I2CManager.initialize();
@@ -58,5 +61,7 @@ public final class Sensors
 		return ipExp;
 	}
 	
-	
+	public static Thermometer getThermometer() {
+		return thermometer;
+	}
 }
