@@ -32,7 +32,7 @@ public class Utils {
 
 	public static boolean isBitSet(byte b, int i) //Retourniert True, wenn das bit an Index i 1 ist, ansonsten False
 	{
-		byte mask = (byte) Math.pow(2, i);
+		byte mask = (byte) (0x01<<i);
 		return ((b & mask) != 0);
 	}
 	
