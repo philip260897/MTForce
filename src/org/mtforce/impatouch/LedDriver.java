@@ -1,5 +1,9 @@
 package org.mtforce.impatouch;
 
+import java.awt.Point;
+
+import org.mtforce.main.Utils;
+
 public class LedDriver 
 {
 	//Decode-Modes
@@ -74,8 +78,24 @@ public class LedDriver
 	public static final byte kgsDIAGNOSTIC_DIGIT_6 	= 0x5A; //Diagnostic digit 6 Register
 	public static final byte kgsDIAGNOSTIC_DIGIT_7 	= 0x5B; //Diagnostic digit 7 Register
 	
+	private byte rgbOrder[][] = new byte[][] {	{2, 1, 0}, 	{5, 4, 3}	};
+											//0: R, G, B  1: R, G, B
+	private byte valueOrder[] = new byte[] {0,1,2,3,4,5,6,7};
+	
 	public LedDriver()
 	{
 		
+	}
+	
+	private byte[] generateBytesFromDigit(LedDigit digit)
+	{
+		byte[] values = new byte[8];
+		for(Point p : digit.getPoints())
+		{
+			byte currB = values[valueOrder[(int)p.getY()]];
+			currB = Utils.setBit(currB, rgbOrder[(int)p.getX()][0]);
+			values[valueOrder[(int)p.getY()]] = currB;
+		}
+		return values;
 	}
 }
