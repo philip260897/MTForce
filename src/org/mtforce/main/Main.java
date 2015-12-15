@@ -1,6 +1,7 @@
 package org.mtforce.main;
 
 import org.mtforce.sensors.Sensor;
+import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 public class Main 
 {

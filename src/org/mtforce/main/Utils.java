@@ -1,6 +1,12 @@
 package org.mtforce.main;
 
 public class Utils {
+	public static byte setBit(byte b, int index){
+		byte mask = (byte) (0x01<<index);
+		byte temp = (byte) (mask | b);
+		return temp;
+	}
+	
 	public static byte[] toBytes(int integer, int var){ //Wandelt eine Integer-Zahl in ein byte array mit integer-Anzahl an bytes um
 		byte lastByte[] = new byte[var];
 		for(int i = 0; i<var; i++){
