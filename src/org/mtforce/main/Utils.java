@@ -10,7 +10,7 @@ public class Utils {
 	public static byte[] toBytes(int integer, int var){ //Wandelt eine Integer-Zahl in ein byte array mit integer-Anzahl an bytes um
 		byte lastByte[] = new byte[var];
 		for(int i = 0; i<var; i++){
-			lastByte[i] = (byte) (integer >> 24-8*(i+var)); // shifts right every iteration and copies in byte array
+			lastByte[var-1-i] = (byte) (integer >> 24-8*(i+var)); // shifts right every iteration and copies in byte array
 		}return lastByte;
 	}
 
