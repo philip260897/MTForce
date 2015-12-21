@@ -36,7 +36,7 @@ public final class Sensors
 	{
 		sensorList.add(distanceSensor);
 		sensorList.add(lightSensor);
-		sensorList.add(ser7seg);
+		//sensorList.add(ser7seg);
 		sensorList.add(ipExp);
 		sensorList.add(thermometer);
 		

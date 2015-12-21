@@ -68,6 +68,7 @@ public class Thermometer extends Sensor
 		super.update();
 		
 		byte[] data = Sensors.getI2C().read(kgsADDRESS, kgsREG_TA, 2);
+		gTemperature = Utils.toInt(data);
 	}
 
 	/**
@@ -107,5 +108,11 @@ public class Thermometer extends Sensor
 		this.gDefaultConfiguration = defaultConfiguration;
 	}
 	
+	public void setRegister(byte register, byte value) {
+		Sensors.getI2C().write(kgsADDRESS, register, value);
+	}
 	
+	public double getTemperature() {
+		return gTemperature;
+	}
 }

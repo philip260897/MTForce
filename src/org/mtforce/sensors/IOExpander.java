@@ -46,7 +46,7 @@ public class IOExpander extends Sensor
 		//Call this method to update specific data. Used to read from component and update tracking variables
 		super.update();
 		
-		byte button = (byte)(I2CArduinoManager.read(ADDRESS, (byte)0x12) & (byte)0x02);
+		byte button = (byte)(Sensors.getI2C().read(ADDRESS, (byte)0x12) & (byte)0x02);
 		buttonState = false;
 		if(button == 0x02)
 			buttonState = true;

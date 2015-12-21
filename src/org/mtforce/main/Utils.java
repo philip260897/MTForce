@@ -18,7 +18,7 @@ public class Utils {
 		int combInt = 0;
 		for (int i=0; i<b.length; i++) {
 			combInt <<= 8;				// shifts Int left
-			combInt |= (int)b[i];		// bitwise-OR with int (can be replaced with "+")
+			combInt |= (int)b[b.length-1-i];		// bitwise-OR with int (can be replaced with "+")
 		}	
 		return combInt;
 	}
