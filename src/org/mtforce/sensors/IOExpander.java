@@ -26,7 +26,7 @@ public class IOExpander extends Sensor
 		//Gets called on Startup once. Check if Sensor is available and setEnabled(true);
 		
 		//Returns false if component not reachable
-		if(Sensors.i2c.write(ADDRESS, (byte)0x00, (byte)0xFE)) 
+		if(Sensors.getI2C().write(ADDRESS, (byte)0x00, (byte)0xFE)) 
 		{
 			//doCheck();
 			setEnabled(true);
@@ -62,7 +62,7 @@ public class IOExpander extends Sensor
 		byte value = (byte) (led ? 0x01 : 0x00);
 		
 		//write value to component
-		Sensors.i2c.write(ADDRESS, GPIOA, value);
+		Sensors.getI2C().write(ADDRESS, GPIOA, value);
 		ledState = led;
 	}
 	
@@ -80,7 +80,7 @@ public class IOExpander extends Sensor
 		super.dispose();
 		
 		//Turn off the LED on shutdown
-		Sensors.i2c.write(ADDRESS, GPIOA, (byte)0x00);
+		Sensors.getI2C().write(ADDRESS, GPIOA, (byte)0x00);
 	}
 	
 	public void doCheck()
@@ -95,9 +95,9 @@ public class IOExpander extends Sensor
 	private boolean checkRegister(byte reg, int value, int bcount)
 	{
 		byte[] txPacket = Utils.toBytes(value, bcount);
-		Sensors.i2c.write(ADDRESS, reg, txPacket);
+		Sensors.getI2C().write(ADDRESS, reg, txPacket);
 		
-		byte[] rxPacket = Sensors.i2c.read(ADDRESS, reg, bcount);
+		byte[] rxPacket = Sensors.getI2C().read(ADDRESS, reg, bcount);
 		
 		return Utils.compareBytes(txPacket, rxPacket);
 	}

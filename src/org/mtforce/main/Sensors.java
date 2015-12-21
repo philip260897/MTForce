@@ -24,8 +24,8 @@ public final class Sensors
 	private static IOExpander ipExp = new IOExpander();
 	private static Thermometer thermometer = new Thermometer();
 	
-	public static CommunicationManager i2c;
-	public static CommunicationManager spi;
+	private static CommunicationManager i2c;
+	private static CommunicationManager spi;
 	
 	private Sensors()
 	{
@@ -36,21 +36,17 @@ public final class Sensors
 	{
 		sensorList.add(distanceSensor);
 		sensorList.add(lightSensor);
-		//sensorList.add(ser7seg);
+		sensorList.add(ser7seg);
 		sensorList.add(ipExp);
 		sensorList.add(thermometer);
 		
-		System.out.println("Test");
-		//i2c.initialize();
-		///spi.initialize();
+		if(i2c == null)
+			i2c = new I2CManager();
+		if(spi == null)
+			spi = new SPIManager();
 		
 		for(Sensor sensor : sensorList)
 			sensor.init();
-	}
-	
-	public static void test()
-	{
-		
 	}
 	
 	public static void updateAll()
@@ -59,6 +55,22 @@ public final class Sensors
 			sensor.update();
 	}
 
+	public static void setI2C(CommunicationManager manager) {
+		i2c = manager;
+	}
+	
+	public static void setSPI(CommunicationManager manager) {
+		spi = manager;
+	}
+	
+	public static CommunicationManager getI2C() {
+		return i2c;
+	}
+	
+	public static CommunicationManager getSPI() {
+		return spi;
+	}
+	
 	public static Sensor[] getSensors() {
 		return sensorList.toArray(new Sensor[sensorList.size()]);
 	}

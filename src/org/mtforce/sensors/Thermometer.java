@@ -49,7 +49,7 @@ public class Thermometer extends Sensor
 	@Override
 	public void init()
 	{
-		if(Sensors.i2c.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(gDefaultConfiguration, 2))) 
+		if(Sensors.getI2C().write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(gDefaultConfiguration, 2))) 
 		{
 			setEnabled(true);
 		} 
@@ -67,7 +67,7 @@ public class Thermometer extends Sensor
 	{
 		super.update();
 		
-		byte[] data = Sensors.i2c.read(kgsADDRESS, kgsREG_TA, 2);
+		byte[] data = Sensors.getI2C().read(kgsADDRESS, kgsREG_TA, 2);
 	}
 
 	/**
@@ -90,9 +90,9 @@ public class Thermometer extends Sensor
 	private boolean checkRegister(byte iReg, int iValue, int iBcount)
 	{
 		byte[] txPacket = Utils.toBytes(iValue, iBcount);
-		Sensors.i2c.write(kgsADDRESS, iReg, txPacket);
+		Sensors.getI2C().write(kgsADDRESS, iReg, txPacket);
 		
-		byte[] rxPacket = Sensors.i2c.read(kgsADDRESS, iReg, iBcount);
+		byte[] rxPacket = Sensors.getI2C().read(kgsADDRESS, iReg, iBcount);
 		
 		return Utils.compareBytes(txPacket, rxPacket);
 	}

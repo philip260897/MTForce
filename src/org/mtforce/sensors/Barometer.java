@@ -17,12 +17,12 @@ public class Barometer extends Sensor {
 	@Override
 	public void init() {
 		
-		 Sensors.i2c.write(ADDRESS, RESET);
+		 Sensors.getI2C().write(ADDRESS, RESET);
 	}
 
 	@Override
 	public void update() {
-		 Sensors.i2c.write(ADDRESS, PROM_READ);
+		 Sensors.getI2C().write(ADDRESS, PROM_READ);
 		
 	}
 
