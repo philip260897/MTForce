@@ -6,11 +6,12 @@ import com.pi4j.io.spi.SpiChannel;
 import com.pi4j.io.spi.SpiDevice;
 import com.pi4j.io.spi.SpiFactory;
 
-public class SPIManager 
+public class SPIManager implements CommunicationManager
 {
 	private static SpiDevice spi = null;
 	
-    public static void initialize() throws Exception
+	@Override
+    public void initialize() throws Exception
     {
         spi = SpiFactory.getInstance(SpiChannel.CS0, 15600000, SpiDevice.DEFAULT_SPI_MODE);
         
@@ -21,7 +22,8 @@ public class SPIManager
     }   
 	
     //Write packets to SPI data line. Returns result if no erros occure. Null on error
-	public static byte[] write(byte ...packets)
+    
+	public byte[] write(byte ...packets)
 	{
 		try 
 		{
@@ -32,6 +34,36 @@ public class SPIManager
 		{
 			e.printStackTrace();
 		}
+		return null;
+	}
+
+	@Override
+	public boolean write(byte address, byte reg, byte val) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean write(byte address, byte val) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean write(byte address, byte reg, byte... val) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int read(byte address, byte reg) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public byte[] read(byte address, byte reg, int bytes) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

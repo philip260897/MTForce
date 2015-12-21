@@ -1,6 +1,7 @@
 package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CManager;
+import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
 public class Barometer extends Sensor {
@@ -16,12 +17,12 @@ public class Barometer extends Sensor {
 	@Override
 	public void init() {
 		
-		I2CManager.write(ADDRESS, RESET);
+		 Sensors.i2c.write(ADDRESS, RESET);
 	}
 
 	@Override
 	public void update() {
-		I2CManager.write(ADDRESS, PROM_READ);
+		 Sensors.i2c.write(ADDRESS, PROM_READ);
 		
 	}
 

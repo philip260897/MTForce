@@ -2,6 +2,7 @@ package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CArduinoManager;
 import org.mtforce.main.Main;
+import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
 import com.pi4j.io.i2c.I2CBus;
@@ -25,7 +26,7 @@ public class IOExpander extends Sensor
 		//Gets called on Startup once. Check if Sensor is available and setEnabled(true);
 		
 		//Returns false if component not reachable
-		if(I2CArduinoManager.write(ADDRESS, (byte)0x00, (byte)0xFE)) 
+		if(Sensors.i2c.write(ADDRESS, (byte)0x00, (byte)0xFE)) 
 		{
 			//doCheck();
 			setEnabled(true);
@@ -61,7 +62,7 @@ public class IOExpander extends Sensor
 		byte value = (byte) (led ? 0x01 : 0x00);
 		
 		//write value to component
-		I2CArduinoManager.write(ADDRESS, GPIOA, value);
+		Sensors.i2c.write(ADDRESS, GPIOA, value);
 		ledState = led;
 	}
 	
@@ -79,7 +80,7 @@ public class IOExpander extends Sensor
 		super.dispose();
 		
 		//Turn off the LED on shutdown
-		I2CArduinoManager.write(ADDRESS, GPIOA, (byte)0x00);
+		Sensors.i2c.write(ADDRESS, GPIOA, (byte)0x00);
 	}
 	
 	public void doCheck()
@@ -94,9 +95,9 @@ public class IOExpander extends Sensor
 	private boolean checkRegister(byte reg, int value, int bcount)
 	{
 		byte[] txPacket = Utils.toBytes(value, bcount);
-		I2CArduinoManager.write(ADDRESS, reg, txPacket);
+		Sensors.i2c.write(ADDRESS, reg, txPacket);
 		
-		byte[] rxPacket = I2CArduinoManager.read(ADDRESS, reg, bcount);
+		byte[] rxPacket = Sensors.i2c.read(ADDRESS, reg, bcount);
 		
 		return Utils.compareBytes(txPacket, rxPacket);
 	}

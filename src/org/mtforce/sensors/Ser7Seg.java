@@ -3,6 +3,7 @@ package org.mtforce.sensors;
 import java.util.Calendar;
 
 import org.mtforce.interfaces.SPIManager;
+import org.mtforce.main.Sensors;
 
 public class Ser7Seg extends Sensor
 {
@@ -32,18 +33,18 @@ public class Ser7Seg extends Sensor
 	@Override
 	public void init() {
 		//initiation of the max 7219
-		SPIManager.write(max7219_reg_scanLimit, 	(byte)0x07);      
-		SPIManager.write(max7219_reg_decodeMode, 	(byte)0xff); 	// using an digits
-		SPIManager.write(max7219_reg_shutdown, 		(byte)0x01);	// not in shutdown mode
-		SPIManager.write(max7219_reg_displayTest, 	(byte)0x00);	// no display test
+		Sensors.spi.write(max7219_reg_scanLimit, 	(byte)0x07);      
+		Sensors.spi.write(max7219_reg_decodeMode, 	(byte)0xff); 	// using an digits
+		Sensors.spi.write(max7219_reg_shutdown, 		(byte)0x01);	// not in shutdown mode
+		Sensors.spi.write(max7219_reg_displayTest, 	(byte)0x00);	// no display test
 		
 		//Set all digits to 0
 		for (int e=1; e<=8; e++) 
 		{ 
-			SPIManager.write((byte)e,(byte)0);
+			Sensors.spi.write((byte)e,(byte)0);
 		}
 		//SPIManager.write(max7219_reg_intensity, (byte)((byte)0x01 & (byte)0x0f));    // the first 0x0f is the value you can set
-		SPIManager.write(max7219_reg_intensity, (byte)intensity);
+		Sensors.spi.write(max7219_reg_intensity, (byte)intensity);
 		setEnabled(true);
 	}
 
@@ -113,14 +114,14 @@ public class Ser7Seg extends Sensor
 
 	   updateUnusedDigits();
 	   
-	   SPIManager.write(max7219_reg_digit0, digits[0]);
-	   SPIManager.write(max7219_reg_digit1, digits[1]);
-	   SPIManager.write(max7219_reg_digit2, digits[2]);
-	   SPIManager.write(max7219_reg_digit3, digits[3]);
-	   SPIManager.write(max7219_reg_digit4, digits[4]);
-	   SPIManager.write(max7219_reg_digit5, digits[5]);
-	   SPIManager.write(max7219_reg_digit6, digits[6]);
-	   SPIManager.write(max7219_reg_digit7, digits[7]);
+	   Sensors.spi.write(max7219_reg_digit0, digits[0]);
+	   Sensors.spi.write(max7219_reg_digit1, digits[1]);
+	   Sensors.spi.write(max7219_reg_digit2, digits[2]);
+	   Sensors.spi.write(max7219_reg_digit3, digits[3]);
+	   Sensors.spi.write(max7219_reg_digit4, digits[4]);
+	   Sensors.spi.write(max7219_reg_digit5, digits[5]);
+	   Sensors.spi.write(max7219_reg_digit6, digits[6]);
+	   Sensors.spi.write(max7219_reg_digit7, digits[7]);
 	   
 	   
 	}
@@ -136,8 +137,8 @@ public class Ser7Seg extends Sensor
 				i = -1;
 			
 		}
-		SPIManager.write(this.max7219_reg_scanLimit, (byte)c);
-		SPIManager.write(max7219_reg_intensity, (byte)intensity);
+		Sensors.spi.write(this.max7219_reg_scanLimit, (byte)c);
+		Sensors.spi.write(max7219_reg_intensity, (byte)intensity);
 	}
 	
 	private void clearDigits() 

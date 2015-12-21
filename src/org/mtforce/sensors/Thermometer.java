@@ -2,6 +2,7 @@ package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CArduinoManager;
 import org.mtforce.interfaces.I2CManager;
+import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
 public class Thermometer extends Sensor 
@@ -48,7 +49,7 @@ public class Thermometer extends Sensor
 	@Override
 	public void init()
 	{
-		if(I2CArduinoManager.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(gDefaultConfiguration, 2))) 
+		if(Sensors.i2c.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(gDefaultConfiguration, 2))) 
 		{
 			setEnabled(true);
 		} 
@@ -66,7 +67,7 @@ public class Thermometer extends Sensor
 	{
 		super.update();
 		
-		byte[] data = I2CManager.read(kgsADDRESS, kgsREG_TA, 2);
+		byte[] data = Sensors.i2c.read(kgsADDRESS, kgsREG_TA, 2);
 	}
 
 	/**
@@ -89,9 +90,9 @@ public class Thermometer extends Sensor
 	private boolean checkRegister(byte iReg, int iValue, int iBcount)
 	{
 		byte[] txPacket = Utils.toBytes(iValue, iBcount);
-		I2CManager.write(kgsADDRESS, iReg, txPacket);
+		Sensors.i2c.write(kgsADDRESS, iReg, txPacket);
 		
-		byte[] rxPacket = I2CManager.read(kgsADDRESS, iReg, iBcount);
+		byte[] rxPacket = Sensors.i2c.read(kgsADDRESS, iReg, iBcount);
 		
 		return Utils.compareBytes(txPacket, rxPacket);
 	}
