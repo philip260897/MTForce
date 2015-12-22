@@ -9,7 +9,7 @@ public class Thermometer extends Sensor
 {
 	public static final byte kgsADDRESS		=		0x20;	//Baustein-Adresse
 	
-	public static final byte kgsREG_CONF		=	0x00;	//Konfigurations-Register
+	public static final byte kgsREG_CONF		=	0x01;	//Konfigurations-Register
 	public static final int kgsCONF_HYST_0 		= 	0x0000;	//Hysterese 0.0°C
 	public static final int kgsCONF_HYST_15 	= 	0x0200;	//Hysterese 1.5°C
 	public static final int kgsCONF_HYST_30 	= 	0x0400;	//Hysterese 3.0°C
@@ -38,10 +38,7 @@ public class Thermometer extends Sensor
 	public static final byte kgsREG_MANUF_ID	=	0x06;	//Hersteller-ID-Register
 	public static final byte kgsREG_DEV_ID		=	0x07;	//Baustein-ID-Register
 	
-	private int gDefaultConfiguration = kgsCONF_DEFAULT;
-	private double gTemperature = 0;						//Ausgelesener Temperaturwert
-	private String gManufacturerId;							//Manufacturer ID
-	private String gDeviceId;								//Device ID
+	private int gDefaultConfiguration 			=	kgsCONF_DEFAULT;
 	
 	/**
 	 * Schreibt einen Testwert in das Konfigurationsregister und aktiviert nach Erfolg den Sensor
@@ -62,14 +59,14 @@ public class Thermometer extends Sensor
 	/**
 	 * Liest Temperaturwert aus dem REG_TA-Register
 	 */
-	@Override
+	/*@Override
 	public void update()
 	{
 		super.update();
 		
 		byte[] data = Sensors.getI2C().read(kgsADDRESS, kgsREG_TA, 2);
 		gTemperature = Utils.toInt(data);
-	}
+	}*/
 
 	/**
 	 * Nicht verwendet
@@ -78,6 +75,129 @@ public class Thermometer extends Sensor
 	public void dispose()
 	{
 		super.dispose();
+	}
+	
+	public void setDefaultConfiguration(int defaultConfiguration)
+	{
+		this.gDefaultConfiguration = defaultConfiguration;
+	}
+	
+	//=====Configuration===== NEEDS WORK! GETTERS FOR MODES
+	
+	public void setConfiguration(int configuration)
+	{
+		Sensors.getI2C().write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(configuration, 2));
+	}
+	
+	//=====Temperature Limits=====IMPLEMENTED
+	
+	public void setTUpperLimit(double limit)
+	{
+		Sensors.getI2C().write(kgsADDRESS, kgsREG_TUPPER, formatWriteLimits(limit));
+	}
+	
+	public double getTUpperLimit()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_TUPPER, 2);
+		return formatReadLimits(packet);
+	}
+	
+	public void setTLowerLimit(double limit)
+	{
+		Sensors.getI2C().write(kgsADDRESS, kgsREG_TLOWER, formatWriteLimits(limit));
+	}
+	
+	public double getTLowerLimit()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_TLOWER, 2);
+		return formatReadLimits(packet);
+	}
+	
+	public void setTCritical(double limit)
+	{
+		Sensors.getI2C().write(kgsADDRESS, kgsREG_TCRIT, formatWriteLimits(limit));
+	}
+	
+	public double getTCriticalLimit()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_TCRIT, 2);
+		return formatReadLimits(packet);
+	}
+	
+	//=====Ta======IMPLEMENTED
+	
+	public boolean isTemperatureCritical()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_TA, 2);
+		return Utils.isBitSet(packet[1], 7);
+	}
+	
+	public boolean isTemperatureUpper()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_TA, 2);
+		return Utils.isBitSet(packet[1], 6);
+	}
+	
+	public boolean isTemperatureLower()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_TA, 2);
+		return Utils.isBitSet(packet[1], 5);
+	}
+	
+	public double getTemperature()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_TA, 2);
+		return formatReadLimits(packet);
+	}
+	
+	//====Manufacturer ID============IMPLEMENTED
+	
+	public int getManufacturerID()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_MANUF_ID, 2);
+		return Utils.toInt(packet);
+	}
+	
+	//====Device ID and Revision======IMPLEMENTED
+	
+	public int getDeviceID()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_DEV_ID, 2);
+		return (int)packet[1] & 0xFF;
+	}
+	
+	public int getRevision()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_DEV_ID, 2);
+		return (int)packet[0] & 0xFF;
+	}
+	
+	//=====UTILS=====
+	
+	private byte[] formatWriteLimits(double limit)
+	{
+		boolean negativ = limit < 0 ? true : false;
+		if(negativ)
+			limit *= -1;
+		int l = Utils.doubleToQNotation(limit, 2);
+		l = l <<= 2;
+		byte[] packet = Utils.toBytes(l, 2);
+		if(negativ)
+			packet[1] = Utils.setBit(packet[1], 4);
+		return packet;
+	}
+	
+	private double formatReadLimits(byte[] packet)
+	{
+		byte HighB = Utils.isolateBits(packet[1], 0, 3);
+		int num = 0;
+		num  |= HighB & 0xFF;
+		num <<= 8;
+		num |= packet[0] & 0xFF;
+		double d = Utils.qNotationToDouble(num, 4);
+		if(Utils.isBitSet(packet[1], 4))
+			d *= -1;
+		return d;
 	}
 	
 	/**
@@ -96,23 +216,5 @@ public class Thermometer extends Sensor
 		byte[] rxPacket = Sensors.getI2C().read(kgsADDRESS, iReg, iBcount);
 		
 		return Utils.compareBytes(txPacket, rxPacket);
-	}
-	
-	public void setConfiguration(int configuration)
-	{
-		I2CArduinoManager.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(configuration, 2));
-	}
-	
-	public void setDefaultConfiguration(int defaultConfiguration)
-	{
-		this.gDefaultConfiguration = defaultConfiguration;
-	}
-	
-	public void setRegister(byte register, byte value) {
-		Sensors.getI2C().write(kgsADDRESS, register, value);
-	}
-	
-	public double getTemperature() {
-		return gTemperature;
 	}
 }
