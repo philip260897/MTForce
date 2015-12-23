@@ -7,6 +7,8 @@ import org.mtforce.main.Utils;
 
 public class Thermometer extends Sensor 
 {
+	//STATUS: Alle Methode Implementiert; Teilweise getestet;
+	
 	public static final byte kgsADDRESS		=		0x20;	//Baustein-Adresse
 	
 	public static final byte kgsREG_CONF		=	0x01;	//Konfigurations-Register
@@ -57,18 +59,6 @@ public class Thermometer extends Sensor
 	}
 
 	/**
-	 * Liest Temperaturwert aus dem REG_TA-Register
-	 */
-	/*@Override
-	public void update()
-	{
-		super.update();
-		
-		byte[] data = Sensors.getI2C().read(kgsADDRESS, kgsREG_TA, 2);
-		gTemperature = Utils.toInt(data);
-	}*/
-
-	/**
 	 * Nicht verwendet
 	 */
 	@Override
@@ -82,11 +72,72 @@ public class Thermometer extends Sensor
 		this.gDefaultConfiguration = defaultConfiguration;
 	}
 	
-	//=====Configuration===== NEEDS WORK! GETTERS FOR MODES
+	//=====Configuration===== IMPLEMENTED
 	
 	public void setConfiguration(int configuration)
 	{
 		Sensors.getI2C().write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(configuration, 2));
+	}
+	
+	public int getHysteresis()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_CONF, 2);
+		packet[0] = 0; packet[1] = Utils.isolateBits(packet[1], 1, 2);
+		return Utils.toInt(packet);
+	}
+	
+	public boolean isShutdownSet()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_CONF, 2);
+		return Utils.isBitSet(packet[1], 0);
+	}
+	
+	public boolean isCriticalLockSet()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_CONF, 2);
+		return Utils.isBitSet(packet[0], 7);
+	}
+	
+	public boolean isWindowLockSet()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_CONF, 2);
+		return Utils.isBitSet(packet[0], 6);
+	}
+	
+	public boolean isInterruptClearSet()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_CONF, 2);
+		return Utils.isBitSet(packet[0], 5);
+	}
+	
+	public boolean isAlertOutputStatusSet()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_CONF, 2);
+		return Utils.isBitSet(packet[0], 4);
+	}
+	
+	public boolean isAlertOutputControlSet()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_CONF, 2);
+		return Utils.isBitSet(packet[0], 3);
+	}
+	
+	public boolean isAlertOutputSelectSet()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_CONF, 2);
+		return Utils.isBitSet(packet[0], 2);
+	}
+	
+	public boolean isAlertOutputPolaritySet()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_CONF, 2);
+		return Utils.isBitSet(packet[0], 1);
+	}
+	
+	public boolean isAlertOutputModeSet()
+	{
+		byte[] packet = Sensors.getI2C().read(kgsADDRESS, kgsREG_CONF, 2);
+		return Utils.isBitSet(packet[0], 0);
 	}
 	
 	//=====Temperature Limits=====IMPLEMENTED
