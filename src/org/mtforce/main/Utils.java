@@ -10,7 +10,7 @@ public class Utils {
 	public static byte[] toBytes(int integer, int var){ //Wandelt eine Integer-Zahl in ein byte array mit integer-Anzahl an bytes um
 		byte lastByte[] = new byte[var];
 		for(int i = 0; i<var; i++){
-			lastByte[var-1-i] = (byte) (integer >> 24-8*(i+var)); // shifts right every iteration and copies in byte array
+			lastByte[i] = (byte) (integer >> 24-8*(i+var)); // shifts right every iteration and copies in byte array
 		}return lastByte;
 	}
 
@@ -18,7 +18,7 @@ public class Utils {
 		int combInt = 0;
 		for (int i=0; i<b.length; i++) {
 			combInt <<= 8;				// shifts Int left
-			combInt |= ((byte)b[b.length-1-i] & 0xFF);		// bitwise-OR with int (can be replaced with "+")
+			combInt |= ((byte)b[i] & 0xFF);		// bitwise-OR with int (can be replaced with "+")
 		}	
 		return combInt;
 	}
