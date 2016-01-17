@@ -24,8 +24,8 @@ public final class Sensors
 	private static IOExpander ipExp = new IOExpander();
 	private static Thermometer thermometer = new Thermometer();
 	
-	private static CommunicationManager i2c;
-	private static CommunicationManager spi;
+	private static CommunicationManager i2c = null;
+	private static CommunicationManager spi = null;
 	
 	private Sensors()
 	{
@@ -44,6 +44,9 @@ public final class Sensors
 			i2c = new I2CManager();
 		if(spi == null)
 			spi = new SPIManager();
+		
+		i2c.initialize();
+		spi.initialize();
 		
 		for(Sensor sensor : sensorList)
 			sensor.init();
