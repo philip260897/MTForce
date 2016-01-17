@@ -8,18 +8,20 @@ import com.pi4j.wiringpi.I2C;
 import com.pi4j.wiringpi.Spi;
 
 
-public class I2CManager 
+public class I2CManager implements CommunicationManager
 {	
 	private static I2CBus bus;
 	private static I2CDevice current;
 
-    public static void initialize() throws Exception
+	@Override
+    public void initialize() throws Exception
     {
     	bus = I2CFactory.getInstance(I2CBus.BUS_1);
     }  
     
 
-	public static boolean write(byte address, byte reg, byte val)
+	@Override
+	public boolean write(byte address, byte reg, byte val)
 	{
 		try
 		{
@@ -33,7 +35,8 @@ public class I2CManager
 		return true;
 	}
 	
-	public static boolean write(byte address,  byte val)
+	@Override
+	public boolean write(byte address,  byte val)
 	{
 		try
 		{
@@ -47,7 +50,8 @@ public class I2CManager
 		return true;
 	}	
 	
-	public static boolean write(byte address, byte reg, byte...val)
+	@Override
+	public boolean write(byte address, byte reg, byte...val)
 	{
 		try
 		{
@@ -63,7 +67,8 @@ public class I2CManager
 		return true;
 	}
 	
-	public static int read(byte address, byte reg)
+	@Override
+	public int read(byte address, byte reg)
 	{
 		try
 		{
@@ -76,7 +81,8 @@ public class I2CManager
 		}
 	}
 
-	public static byte[] read(byte address, byte reg, int bytes)
+	@Override
+	public byte[] read(byte address, byte reg, int bytes)
 	{
 		byte[] b = new byte[bytes];
 		try

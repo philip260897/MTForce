@@ -3,6 +3,7 @@ package org.mtforce.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mtforce.interfaces.CommunicationManager;
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.interfaces.SPIManager;
 import org.mtforce.sensors.DistanceSensor;
@@ -23,6 +24,9 @@ public final class Sensors
 	private static IOExpander ipExp = new IOExpander();
 	private static Thermometer thermometer = new Thermometer();
 	
+	private static CommunicationManager i2c;
+	private static CommunicationManager spi;
+	
 	private Sensors()
 	{
 		
@@ -32,12 +36,14 @@ public final class Sensors
 	{
 		sensorList.add(distanceSensor);
 		sensorList.add(lightSensor);
-		sensorList.add(ser7seg);
+		//sensorList.add(ser7seg);
 		sensorList.add(ipExp);
 		sensorList.add(thermometer);
 		
-		SPIManager.initialize();
-		I2CManager.initialize();
+		if(i2c == null)
+			i2c = new I2CManager();
+		if(spi == null)
+			spi = new SPIManager();
 		
 		for(Sensor sensor : sensorList)
 			sensor.init();
@@ -49,6 +55,22 @@ public final class Sensors
 			sensor.update();
 	}
 
+	public static void setI2C(CommunicationManager manager) {
+		i2c = manager;
+	}
+	
+	public static void setSPI(CommunicationManager manager) {
+		spi = manager;
+	}
+	
+	public static CommunicationManager getI2C() {
+		return i2c;
+	}
+	
+	public static CommunicationManager getSPI() {
+		return spi;
+	}
+	
 	public static Sensor[] getSensors() {
 		return sensorList.toArray(new Sensor[sensorList.size()]);
 	}

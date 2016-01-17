@@ -18,7 +18,7 @@ public class Utils {
 		int combInt = 0;
 		for (int i=0; i<b.length; i++) {
 			combInt <<= 8;				// shifts Int left
-			combInt |= (int)b[i];		// bitwise-OR with int (can be replaced with "+")
+			combInt |= ((byte)b[b.length-1-i] & 0xFF);		// bitwise-OR with int (can be replaced with "+")
 		}	
 		return combInt;
 	}
@@ -44,5 +44,15 @@ public class Utils {
 			if(a[i] != b[i])
 				return false;
 		return true;
+	}
+	
+	public static int doubleToQNotation(double number, int n)
+	{
+		return Math.round((float)number * (float)Math.pow(2, n));
+	}
+	
+	public static double qNotationToDouble(int number, int n)
+	{
+		return (double)number  * Math.pow(2, -n);
 	}
 }
