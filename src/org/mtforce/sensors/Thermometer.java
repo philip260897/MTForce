@@ -79,6 +79,15 @@ public class Thermometer extends Sensor
 		Sensors.getI2C().write16(kgsADDRESS, kgsREG_CONF, Utils.toBytes(configuration, 2));
 	}
 	
+	public int getConfiguration()
+	{
+		byte[] packet = Sensors.getI2C().read16(kgsADDRESS, kgsREG_CONF);
+		byte b = packet[0];
+		packet[0] = packet[1];
+		packet[1] = b;
+		return Utils.toInt(packet);
+	}
+	
 	public int getHysteresis()
 	{
 		byte[] packet = Sensors.getI2C().read16(kgsADDRESS, kgsREG_CONF);
@@ -198,7 +207,6 @@ public class Thermometer extends Sensor
 	public double getTemperature()
 	{
 		byte[] packet = Sensors.getI2C().read16(kgsADDRESS, kgsREG_TA);
-		System.out.println(packet[0]+ " " + packet[1]);
 		return formatReadLimits(packet);
 	}
 	
@@ -224,6 +232,19 @@ public class Thermometer extends Sensor
 		return (int)packet[0] & 0xFF;
 	}
 	
+	//======RESOLUTIOn=====
+	
+	public void setResolution(byte resolution)
+	{
+		Sensors.getI2C().write8(kgsADDRESS, kgsREG_RES, resolution);
+	}
+	
+	public byte getResolution()
+	{
+		byte packet = Sensors.getI2C().read8(kgsADDRESS, kgsREG_RES);
+		return packet;
+	}
+	
 	//=====UTILS=====
 	
 	private byte[] formatWriteLimits(double limit)
@@ -236,6 +257,7 @@ public class Thermometer extends Sensor
 		byte[] packet = Utils.toBytes(l, 2);
 		if(negativ)
 			packet[1] = Utils.setBit(packet[1], 4);
+		
 		return packet;
 	}
 	
