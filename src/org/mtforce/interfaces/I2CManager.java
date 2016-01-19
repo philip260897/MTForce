@@ -21,6 +21,8 @@ public class I2CManager implements CommunicationManager
     	//bus = I2CFactory.getInstance(I2CBus.BUS_1);
     }  
 
+
+	
 	@Override
 	public boolean write8(byte address, byte reg, byte val) {
 		int fd = I2C.wiringPiI2CSetup(address);
@@ -54,10 +56,15 @@ public class I2CManager implements CommunicationManager
 		int fd = I2C.wiringPiI2CSetup(address);
 		int xMSB =  I2C.wiringPiI2CReadReg16(fd, reg);
 		byte[] packet = Utils.toBytes(xMSB, 2);
-		
 		return packet;
 	}
-
+	@Override
+	public byte read8(byte address) {
+		int fd = I2C.wiringPiI2CSetup(address);
+		int xMSB =  I2C.wiringPiI2CRead(fd);
+		
+		return (byte) xMSB;
+	}
 
 	@Override
 	public boolean write8(byte address, byte val) {

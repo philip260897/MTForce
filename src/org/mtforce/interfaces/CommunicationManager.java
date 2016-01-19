@@ -13,6 +13,9 @@ public interface CommunicationManager
 	public boolean write16(byte address, byte reg, byte[] val);
 	
 	public byte read8(byte address, byte reg);
+	
+	public byte read8(byte address);
 
 	public byte[] read16(byte address, byte reg);
+
 }
