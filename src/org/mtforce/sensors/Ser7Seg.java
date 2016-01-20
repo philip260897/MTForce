@@ -53,16 +53,24 @@ public class Ser7Seg extends Sensor
 		// TODO Auto-generated method stub
 		super.update();
 		number++;
-		
-		//clearDigits();
-		//cal = Calendar.getInstance();
-		//printNumber(cal.getTime().getHours(), 6);
-		//printNumber(cal.getTime().getMinutes(), 3);
-		//printNumber(cal.getTime().getSeconds(), 0);
-		printNumber(number, 0);
+		clearDigits();
+		cal = Calendar.getInstance();
+		printNumber(cal.getTime().getHours(), 6);
+		printNumber(cal.getTime().getMinutes(), 3);
+		printNumber(cal.getTime().getSeconds(), 0);
+
+		//printNumber(number, 0);
 	}
 
-
+	public void showTemperature(double temp)
+	{
+		clearDigits();
+		int iTemp = (int)temp;
+		int dec = (int)(((double)temp - iTemp) * 10000);
+		number++;
+		printNumber(iTemp, 4);
+		printNumber(dec, 0);
+	}
 
 	@Override
 	public void dispose() {
@@ -118,7 +126,7 @@ public class Ser7Seg extends Sensor
 	   Sensors.getSPI().write8(max7219_reg_digit1, digits[1]);
 	   Sensors.getSPI().write8(max7219_reg_digit2, digits[2]);
 	   Sensors.getSPI().write8(max7219_reg_digit3, digits[3]);
-	   Sensors.getSPI().write8(max7219_reg_digit4, digits[4]);
+	   Sensors.getSPI().write8(max7219_reg_digit4, (byte)(digits[4] | 0x80));
 	   Sensors.getSPI().write8(max7219_reg_digit5, digits[5]);
 	   Sensors.getSPI().write8(max7219_reg_digit6, digits[6]);
 	   Sensors.getSPI().write8(max7219_reg_digit7, digits[7]);

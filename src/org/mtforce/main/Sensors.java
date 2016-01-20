@@ -36,7 +36,7 @@ public final class Sensors
 	{
 		sensorList.add(distanceSensor);
 		sensorList.add(lightSensor);
-		//sensorList.add(ser7seg);
+		sensorList.add(ser7seg);
 		sensorList.add(ipExp);
 		sensorList.add(thermometer);
 		
@@ -45,7 +45,7 @@ public final class Sensors
 		if(spi == null)
 			spi = new SPIManager();
 		
-		i2c.initialize();
+		//i2c.initialize();
 		spi.initialize();
 		
 		for(Sensor sensor : sensorList)
@@ -88,5 +88,9 @@ public final class Sensors
 	
 	public static Thermometer getThermometer() {
 		return thermometer;
+	}
+	
+	public static Ser7Seg getSer7Seg() {
+		return ser7seg;
 	}
 }

@@ -13,7 +13,7 @@ public class SPIManager implements CommunicationManager
 	@Override
     public void initialize() throws Exception
     {
-        spi = SpiFactory.getInstance(SpiChannel.CS0, 15600000, SpiDevice.DEFAULT_SPI_MODE);
+        spi = SpiFactory.getInstance(SpiChannel.CS0, 16000000, SpiDevice.DEFAULT_SPI_MODE);
         
         if(spi == null)
         {
@@ -21,9 +21,15 @@ public class SPIManager implements CommunicationManager
         }
     }
 
+	public void write(byte[] bytes)
+	{
+		
+	}
+	
 	@Override
 	public boolean write8(byte address, byte reg, byte val) {
 		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
@@ -48,7 +54,20 @@ public class SPIManager implements CommunicationManager
 	@Override
 	public boolean write8(byte address, byte val) {
 		// TODO Auto-generated method stub
+		//byte[] packet = new byte[] {address, val};
+		try {
+			spi.write(address, val);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return false;
+	}
+
+	@Override
+	public byte read8(byte address) {
+		// TODO Auto-generated method stub
+		return 0;
 	}   
 	
 
