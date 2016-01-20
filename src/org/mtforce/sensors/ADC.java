@@ -47,6 +47,11 @@ public class ADC extends Sensor {
 		
 	}
 	
+	public void setStandardConfiguration()
+	{
+		Sensors.getI2C().write8(kgsADDRESS, kgsSTD_CONFIG);
+	}
+	
 	public void setConfiguration(byte configuration)
 	{
 		Sensors.getI2C().write8(kgsADDRESS, configuration);

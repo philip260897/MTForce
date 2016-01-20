@@ -49,6 +49,12 @@ public class SPIManager implements CommunicationManager
 	public boolean write8(byte address, byte val) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public byte read8(byte address) {
+		// TODO Auto-generated method stub
+		return 0;
 	}   
 	
 
