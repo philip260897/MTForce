@@ -45,7 +45,7 @@ public final class Sensors
 		if(spi == null)
 			spi = new SPIManager();
 		
-		//i2c.initialize();
+		i2c.initialize();
 		spi.initialize();
 		
 		for(Sensor sensor : sensorList)

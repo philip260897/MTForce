@@ -52,7 +52,7 @@ public class Thermometer extends Sensor
 	{
 		i2c = (I2CManager)Sensors.getI2C();
 		
-		if(i2c.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(gDefaultConfiguration, 2))) 
+		if(i2c.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(gDefaultConfiguration, 2), true)) 
 		{
 			setEnabled(true);
 		} 
@@ -80,12 +80,12 @@ public class Thermometer extends Sensor
 	
 	public void setConfiguration(int configuration)
 	{
-		i2c.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(configuration, 2));
+		i2c.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(configuration, 2), true);
 	}
 	
 	public int getConfiguration()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		byte b = packet[0];
 		packet[0] = packet[1];
 		packet[1] = b;
@@ -94,62 +94,62 @@ public class Thermometer extends Sensor
 	
 	public int getHysteresis()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		packet[0] = 0; packet[1] = Utils.isolateBits(packet[1], 1, 2);
 		return Utils.toInt(packet);
 	}
 	
 	public boolean isShutdownSet()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[1], 0);
 	}
 	
 	public boolean isCriticalLockSet()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 7);
 	}
 	
 	public boolean isWindowLockSet()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 6);
 	}
 	
 	public boolean isInterruptClearSet()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 5);
 	}
 	
 	public boolean isAlertOutputStatusSet()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 4);
 	}
 	
 	public boolean isAlertOutputControlSet()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 3);
 	}
 	
 	public boolean isAlertOutputSelectSet()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 2);
 	}
 	
 	public boolean isAlertOutputPolaritySet()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 1);
 	}
 	
 	public boolean isAlertOutputModeSet()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 0);
 	}
 	
@@ -157,34 +157,34 @@ public class Thermometer extends Sensor
 	
 	public void setTUpperLimit(double limit)
 	{
-		i2c.write(kgsADDRESS, kgsREG_TUPPER, formatWriteLimits(limit));
+		i2c.write(kgsADDRESS, kgsREG_TUPPER, formatWriteLimits(limit), true);
 	}
 	
 	public double getTUpperLimit()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TUPPER, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TUPPER, 2, true);
 		return formatReadLimits(packet);
 	}
 	
 	public void setTLowerLimit(double limit)
 	{
-		i2c.write(kgsADDRESS, kgsREG_TLOWER, formatWriteLimits(limit));
+		i2c.write(kgsADDRESS, kgsREG_TLOWER, formatWriteLimits(limit), false);
 	}
 	
 	public double getTLowerLimit()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TLOWER, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TLOWER, 2, true);
 		return formatReadLimits(packet);
 	}
 	
 	public void setTCritical(double limit)
 	{
-		i2c.write(kgsADDRESS, kgsREG_TCRIT, formatWriteLimits(limit));
+		i2c.write(kgsADDRESS, kgsREG_TCRIT, formatWriteLimits(limit), true);
 	}
 	
 	public double getTCriticalLimit()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TCRIT, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TCRIT, 2, true);
 		return formatReadLimits(packet);
 	}
 	
@@ -192,25 +192,25 @@ public class Thermometer extends Sensor
 	
 	public boolean isTemperatureCritical()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2, true);
 		return Utils.isBitSet(packet[1], 7);
 	}
 	
 	public boolean isTemperatureUpper()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2, true);
 		return Utils.isBitSet(packet[1], 6);
 	}
 	
 	public boolean isTemperatureLower()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2, true);
 		return Utils.isBitSet(packet[1], 5);
 	}
 	
 	public double getTemperature()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2, true);
 		return formatReadLimits(packet);
 	}
 	
@@ -218,7 +218,7 @@ public class Thermometer extends Sensor
 	
 	public int getManufacturerID()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_MANUF_ID, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_MANUF_ID, 2, true);
 		return Utils.toInt(packet);
 	}
 	
@@ -226,13 +226,13 @@ public class Thermometer extends Sensor
 	
 	public int getDeviceID()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_DEV_ID, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_DEV_ID, 2, true);
 		return (int)packet[1] & 0xFF;
 	}
 	
 	public int getRevision()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, kgsREG_DEV_ID, 2);
+		byte[] packet = i2c.read(kgsADDRESS, kgsREG_DEV_ID, 2, true);
 		return (int)packet[0] & 0xFF;
 	}
 	
@@ -289,9 +289,9 @@ public class Thermometer extends Sensor
 	private boolean checkRegister(byte iReg, int iValue, int iBcount)
 	{
 		byte[] txPacket = Utils.toBytes(iValue, iBcount);
-		i2c.write(kgsADDRESS, iReg, txPacket);
+		i2c.write(kgsADDRESS, iReg, txPacket, true);
 		
-		byte[] rxPacket = i2c.read(kgsADDRESS, iReg, 2);
+		byte[] rxPacket = i2c.read(kgsADDRESS, iReg, 2, true);
 		
 		return Utils.compareBytes(txPacket, rxPacket);
 	}

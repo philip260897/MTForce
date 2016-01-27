@@ -54,7 +54,11 @@ public class I2CManager implements CommunicationManager
 			current = bus.getDevice(address);
 			if(highByteFirst)
 				val = Utils.reverseBytes(val);
+			
+			System.out.println("W: 0x"+Utils.byteToHexString(val[0]) + " 0x"+Utils.byteToHexString(val[1]));
+			
 			current.write(reg, val, 0, val.length);
+			return true;
 		}
 		catch(Exception ex){}
 		return false;
@@ -81,7 +85,17 @@ public class I2CManager implements CommunicationManager
 		return -1;
 	}
 
-
+	public byte[] read (byte address, int bytes) {
+		try
+		{
+			current = bus.getDevice(address);
+			byte[] buffer = new byte[bytes];
+			current.read(buffer, 0, buffer.length);
+			return buffer;
+		}catch(Exception ex){}
+		return null;
+	}
+	
 	public byte[] read(byte address, byte reg, int bytes) {
 		return read(address, reg, bytes, false);
 	}
@@ -94,6 +108,7 @@ public class I2CManager implements CommunicationManager
 			current.read(reg, buffer, 0, buffer.length);
 			if(lowByteFirst)
 				buffer = Utils.reverseBytes(buffer);
+			System.out.println("R: 0x"+Utils.byteToHexString(buffer[0]) + " 0x"+Utils.byteToHexString(buffer[1]));
 			return buffer;
 		}
 		catch(Exception ex){}
