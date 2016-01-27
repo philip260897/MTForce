@@ -12,64 +12,91 @@ import com.pi4j.wiringpi.Spi;
 
 public class I2CManager implements CommunicationManager
 {	
-	/*private static I2CBus bus;
-	private static I2CDevice current;*/
+	private static I2CBus bus;
+	private static I2CDevice current;
 
 	@Override
     public void initialize() throws Exception
     {
-    	//bus = I2CFactory.getInstance(I2CBus.BUS_1);
+    	bus = I2CFactory.getInstance(I2CBus.BUS_1);
     }  
 
 
-	
-	@Override
-	public boolean write8(byte address, byte reg, byte val) {
-		int fd = I2C.wiringPiI2CSetup(address);
-		int ret = I2C.wiringPiI2CWriteReg8(fd, reg, val);
-		return true;
-	}
-
-
-	@Override
-	public boolean write16(byte address, byte reg, byte[] val) {
-		int fd = I2C.wiringPiI2CSetup(address);
-		byte b = val[0];
-		val[0] = val[1];
-		val[1] = b;
-		int value = Utils.toInt(val);
-		int ret = I2C.wiringPiI2CWriteReg16(fd, reg, value);
-		return true;
-	}
-
-
-	@Override
-	public byte read8(byte address, byte reg) {
-		int fd = I2C.wiringPiI2CSetup(address);
-		byte xMSB = (byte) I2C.wiringPiI2CReadReg8(fd, reg);
-		return xMSB;
-	}
-
-
-	@Override
-	public byte[] read16(byte address, byte reg) {
-		int fd = I2C.wiringPiI2CSetup(address);
-		int xMSB =  I2C.wiringPiI2CReadReg16(fd, reg);
-		byte[] packet = Utils.toBytes(xMSB, 2);
-		return packet;
-	}
-	@Override
-	public byte read8(byte address) {
-		int fd = I2C.wiringPiI2CSetup(address);
-		int xMSB =  I2C.wiringPiI2CRead(fd);
-		
-		return (byte) xMSB;
-	}
-
-	@Override
-	public boolean write8(byte address, byte val) {
-		int fd = I2C.wiringPiI2CSetup(address);
-		I2C.wiringPiI2CWrite(fd, val);
+	public boolean write(byte address, byte val) {
+		try
+		{
+			current = bus.getDevice(address);
+			current.write(val);
+			return true;
+		}catch(Exception ex){}
 		return false;
+	}
+	
+	public boolean write(byte address, byte reg, byte val) 
+	{
+		try 
+		{
+			current = bus.getDevice(address);
+			current.write(reg, val);
+			return true;
+		} 
+		catch (IOException e) {}
+		return false;
+	}
+
+	public boolean write(byte address, byte reg, byte[] val) {
+		return write(address, reg, val, false);
+	}
+
+	public boolean write(byte address, byte reg, byte[] val, boolean highByteFirst) {
+		try
+		{
+			current = bus.getDevice(address);
+			if(highByteFirst)
+				val = Utils.reverseBytes(val);
+			current.write(reg, val, 0, val.length);
+		}
+		catch(Exception ex){}
+		return false;
+	}
+
+
+	public byte read(byte address) {
+		try
+		{
+			current = bus.getDevice(address);
+			return (byte)current.read();
+		}
+		catch(Exception ex){}
+		return -1;
+	}
+	
+	public byte read(byte address, byte reg) {
+		try
+		{
+			current = bus.getDevice(address);
+			return (byte)current.read(reg);
+		}
+		catch(Exception ex){}
+		return -1;
+	}
+
+
+	public byte[] read(byte address, byte reg, int bytes) {
+		return read(address, reg, bytes, false);
+	}
+	
+	public byte[] read(byte address, byte reg, int bytes, boolean lowByteFirst) {
+		try
+		{
+			current = bus.getDevice(address);
+			byte[] buffer = new byte[bytes];
+			current.read(reg, buffer, 0, buffer.length);
+			if(lowByteFirst)
+				buffer = Utils.reverseBytes(buffer);
+			return buffer;
+		}
+		catch(Exception ex){}
+		return null;
 	}
 }

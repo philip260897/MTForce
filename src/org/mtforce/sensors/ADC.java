@@ -1,5 +1,6 @@
 package org.mtforce.sensors;
 
+import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
@@ -27,13 +28,13 @@ public class ADC extends Sensor {
 	public static final byte kgsNO_EFFECT 			= 0x00;	//One-Shot Conversion mode, No effect
 	public static final int	 kgsINIT_NEW_CONV 		= 0x80;	//One-Shot Conversion mode, Initiate a new conversion.
 
-	
+	private I2CManager i2c;
 	
 	
 	
 	@Override
 	public void init() {
-		
+		i2c = (I2CManager)Sensors.getI2C();
 	}
 
 	@Override
@@ -49,43 +50,43 @@ public class ADC extends Sensor {
 	
 	public void setStandardConfiguration()
 	{
-		Sensors.getI2C().write8(kgsADDRESS, kgsSTD_CONFIG);
+		i2c.write(kgsADDRESS, kgsSTD_CONFIG);
 	}
 	
 	public void setConfiguration(byte configuration)
 	{
-		Sensors.getI2C().write8(kgsADDRESS, configuration);
+		i2c.write(kgsADDRESS, configuration);
 	}
 	
 	public int getGain()
 	{
-		byte packet = Sensors.getI2C().read8(kgsADDRESS);
+		byte packet = i2c.read(kgsADDRESS);
 		packet = Utils.isolateBits(packet, 0, 1);
 		return packet;
 	}
 		
 	public int getConvMode()
 	{
-		byte packet = Sensors.getI2C().read8(kgsADDRESS);
+		byte packet = i2c.read(kgsADDRESS);
 		return Utils.isolateBits(packet, 4, 4);
 	}
 	
 	public int getReadyBit()
 	{
-		byte packet = Sensors.getI2C().read8(kgsADDRESS);
+		byte packet = i2c.read(kgsADDRESS);
 		return Utils.isolateBits(packet, 7, 7);
 	}
 	
 	public int getSampleRate()
 	{
-		byte packet = Sensors.getI2C().read8(kgsADDRESS);
+		byte packet = i2c.read(kgsADDRESS);
 		packet = Utils.isolateBits(packet, 2, 3);
 		return packet;
 	}
 	
 	public int getChannelSelection()
 	{
-		byte packet = Sensors.getI2C().read8(kgsADDRESS);
+		byte packet = i2c.read(kgsADDRESS);
 		packet = Utils.isolateBits(packet, 6, 5);
 		return packet;
 	}

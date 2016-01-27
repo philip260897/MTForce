@@ -25,34 +25,9 @@ public class SPIManager implements CommunicationManager
 	{
 		
 	}
+
 	
-	@Override
-	public boolean write8(byte address, byte reg, byte val) {
-		// TODO Auto-generated method stub
-		
-		return false;
-	}
-
-	@Override
-	public boolean write16(byte address, byte reg, byte[] val) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public byte read8(byte address, byte reg) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public byte[] read16(byte address, byte reg) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean write8(byte address, byte val) {
+	public boolean write(byte address, byte val) {
 		// TODO Auto-generated method stub
 		//byte[] packet = new byte[] {address, val};
 		try {
@@ -63,12 +38,5 @@ public class SPIManager implements CommunicationManager
 		}
 		return false;
 	}
-
-	@Override
-	public byte read8(byte address) {
-		// TODO Auto-generated method stub
-		return 0;
-	}   
-	
 
 }

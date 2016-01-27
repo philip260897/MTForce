@@ -29,22 +29,25 @@ public class Ser7Seg extends Sensor
 	private int intensity = 3;
 	
 	private Calendar cal = Calendar.getInstance();
+	
+	private SPIManager spi;
 
 	@Override
 	public void init() {
+		spi = (SPIManager)Sensors.getSPI();
 		//initiation of the max 7219
-		Sensors.getSPI().write8(max7219_reg_scanLimit, 	(byte)0x07);      
-		Sensors.getSPI().write8(max7219_reg_decodeMode, 	(byte)0xff); 	// using an digits
-		Sensors.getSPI().write8(max7219_reg_shutdown, 		(byte)0x01);	// not in shutdown mode
-		Sensors.getSPI().write8(max7219_reg_displayTest, 	(byte)0x00);	// no display test
+		spi.write(max7219_reg_scanLimit, 	(byte)0x07);      
+		spi.write(max7219_reg_decodeMode, 	(byte)0xff); 	// using an digits
+		spi.write(max7219_reg_shutdown, 		(byte)0x01);	// not in shutdown mode
+		spi.write(max7219_reg_displayTest, 	(byte)0x00);	// no display test
 		
 		//Set all digits to 0
 		for (int e=1; e<=8; e++) 
 		{ 
-			Sensors.getSPI().write8((byte)e,(byte)0);
+			spi.write((byte)e,(byte)0);
 		}
 		//SPIManager.write(max7219_reg_intensity, (byte)((byte)0x01 & (byte)0x0f));    // the first 0x0f is the value you can set
-		Sensors.getSPI().write8(max7219_reg_intensity, (byte)intensity);
+		spi.write(max7219_reg_intensity, (byte)intensity);
 		setEnabled(true);
 	}
 
@@ -122,14 +125,14 @@ public class Ser7Seg extends Sensor
 
 	   updateUnusedDigits();
 	   
-	   Sensors.getSPI().write8(max7219_reg_digit0, digits[0]);
-	   Sensors.getSPI().write8(max7219_reg_digit1, digits[1]);
-	   Sensors.getSPI().write8(max7219_reg_digit2, digits[2]);
-	   Sensors.getSPI().write8(max7219_reg_digit3, digits[3]);
-	   Sensors.getSPI().write8(max7219_reg_digit4, (byte)(digits[4] | 0x80));
-	   Sensors.getSPI().write8(max7219_reg_digit5, digits[5]);
-	   Sensors.getSPI().write8(max7219_reg_digit6, digits[6]);
-	   Sensors.getSPI().write8(max7219_reg_digit7, digits[7]);
+	   spi.write(max7219_reg_digit0, digits[0]);
+	   spi.write(max7219_reg_digit1, digits[1]);
+	   spi.write(max7219_reg_digit2, digits[2]);
+	   spi.write(max7219_reg_digit3, digits[3]);
+	   spi.write(max7219_reg_digit4, (byte)(digits[4] | 0x80));
+	   spi.write(max7219_reg_digit5, digits[5]);
+	   spi.write(max7219_reg_digit6, digits[6]);
+	   spi.write(max7219_reg_digit7, digits[7]);
 	   
 	   
 	}
@@ -145,8 +148,8 @@ public class Ser7Seg extends Sensor
 				i = -1;
 			
 		}
-		Sensors.getSPI().write8(this.max7219_reg_scanLimit, (byte)c);
-		Sensors.getSPI().write8(max7219_reg_intensity, (byte)intensity);
+		spi.write(this.max7219_reg_scanLimit, (byte)c);
+		spi.write(max7219_reg_intensity, (byte)intensity);
 	}
 	
 	private void clearDigits() 

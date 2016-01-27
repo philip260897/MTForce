@@ -1,6 +1,7 @@
 package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CArduinoManager;
+import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Main;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
@@ -19,14 +20,16 @@ public class IOExpander extends Sensor
     private boolean ledState = false;
     private boolean buttonState = false;
 	
+    private I2CManager i2c;
     
 	@Override
 	public void init() 
 	{
+		i2c = (I2CManager)Sensors.getI2C();
 		//Gets called on Startup once. Check if Sensor is available and setEnabled(true);
 		
 		//Returns false if component not reachable
-		if(Sensors.getI2C().write8(ADDRESS, (byte)0x00, (byte)0xFE)) 
+		if(i2c.write(ADDRESS, (byte)0x00, (byte)0xFE)) 
 		{
 			//doCheck();
 			setEnabled(true);
@@ -46,7 +49,7 @@ public class IOExpander extends Sensor
 		//Call this method to update specific data. Used to read from component and update tracking variables
 		super.update();
 		
-		byte button = (byte)(Sensors.getI2C().read8(ADDRESS, (byte)0x12) & (byte)0x02);
+		byte button = (byte)(i2c.read(ADDRESS, (byte)0x12) & (byte)0x02);
 		buttonState = false;
 		if(button == 0x02)
 			buttonState = true;
@@ -62,7 +65,7 @@ public class IOExpander extends Sensor
 		byte value = (byte) (led ? 0x01 : 0x00);
 		
 		//write value to component
-		Sensors.getI2C().write8(ADDRESS, GPIOA, value);
+		i2c.write(ADDRESS, GPIOA, value);
 		ledState = led;
 	}
 	
@@ -80,7 +83,7 @@ public class IOExpander extends Sensor
 		super.dispose();
 		
 		//Turn off the LED on shutdown
-		Sensors.getI2C().write8(ADDRESS, GPIOA, (byte)0x00);
+		i2c.write(ADDRESS, GPIOA, (byte)0x00);
 	}
 	
 	public void doCheck()
@@ -95,9 +98,9 @@ public class IOExpander extends Sensor
 	private boolean checkRegister(byte reg, int value, int bcount)
 	{
 		byte[] txPacket = Utils.toBytes(value, bcount);
-		Sensors.getI2C().write16(ADDRESS, reg, txPacket);
+		i2c.write(ADDRESS, reg, txPacket);
 		
-		byte[] rxPacket = Sensors.getI2C().read16(ADDRESS, reg);
+		byte[] rxPacket = i2c.read(ADDRESS, reg, 2);
 		
 		return Utils.compareBytes(txPacket, rxPacket);
 	}

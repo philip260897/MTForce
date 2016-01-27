@@ -2,6 +2,7 @@ package org.mtforce.impatouch;
 
 import java.awt.Point;
 
+import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
@@ -83,16 +84,23 @@ public class LedDriver
 											//0: R, G, B  1: R, G, B
 	private byte valueOrder[] = new byte[] {0,1,2,3,4,5,6,7};
 	
+	private I2CManager i2c;
+	
 	public LedDriver()
 	{
-
+		
+	}
+	
+	public void initialize()
+	{
+		i2c = (I2CManager)Sensors.getI2C();
 	}
 	
 	public void sendTest()
 	{
 		LedDictionary.LoadDictionary();
 		LedDigit digit_4 = LedDictionary.getDigit("4");
-		Sensors.getI2C().write16((byte)0xFF, (byte)0xFF, generateBytesFromDigit(digit_4));
+		i2c.write((byte)0xFF, (byte)0xFF, generateBytesFromDigit(digit_4));
 	}
 	
 	private byte[] generateBytesFromDigit(LedDigit digit)

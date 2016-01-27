@@ -55,4 +55,17 @@ public class Utils {
 	{
 		return (double)number  * Math.pow(2, -n);
 	}
+	
+	public static byte[] reverseBytes(byte[] array)
+	{
+		byte[] n = new byte[array.length];
+		for(int i = 0; i < n.length; i++)
+			n[n.length-1-i] = array[i];
+		return n;
+	}
+	
+	public static String byteToHexString(byte b)
+	{
+		return String.format("%02x", b & 0xff);
+	}
 }

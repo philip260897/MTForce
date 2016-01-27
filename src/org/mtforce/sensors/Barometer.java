@@ -14,15 +14,18 @@ public class Barometer extends Sensor {
 	public static final byte ADC_CONVERSION = 0x48; 		//CONVERSION OF ANALOG IN
 	public static final byte ADC_READ 		= 0x00;			//8-BIT DATA FOLLOWED BY ACK 3 TIMES (24BIT)
 	
+	
+	private I2CManager i2c;
+	
 	@Override
 	public void init() {
-		
-		 Sensors.getI2C().write8(ADDRESS, RESET);
+		i2c = (I2CManager) Sensors.getI2C();
+		i2c.write(ADDRESS, RESET);
 	}
 
 	@Override
 	public void update() {
-		 Sensors.getI2C().write8(ADDRESS, PROM_READ);
+		 i2c.write(ADDRESS, PROM_READ);
 		
 	}
 
