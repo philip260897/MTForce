@@ -14,6 +14,8 @@ import org.mtforce.main.Utils;
  * Funktionen: Komplett
  * 
  * TODO: Modultest
+ * 	getVoltage(int Kanal) 	- Spannungswert von bestimmten Kanal einlesen
+ * 	getVoltage()			- Spannungswert von momentan ausgewaehlten Kanal einlesen
  */
 public class ADC extends Sensor 
 {
@@ -43,12 +45,13 @@ public class ADC extends Sensor
 	private I2CManager i2c;
 	
 	
-	
+	/**
+	 * Initialisiert den Baustein
+	 */
 	@Override
 	public void init() 
 	{
 		i2c = (I2CManager)Sensors.getI2C();
-		
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public class ADC extends Sensor
 	
 	/**
 	 * Setzt die gewünschte Konfiguration
-	 * @param configuration
+	 * @param configuration	Bausteinkonfiguration
 	 */
 	public void setConfiguration(byte configuration)
 	{
@@ -81,7 +84,7 @@ public class ADC extends Sensor
 	
 	/**
 	 * Returned die Gain-Konfiguration
-	 * @return
+	 * @return	Gibt die Gain-Konstante zurueck
 	 */
 	public int getGain()
 	{
@@ -92,7 +95,7 @@ public class ADC extends Sensor
 	
 	/**
 	 * Returned die Conversions-Konfiguration
-	 * @return
+	 * @return	Gibt die Conversion-Mode-Konstante zurueck
 	 */
 	public int getConvMode()
 	{
@@ -102,7 +105,7 @@ public class ADC extends Sensor
 	
 	/**
 	 * Returned das Ready Bit
-	 * 
+	 * @return Gibt das "Ready" bit zurueck
 	 */
 	public int getReadyBit()
 	{
@@ -112,7 +115,7 @@ public class ADC extends Sensor
 	
 	/***
 	 * Returned die SampleRate-Konfiguration
-	 * @return
+	 * @return Gibt die Samplerate-Konstante zurueck
 	 */
 	public int getSampleRate()
 	{
@@ -123,7 +126,7 @@ public class ADC extends Sensor
 	
 	/**
 	 * Returned die Channel-Konfiguration
-	 * @return
+	 * @return	Gibt die Channel-Select-Konstante zurueck
 	 */
 	public int getChannelSelection()
 	{
