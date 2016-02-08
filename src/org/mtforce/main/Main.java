@@ -16,7 +16,6 @@ public class Main
 		try
 		{
 			Sensors.initialize();
-			Sensors.updateAll();
 			
 			for(Sensor sensor : Sensors.getSensors())
 				System.out.println("Registered: "+sensor.getClass().getSimpleName());
