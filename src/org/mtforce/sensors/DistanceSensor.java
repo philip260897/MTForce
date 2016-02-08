@@ -3,10 +3,22 @@ package org.mtforce.sensors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mtforce.main.Sensors;
+
+/**
+ * Beschreibung: Analoger Distanzsensor, haengt am ADC
+ * 
+ * Konstanten: Komplett
+ * Funktionen: NICHT Komplett
+ * 
+ * TODO: Modultest
+ */
+
 public class DistanceSensor extends Sensor
 {
-
 	private List<Double[]> points = new ArrayList<Double[]>();
+	private ADC adc;
+	
 	
 	public DistanceSensor()
 	{
@@ -19,9 +31,32 @@ public class DistanceSensor extends Sensor
 		points.add(new Double[] {3.0, 1/7d});
 		points.add(new Double[] {3.15, 1/6d});
 		points.add(new Double[] {3.10, 1/5d});
+		
+		adc = Sensors.getAdc();
 	}
 	
-	public double convertVoltageToDistance(double voltage)
+	@Override
+	public void init() 
+	{
+		if(adc.isEnabled())
+		{
+			
+		}
+		else
+		{
+			setEnabled(false);
+		}
+	}
+	
+	private double getDistance()
+	{
+		double distance = 0;
+		
+		
+		return distance;
+	}
+	
+	private double convertVoltageToDistance(double voltage)
 	{
 		Double[] lower = getPoint(voltage, false);
 		Double[] higher = getPoint(voltage, true);
@@ -58,12 +93,6 @@ public class DistanceSensor extends Sensor
 		}
 		return new Double[]{-1d,-1d};
 	}
-	
-	@Override
-	public void init() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void update() {
@@ -76,9 +105,4 @@ public class DistanceSensor extends Sensor
 		// TODO Auto-generated method stub
 		
 	}
-	
-	public double getDistance() {
-		return 0.0d;
-	}
-
 }

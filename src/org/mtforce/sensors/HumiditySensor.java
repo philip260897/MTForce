@@ -1,6 +1,16 @@
 package org.mtforce.sensors;
 
-public class HumiditySensor extends Sensor {
+/**
+ * Beschreibung: Feuchtigkeitssensor
+ * 
+ * Konstanten: Komplett
+ * Funktionen: NICHT Komplett
+ * 
+ * TODO: Modultest
+ */
+
+public class HumiditySensor extends Sensor 
+{
 	public final static byte ADDRESS 				= (byte) 0x80; 		//DEVICE ADDRESS
 	public final static byte MEASURE_HUM_HMM 		= (byte) 0xE5;		//Measure Relative Humidity, Hold Master Mode
 	public final static byte MEASURE_HUM_NO_HMM 	= (byte) 0xF5;		//Measure Relative Humidity, No Hold Master Mode

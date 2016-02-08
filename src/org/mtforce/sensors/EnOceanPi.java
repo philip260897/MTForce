@@ -1,5 +1,14 @@
 package org.mtforce.sensors;
 
+/**
+ * Beschreibung: Funkmodul
+ * 
+ * Konstanten: Komplett
+ * Funktionen: NICHT Komplett
+ * 
+ * TODO: Modultest
+ */
+
 public class EnOceanPi extends Sensor {
 
 	public static final byte RESERVED_1 		= 0x00; //RESERVED

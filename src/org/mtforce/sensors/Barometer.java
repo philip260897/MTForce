@@ -4,8 +4,17 @@ import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
-public class Barometer extends Sensor {
+/**
+ * Beschreibung: Misst Luftdruck
+ * 
+ * Konstanten: Komplett
+ * Funktionen: NICHT Komplett
+ * 
+ * TODO: Modultest
+ */
 
+public class Barometer extends Sensor 
+{	
 	public static final byte ADDRESS 		= 0x76;			//LAST BIT = !CSB (CSB = HARDWARE PIN)
 	public static final byte RESET 			= 0x1E; 		//RESETS PROM
 	
@@ -18,14 +27,16 @@ public class Barometer extends Sensor {
 	private I2CManager i2c;
 	
 	@Override
-	public void init() {
+	public void init() 
+	{
+		//TODO: Richtig initialisieren
 		i2c = (I2CManager) Sensors.getI2C();
 		i2c.write(ADDRESS, RESET);
 	}
 
 	@Override
 	public void update() {
-		 i2c.write(ADDRESS, PROM_READ);
+		 //i2c.write(ADDRESS, PROM_READ);
 		
 	}
 

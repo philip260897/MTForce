@@ -6,6 +6,7 @@ import java.util.List;
 import org.mtforce.interfaces.CommunicationManager;
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.interfaces.SPIManager;
+import org.mtforce.sensors.ADC;
 import org.mtforce.sensors.DistanceSensor;
 import org.mtforce.sensors.IOExpander;
 import org.mtforce.sensors.LightSensor;
@@ -23,6 +24,7 @@ public final class Sensors
 	private static Ser7Seg ser7seg = new Ser7Seg();
 	private static IOExpander ipExp = new IOExpander();
 	private static Thermometer thermometer = new Thermometer();
+	private static ADC adc = new ADC();
 	
 	private static CommunicationManager i2c = null;
 	private static CommunicationManager spi = null;
@@ -39,6 +41,7 @@ public final class Sensors
 		sensorList.add(ser7seg);
 		sensorList.add(ipExp);
 		sensorList.add(thermometer);
+		sensorList.add(adc);
 		
 		if(i2c == null)
 			i2c = new I2CManager();
@@ -92,5 +95,9 @@ public final class Sensors
 	
 	public static Ser7Seg getSer7Seg() {
 		return ser7seg;
+	}
+	
+	public static ADC getAdc() {
+		return adc;
 	}
 }

@@ -5,10 +5,16 @@ import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
+/**
+ * Beschreibung: Thermometer
+ * 
+ * Konstanten: Komplett
+ * Funktionen: Komplett
+ * 
+ * TODO: Modultest
+ */
 public class Thermometer extends Sensor 
 {
-	//STATUS: Alle Methode Implementiert; Teilweise getestet;
-	
 	public static final byte kgsADDRESS		=		0x18;	//Baustein-Adresse
 	
 	public static final byte kgsREG_CONF		=	0x01;	//Konfigurations-Register
@@ -168,7 +174,7 @@ public class Thermometer extends Sensor
 	
 	public void setTLowerLimit(double limit)
 	{
-		i2c.write(kgsADDRESS, kgsREG_TLOWER, formatWriteLimits(limit), false);
+		i2c.write(kgsADDRESS, kgsREG_TLOWER, formatWriteLimits(limit), true);
 	}
 	
 	public double getTLowerLimit()

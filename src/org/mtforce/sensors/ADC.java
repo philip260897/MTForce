@@ -4,7 +4,19 @@ import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
-public class ADC extends Sensor {
+
+/**
+ * Beschreibung: 4-Kanal ADC
+ * 		Kanal 1: Distanzsensor
+ * 		Kanal 2: Lichtsnsor
+ * 
+ * Konstanten: Komplett
+ * Funktionen: Komplett
+ * 
+ * TODO: Modultest
+ */
+public class ADC extends Sensor 
+{
 	public static final byte kgsADDRESS				= 0x68;
 	public static final byte kgsSTD_CONFIG			= (byte) 0x90;
 	
@@ -33,8 +45,10 @@ public class ADC extends Sensor {
 	
 	
 	@Override
-	public void init() {
+	public void init() 
+	{
 		i2c = (I2CManager)Sensors.getI2C();
+		
 	}
 
 	@Override

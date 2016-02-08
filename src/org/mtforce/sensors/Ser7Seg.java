@@ -5,6 +5,7 @@ import java.util.Calendar;
 import org.mtforce.interfaces.SPIManager;
 import org.mtforce.main.Sensors;
 
+@Deprecated
 public class Ser7Seg extends Sensor
 {
 	//Common register declaration 
