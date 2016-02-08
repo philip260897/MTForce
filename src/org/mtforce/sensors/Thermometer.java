@@ -264,24 +264,43 @@ public class Thermometer extends Sensor
 	
 	//=====Ta======IMPLEMENTED
 	
+	/**
+	 * Returned ob TemperatureCritical-Bit gesetzt ist
+	 * COMMENT: True wenn Temperatur das gewünschte Critical Limit überschreitet
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isTemperatureCritical()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2, true);
 		return Utils.isBitSet(packet[1], 7);
 	}
 	
+	/**
+	 * Returned ob TemperatureUpper-Bit gesetzt ist
+	 * COMMENT: True wenn Temperatur das gewünschte Upper Limit überschreitet
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isTemperatureUpper()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2, true);
 		return Utils.isBitSet(packet[1], 6);
 	}
 	
+	/**
+	 * Returned ob TemperatureLower-Bit gesetzt ist
+	 * COMMENT: True wenn Temperatur das gewünschte Lower Limit überschreitet
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isTemperatureLower()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2, true);
 		return Utils.isBitSet(packet[1], 5);
 	}
 	
+	/**
+	 * Returned die Temperatur
+	 * @return Temperatur
+	 */
 	public double getTemperature()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TA, 2, true);
@@ -290,6 +309,10 @@ public class Thermometer extends Sensor
 	
 	//====Manufacturer ID============IMPLEMENTED
 	
+	/**
+	 * Returned die Manufacturer ID
+	 * @return Manufacturer ID
+	 */
 	public int getManufacturerID()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_MANUF_ID, 2, true);
@@ -298,12 +321,20 @@ public class Thermometer extends Sensor
 	
 	//====Device ID and Revision======IMPLEMENTED
 	
+	/**
+	 * Returned die Device ID
+	 * @return Device ID
+	 */
 	public int getDeviceID()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_DEV_ID, 2, true);
 		return (int)packet[1] & 0xFF;
 	}
 	
+	/**
+	 * Returned die Devision
+	 * @return Devision
+	 */
 	public int getRevision()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_DEV_ID, 2, true);
@@ -312,11 +343,19 @@ public class Thermometer extends Sensor
 	
 	//======RESOLUTIOn=====
 	
+	/**
+	 * gewünschte Auflösung setzen
+	 * @param 	gewünschte Auflösung
+	 */
 	public void setResolution(byte resolution)
 	{
 		i2c.write(kgsADDRESS, kgsREG_RES, resolution);
 	}
 	
+	/**
+	 * Returned die Auflösung
+	 * @return resolution
+	 */
 	public byte getResolution()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_RES);
@@ -325,6 +364,11 @@ public class Thermometer extends Sensor
 	
 	//=====UTILS=====
 	
+	/**
+	 * Konvertiert einen Double Wert in Q-Notation
+	 * @param limit Parameter welcher Wert konvertiert werden soll
+	 * @return 	Konvertiertes Ergebnis in Q-Notation
+	 */
 	private byte[] formatWriteLimits(double limit)
 	{
 		boolean negativ = limit < 0 ? true : false;
@@ -339,6 +383,11 @@ public class Thermometer extends Sensor
 		return packet;
 	}
 	
+	/**
+	 * Q-Notation zu double Wert
+	 * @param packet Parameter welcher Wert konvertiert werden soll
+	 * @return 	Konvertiertes Ergebnis
+	 */
 	private double formatReadLimits(byte[] packet)
 	{
 		byte HighB = Utils.isolateBits(packet[1], 0, 3);
