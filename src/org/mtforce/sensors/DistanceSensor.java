@@ -7,17 +7,19 @@ import org.mtforce.main.Sensors;
 
 /**
  * Beschreibung: Analoger Distanzsensor, haengt am ADC
+ * 	Spannungswerte werden linear Interpoliert nach der Kennlinie im Datenblatt
  * 
  * Konstanten: Komplett
- * Funktionen: NICHT Komplett
+ * Funktionen: Komplett
  * 
- * TODO: Modultest
+ * TODO: 	Modultest
+ * 			getDistance() -	Geschrieben aber nicht getestet
  */
 
 public class DistanceSensor extends Sensor
 {
-	private List<Double[]> points = new ArrayList<Double[]>();
-	private ADC adc;
+	private List<Double[]> points = new ArrayList<Double[]>();	//Kennlinienwerte laut Datenblatt
+	private ADC adc;											//Verweis auf ADC
 	
 	
 	public DistanceSensor()
@@ -35,42 +37,61 @@ public class DistanceSensor extends Sensor
 		adc = Sensors.getAdc();
 	}
 	
+	/**
+	 * Initialisiert Baustein. (Wird nur initialisiert wenn ADC aktiv ist)
+	 */
 	@Override
 	public void init() 
 	{
 		if(adc.isEnabled())
 		{
-			
+			setEnabled(true);
 		}
 		else
 		{
-			setEnabled(false);
+			System.out.println(this.getClass().getSimpleName() + ": init error! ADC not functional");
 		}
 	}
 	
+	/**
+	 * Gibt den Momentanen Distanzwert des Distanzsensors zurueck
+	 * @return	Distanzwert in cm
+	 */
 	private double getDistance()
 	{
+		//TODO: Spannungswert von ADC auslesen auf Kanal 1
 		double distance = 0;
 		
+		if(adc.isEnabled())
+		{
+			distance = convertVoltageToDistance(5);
+		}
 		
 		return distance;
 	}
 	
+	/**
+	 * Wandelt einen Spannungswert in einen Distanzwert um
+	 * @param voltage	Spannung in Volt
+	 * @return			Gibt einen Distanzwert in cm zurueck
+	 */
 	private double convertVoltageToDistance(double voltage)
 	{
 		Double[] lower = getPoint(voltage, false);
 		Double[] higher = getPoint(voltage, true);
 		
-		System.out.println(lower[0] + " " + voltage + " " + higher[0]);
-		
 		double k = (higher[0] - lower[0])/(higher[1] - lower[1]);
 		double distance = 1/((voltage)/k);
-		
-		System.out.println(distance + " cm");
 		
 		return -1d;
 	}
 	
+	/**
+	 * Gibt einen darueberliegenden oder darunterliegenden Referenzwert zurueck. Benoetigt fuer Lineare Interpolation
+	 * @param voltage	Spannungswert in Volt
+	 * @param above		Waehlt den ueberliegenden Referenzwert aus oder den darunterliegenden
+	 * @return			Gibt ein Double-Array zurueck welches x und y Koordinaten zurueck
+	 */
 	private Double[] getPoint(double voltage, boolean above)
 	{
 		for(int i = 0; i < points.size(); i++)

@@ -14,12 +14,14 @@ public class Sensor
 		setEnabled(false);
 	}
 	
+	@Deprecated
 	public void update()												//Ueberprueft ob Sensor aktiv ist
 	{
 		if(!isEnabled())
 			return;
 	}
 	
+	@Deprecated
 	public void dispose()												//Ueberprueft ob Sensor aktiv ist
 	{
 		if(!isEnabled())
