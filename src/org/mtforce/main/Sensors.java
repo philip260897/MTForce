@@ -54,12 +54,6 @@ public final class Sensors
 		for(Sensor sensor : sensorList)
 			sensor.init();
 	}
-	
-	public static void updateAll()
-	{
-		for(Sensor sensor : sensorList)
-			sensor.update();
-	}
 
 	public static void setI2C(CommunicationManager manager) {
 		i2c = manager;
