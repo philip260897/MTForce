@@ -114,8 +114,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned das Shutdown-Bit
-	 * @return
+	 * Returned ob das Shutdown-Bit gesetzt ist
+	 * @return	boolean ob gesetzt
 	 */
 	public boolean isShutdownSet()
 	{
@@ -123,48 +123,80 @@ public class Thermometer extends Sensor
 		return Utils.isBitSet(packet[1], 0);
 	}
 	
+	/**
+	 * Returned ob CriticalLock-Bit gesetzt ist
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isCriticalLockSet()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 7);
 	}
 	
+	/**
+	 * Returned ob Window-Bit gesetzt ist
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isWindowLockSet()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 6);
 	}
 	
+	/**
+	 * Returned ob InterruptClear-Bit gesetzt ist
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isInterruptClearSet()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 5);
 	}
 	
+	/**
+	 * Returned ob AlertOutputStatus-Bit gesetzt ist
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isAlertOutputStatusSet()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 4);
 	}
 	
+	/**
+	 * Returned ob AlertOutputControl-Bit gesetzt ist
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isAlertOutputControlSet()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 3);
 	}
 	
+	/**
+	 * Returned ob AlertOutputSelectSet-Bit gesetzt ist
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isAlertOutputSelectSet()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 2);
 	}
 	
+	/**
+	 * Returned ob AlertOutputPolaritySet-Bit gesetzt ist
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isAlertOutputPolaritySet()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
 		return Utils.isBitSet(packet[0], 1);
 	}
 	
+	/**
+	 * Returned ob AlertOutputModeSet-Bit gesetzt ist
+	 * @return boolean ob gesetzt
+	 */
 	public boolean isAlertOutputModeSet()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
@@ -173,33 +205,57 @@ public class Thermometer extends Sensor
 	
 	//=====Temperature Limits=====IMPLEMENTED
 	
+	/**
+	 * Schreibt das gewünschte Upper Limit ins Register
+	 * @param limit		Upper Limit in Grad Celsius
+	 */
 	public void setTUpperLimit(double limit)
 	{
 		i2c.write(kgsADDRESS, kgsREG_TUPPER, formatWriteLimits(limit), true);
 	}
 	
+	/**
+	 * gettet Upper Limit
+	 * @param return	Upper Limit in Grad Celsius
+	 */
 	public double getTUpperLimit()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TUPPER, 2, true);
 		return formatReadLimits(packet);
 	}
 	
+	/**
+	 * Schreibt das gewünschte Lower Limit ins Register
+	 * @param limit		Upper Lower in Grad Celsius
+	 */
 	public void setTLowerLimit(double limit)
 	{
 		i2c.write(kgsADDRESS, kgsREG_TLOWER, formatWriteLimits(limit), true);
 	}
 	
+	/**
+	 * gettet Lower Limit
+	 * @param return	Lower Limit in Grad Celsius
+	 */
 	public double getTLowerLimit()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TLOWER, 2, true);
 		return formatReadLimits(packet);
 	}
 	
+	/**
+	 * Schreibt die gewünschte Critical Temperature ins Register
+	 * @param limit		Critical Temperature in Grad Celsius
+	 */
 	public void setTCritical(double limit)
 	{
 		i2c.write(kgsADDRESS, kgsREG_TCRIT, formatWriteLimits(limit), true);
 	}
 	
+	/**
+	 * gettet Critical Temperature
+	 * @param return	Critical Temperature in Grad Celsius
+	 */
 	public double getTCriticalLimit()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_TCRIT, 2, true);
