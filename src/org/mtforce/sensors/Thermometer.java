@@ -68,6 +68,11 @@ public class Thermometer extends Sensor
 		} 
 	}
 	
+	/**
+	 * Setzt die Standard Konfiguration
+	 * WICHTIG: Nur vor dem Initialisieren aufrufen! 
+	 * @param defaultConfiguration	Konstante Konfiguration
+	 */
 	public void setDefaultConfiguration(int defaultConfiguration)
 	{
 		this.gDefaultConfiguration = defaultConfiguration;
@@ -75,11 +80,19 @@ public class Thermometer extends Sensor
 	
 	//=====Configuration===== IMPLEMENTED
 	
+	/**
+	 * Setzt die gewünschte Konfiguration
+	 * @param configuration		gewünschte Konstanten verODERn
+	 */
 	public void setConfiguration(int configuration)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONF, Utils.toBytes(configuration, 2), true);
 	}
 	
+	/**
+	 * Führt read aus und schreibt das gelesene in einen Integer
+	 * @return	gelesener Integer Wert
+	 */
 	public int getConfiguration()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
@@ -89,6 +102,10 @@ public class Thermometer extends Sensor
 		return Utils.toInt(packet);
 	}
 	
+	/**
+	 * Gibt die Hysteresen-Konfiguration aus
+	 * @return 	Hysteresen-Konfiguration Integer
+	 */
 	public int getHysteresis()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
@@ -96,6 +113,10 @@ public class Thermometer extends Sensor
 		return Utils.toInt(packet);
 	}
 	
+	/**
+	 * Returned das Shutdown-Bit
+	 * @return
+	 */
 	public boolean isShutdownSet()
 	{
 		byte[] packet = i2c.read(kgsADDRESS, kgsREG_CONF, 2, true);
