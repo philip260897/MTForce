@@ -52,20 +52,6 @@ public class Ser7Seg extends Sensor
 		setEnabled(true);
 	}
 
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		super.update();
-		number++;
-		clearDigits();
-		cal = Calendar.getInstance();
-		printNumber(cal.getTime().getHours(), 6);
-		printNumber(cal.getTime().getMinutes(), 3);
-		printNumber(cal.getTime().getSeconds(), 0);
-
-		//printNumber(number, 0);
-	}
-
 	public void showTemperature(double temp)
 	{
 		clearDigits();
@@ -74,13 +60,6 @@ public class Ser7Seg extends Sensor
 		number++;
 		printNumber(iTemp, 4);
 		printNumber(dec, 0);
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		super.dispose();
-
 	}
 
 	public int getNumber() {

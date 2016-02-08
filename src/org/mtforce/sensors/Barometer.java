@@ -22,16 +22,6 @@ public class Barometer extends Sensor {
 		i2c = (I2CManager) Sensors.getI2C();
 		i2c.write(ADDRESS, RESET);
 	}
-
-	@Override
-	public void update() {
-		 i2c.write(ADDRESS, PROM_READ);
-	}
-
-	@Override
-	public void dispose() {
-		
-	}
 	
 	public void reset(){
 		i2c.write(ADDRESS, RESET);

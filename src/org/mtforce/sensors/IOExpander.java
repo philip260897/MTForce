@@ -44,18 +44,6 @@ public class IOExpander extends Sensor
 		} 
 	}
 
-	@Override
-	public void update() 
-	{
-		//Call this method to update specific data. Used to read from component and update tracking variables
-		super.update();
-		
-		byte button = (byte)(i2c.read(ADDRESS, (byte)0x12) & (byte)0x02);
-		buttonState = false;
-		if(button == 0x02)
-			buttonState = true;
-	}
-
 	public void setLedOn(boolean led)
 	{
 		//Check if Sensor is enabled or not
@@ -76,15 +64,6 @@ public class IOExpander extends Sensor
 	
 	public boolean getButtonState() {
 		return buttonState;
-	}
-	
-	@Override
-	public void dispose() {
-		//Gets called on shutdown
-		super.dispose();
-		
-		//Turn off the LED on shutdown
-		i2c.write(ADDRESS, GPIOA, (byte)0x00);
 	}
 	
 	public void doCheck()

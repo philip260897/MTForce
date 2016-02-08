@@ -67,15 +67,6 @@ public class Thermometer extends Sensor
 			System.out.println(this.getClass().getSimpleName() + ": init error! Device not functional");
 		} 
 	}
-
-	/**
-	 * Nicht verwendet
-	 */
-	@Override
-	public void dispose()
-	{
-		super.dispose();
-	}
 	
 	public void setDefaultConfiguration(int defaultConfiguration)
 	{

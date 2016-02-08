@@ -53,17 +53,6 @@ public class ADC extends Sensor
 	{
 		i2c = (I2CManager)Sensors.getI2C();
 	}
-
-	@Override
-	public void update() {
-
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	/**
 	 * Setzt die Standard Konfiguration
