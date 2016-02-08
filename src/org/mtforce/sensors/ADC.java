@@ -11,7 +11,7 @@ import org.mtforce.main.Utils;
  * 		Kanal 2: Lichtsnsor
  * 
  * Konstanten: Komplett
- * Funktionen: Komplett
+ * Funktionen: NICHT Komplett
  * 
  * TODO: Modultest
  * 	getVoltage(int Kanal) 	- Spannungswert von bestimmten Kanal einlesen
@@ -19,8 +19,8 @@ import org.mtforce.main.Utils;
  */
 public class ADC extends Sensor 
 {
-	public static final byte kgsADDRESS				= 0x68;
-	public static final byte kgsSTD_CONFIG			= (byte) 0x90;
+	public static final byte kgsADDRESS				= 0x68;	//Bausteinaddresse
+	public static final byte kgsSTD_CONFIG			= (byte) 0x90;	//Standard Konfiguration
 	
 	public static final byte kgsPGA_GAIN_x1			= 0x00;	//PGA Gain Selection Bits PGA=1
 	public static final byte kgsPGA_GAIN_x2 		= 0x01;	//PGA Gain Selection Bits, PGA=2
@@ -42,7 +42,7 @@ public class ADC extends Sensor
 	public static final byte kgsNO_EFFECT 			= 0x00;	//One-Shot Conversion mode, No effect
 	public static final int	 kgsINIT_NEW_CONV 		= 0x80;	//One-Shot Conversion mode, Initiate a new conversion.
 
-	private I2CManager i2c;
+	private I2CManager i2c;									//Verweis auf I2CManager
 	
 	
 	/**
