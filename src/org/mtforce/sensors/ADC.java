@@ -62,35 +62,58 @@ public class ADC extends Sensor
 		
 	}
 	
+	/**
+	 * Setzt die Standard Konfiguration
+	 */
 	public void setStandardConfiguration()
 	{
 		i2c.write(kgsADDRESS, kgsSTD_CONFIG);
 	}
 	
+	/**
+	 * Setzt die gewünschte Konfiguration
+	 * @param configuration
+	 */
 	public void setConfiguration(byte configuration)
 	{
 		i2c.write(kgsADDRESS, configuration);
 	}
 	
+	/**
+	 * Returned die Gain-Konfiguration
+	 * @return
+	 */
 	public int getGain()
 	{
 		byte packet = i2c.read(kgsADDRESS);
 		packet = Utils.isolateBits(packet, 0, 1);
 		return packet;
 	}
-		
+	
+	/**
+	 * Returned die Conversions-Konfiguration
+	 * @return
+	 */
 	public int getConvMode()
 	{
 		byte packet = i2c.read(kgsADDRESS);
 		return Utils.isolateBits(packet, 4, 4);
 	}
 	
+	/**
+	 * Returned das Ready Bit
+	 * 
+	 */
 	public int getReadyBit()
 	{
 		byte packet = i2c.read(kgsADDRESS);
 		return Utils.isolateBits(packet, 7, 7);
 	}
 	
+	/***
+	 * Returned die SampleRate-Konfiguration
+	 * @return
+	 */
 	public int getSampleRate()
 	{
 		byte packet = i2c.read(kgsADDRESS);
@@ -98,6 +121,10 @@ public class ADC extends Sensor
 		return packet;
 	}
 	
+	/**
+	 * Returned die Channel-Konfiguration
+	 * @return
+	 */
 	public int getChannelSelection()
 	{
 		byte packet = i2c.read(kgsADDRESS);
