@@ -9,12 +9,22 @@ import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.wiringpi.I2C;
 import com.pi4j.wiringpi.Spi;
 
-
+/**
+ * Beschreibung: Kommunikation ueber das I2C Interface
+ * 
+ * Konstanten: Komplett
+ * Funktionen: Komplett
+ * 
+ * TODO: Modultest
+ */
 public class I2CManager implements CommunicationManager
 {	
 	private static I2CBus bus;
 	private static I2CDevice current;
 
+	/**
+	 * Initialisiert das I2C-Interface
+	 */
 	@Override
     public void initialize() throws Exception
     {

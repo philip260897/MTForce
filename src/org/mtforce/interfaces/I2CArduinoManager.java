@@ -4,6 +4,12 @@ import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 
+/**
+ * NUR ZUM TESTEN
+ * @author Philip
+ *
+ */
+@Deprecated
 public class I2CArduinoManager {
 	private static I2CBus bus;
 	private static I2CDevice current;

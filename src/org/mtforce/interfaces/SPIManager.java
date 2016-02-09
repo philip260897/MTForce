@@ -6,10 +6,21 @@ import com.pi4j.io.spi.SpiChannel;
 import com.pi4j.io.spi.SpiDevice;
 import com.pi4j.io.spi.SpiFactory;
 
+/**
+ * Beschreibung: Kommunikation ueber das SPI Interface
+ * 
+ * Konstanten: Komplett
+ * Funktionen: NICHT Komplett
+ * 
+ * TODO: write und read funktionen, Modultest
+ */
 public class SPIManager implements CommunicationManager
 {
 	private static SpiDevice spi = null;
 	
+	/**
+	 * Initialisiert den SPIManager auf 16MHz, CH0, DEFAULT_SPI_MODE
+	 */
 	@Override
     public void initialize() throws Exception
     {
@@ -21,12 +32,13 @@ public class SPIManager implements CommunicationManager
         }
     }
 
+	
 	public void write(byte[] bytes)
 	{
-		
+		//TODO: Methode schreiben
 	}
 
-	
+	//DEBUG: noch nicht fertig
 	public boolean write(byte address, byte val) {
 		// TODO Auto-generated method stub
 		//byte[] packet = new byte[] {address, val};

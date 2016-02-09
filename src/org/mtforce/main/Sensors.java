@@ -15,6 +15,14 @@ import org.mtforce.sensors.Sensor;
 import org.mtforce.sensors.Ser7Seg;
 import org.mtforce.sensors.Thermometer;
 
+/**
+ * Beschreibung: Die Sensors-Klasse enthaelt alle Instanzen der verschiedenen Sensoren.
+ * 
+ * Konstanten: NICHT Komplett
+ * Funktionen: NICHT Komplett
+ * 
+ * TODO: Alle Sensoren hinzufuegen, getter und setter, Modultest
+ */
 public final class Sensors 
 {
 	private static List<Sensor> sensorList = new ArrayList<Sensor>();
@@ -34,6 +42,10 @@ public final class Sensors
 		
 	}
 	
+	/**
+	 * Initialisiert Alle Sensoren und die CommunicationManager (I2C, SPI)
+	 * @throws Exception	Falls ein Fehler bei der Initialisierung vorkommt
+	 */
 	public static void initialize() throws Exception
 	{
 		sensorList.add(distanceSensor);
@@ -55,6 +67,8 @@ public final class Sensors
 			sensor.init();
 	}
 
+	
+	//=====Getter und Setter=====//
 	public static void setI2C(CommunicationManager manager) {
 		i2c = manager;
 	}
