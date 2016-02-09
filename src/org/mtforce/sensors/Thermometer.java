@@ -371,12 +371,17 @@ public class Thermometer extends Sensor
 	 */
 	private byte[] formatWriteLimits(double limit)
 	{
+		//Falls wert negativ, vorzeichen merken und wert invertieren
 		boolean negativ = limit < 0 ? true : false;
 		if(negativ)
 			limit *= -1;
+		//Positiven wert in 14Q2 Umwandeln
 		int l = Utils.doubleToQNotation(limit, 2);
+		//Q-Notationswert um 2 nach links shiften (Siehe datenblatt)
 		l = l <<= 2;
+		//integer wert in bytes umwandeln fuer die uebertragung
 		byte[] packet = Utils.toBytes(l, 2);
+		//falls der dezimalwert negativ war, vorzeichen bit (bit 4, MSB) setzten
 		if(negativ)
 			packet[1] = Utils.setBit(packet[1], 4);
 		
@@ -390,12 +395,15 @@ public class Thermometer extends Sensor
 	 */
 	private double formatReadLimits(byte[] packet)
 	{
-		byte HighB = Utils.isolateBits(packet[1], 0, 3);
-		int num = 0;
+		byte HighB = Utils.isolateBits(packet[1], 0, 3);		//Ersten 4 bits von MSB isolieren (Siehe datenblatt)
+		//empfangenen byte in einen Integer umwandeln
+		int num = 0;							
 		num  |= HighB & 0xFF;
 		num <<= 8;
 		num |= packet[0] & 0xFF;
+		//Q-Notation -> Dezimalwert
 		double d = Utils.qNotationToDouble(num, 4);
+		//4. bit von MSB ist das vorzeichen bit -> dezimalwert invertieren falls 1
 		if(Utils.isBitSet(packet[1], 4))
 			d *= -1;
 		return d;

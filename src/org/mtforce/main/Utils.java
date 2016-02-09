@@ -1,5 +1,11 @@
 package org.mtforce.main;
 
+/**
+ * Beschreibung: Diese Klasse beinhaltet haeufig verwendete Hilfsmethoden zur Bit und Byte manipulation
+ * 
+ * Konstanten: Komplett
+ * Funktionen: Komplett (Erweiterbar)
+ */
 public class Utils 
 {
 	

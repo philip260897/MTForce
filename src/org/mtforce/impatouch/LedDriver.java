@@ -6,6 +6,15 @@ import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
+/**
+ * Beschreibung: Diese Klasse steuert die LED-Treiber auf dem Board. Aus den angegebenen Symbolen wird ein Bitstream generiert, welcher ueber SPI
+ * 	in die Bausteine geschrieben wird.
+ * 
+ * Konstanten: Komplett
+ * Funktionen: NICHT Komplett
+ * 
+ * TODO: Alle Sensoren hinzufuegen, getter und setter, Modultest
+ */
 public class LedDriver 
 {
 	//Decode-Modes
@@ -96,6 +105,9 @@ public class LedDriver
 		i2c = (I2CManager)Sensors.getI2C();
 	}
 	
+	/**
+	 * DEBUG: Schickt eine Testsymbol auf i2c (<- nur zum testen. spaeter spi)
+	 */
 	public void sendTest()
 	{
 		LedDictionary.LoadDictionary();
@@ -103,6 +115,11 @@ public class LedDriver
 		i2c.write((byte)0xFF, (byte)0xFF, generateBytesFromDigit(digit_4));
 	}
 	
+	/**
+	 * Generiert den Bitstream der benoetigt wird fuer ein Symbol
+	 * @param digit	Symbold welches in ein Bitstream umgewandel werden soll
+	 * @return		Gibt den generierten bitstream in Byte-Arrays zurueck
+	 */
 	private byte[] generateBytesFromDigit(LedDigit digit)
 	{
 		byte[] values = new byte[8];
