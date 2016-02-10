@@ -10,7 +10,43 @@ public class DOF9 extends Sensor
 	 * 
 	 * TODO: Modultest
 	 */
-
+	public static final byte kgsREG_SELF_TEST_X_GYRO = 0x00;
+	public static final byte kgsREG_SELF_TEST_Y_GYRO = 0x01;
+	public static final byte kgsREG_SELF_TEST_Z_GYRO = 0x02;
+	public static final byte kgsREG_SELF_TEST_X_ACCEL = 0x0D;
+	public static final byte kgsREG_SELF_TEST_Y_ACCEL = 0x0E;
+	public static final byte kgsREG_SELF_TEST_Z_ACCEL = 0x0F;
+	public static final byte kgsREG_XG_OFFSET_H = 0x13;
+	public static final byte kgsREG_XG_OFFSET_L = 0x14;
+	public static final byte kgsREG_YG_OFFSET_H = 0x15;
+	public static final byte kgsREG_YG_OFFSET_L = 0x16;
+	public static final byte kgsREG_ZG_OFFSET_H = 0x17;
+	public static final byte kgsREG_ZG_OFFSET_L = 0x18;
+	public static final byte kgsREG_SMPLRT_DIV = 0x19;
+	public static final byte kgsREG_CONFIG = 0x1A;
+	public static final byte kgsREG_GYRO_CONFIG = 0x1B;
+	public static final byte kgsREG_ACCEL_CONFIG = 0x1C;
+	public static final byte kgsREG_ACCEL_CONFIG_2 = 0x1D;
+	public static final byte kgsREG_LP_ACCEL_ODR = 0x1E;
+	public static final byte kgsREG_WOM_THR = 0x1F;
+	public static final byte kgsREG_FIFO_EN = 0x23;
+	public static final byte kgsREG_I2C_MST_CTRL = 0x24;
+	public static final byte kgsREG_I2C_SLV0_ADDR = 0x25;
+	public static final byte kgsREG_I2C_SLV0_REG = 0x26;
+	public static final byte kgsREG_I2C_SLV0_CTRL = 0x27;
+	public static final byte kgsREG_I2C_SLV1_ADDR = 0x28;
+	public static final byte kgsREG_I2C_SLV1_REG = 0x29;
+	public static final byte kgsREG_I2C_SLV1_CTRL = 0x2A;
+	public static final byte kgsREG_I2C_SLV2_ADDR = 0x2B;
+	public static final byte kgsREG_I2C_SLV2_REG = 0x2C;
+	public static final byte kgsREG_I2C_SLV2_CTRL = 0x2D;
+	public static final byte kgsREG_I2C_SLV3_ADDR = 0x2E;
+	public static final byte kgsREG_I2C_SLV3_REG = 0x2F;
+	public static final byte kgsREG_I2C_SLV3_CTRL = 0x30;
+	public static final byte kgsREG_I2C_SLV4_ADDR = 0x31;
+	public static final byte kgsREG_I2C_SLV4_REG = 0x32;
+	public static final byte kgsREG_I2C_SLV4_DO = 0x33;
+	public static final byte kgsREG_I2C_SLV4_CTRL = 0x34;
 	public static final byte kgsREG_I2C_SLV4_DI = 0x35;
 	public static final byte kgsREG_I2C_MST_STATUS = 0x36;
 	public static final byte kgsREG_INT_PIN_CFG = 0x37;
@@ -72,11 +108,11 @@ public class DOF9 extends Sensor
 	public static final byte kgsREG_ZA_OFFSET_H = 0x7D;
 	public static final byte kgsREG_ZA_OFFSET_L = 0x7E;
 
-	
-	
+
+
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
