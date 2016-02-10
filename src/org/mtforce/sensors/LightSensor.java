@@ -8,7 +8,7 @@ import org.mtforce.main.Sensors;
  * Konstanten: NICHT Komplett
  * Funktionen: NICHT Komplett
  * 
- * TODO: Modultest
+ * TODO: Modultest, Kommentare hinzufuegen
  */
 public class LightSensor extends Sensor
 {
@@ -33,6 +33,7 @@ public class LightSensor extends Sensor
 		}
 		
 	}
+	
 	
 	public String getBrightness()
 	{
