@@ -54,6 +54,23 @@ public class DOF9 extends Sensor
 	public static final byte I2C_SLV1_DO = 0x64;
 	public static final byte I2C_SLV2_DO = 0x65;
 	public static final byte ADDRESS = 0x68;
+	public static final byte I2C_SLV3_DO = 0x66;
+	public static final byte I2C_MST_DELAY_CTRL = 0x67;
+	public static final byte SIGNAL_PATH_RESET = 0x68;
+	public static final byte MOT_DETECT_CTRL = 0x69;
+	public static final byte USER_CTRL = 0x6A;
+	public static final byte PWR_MGMT_1 = 0x6B;
+	public static final byte PWR_MGMT_2 = 0x6C;
+	public static final byte FIFO_COUNTH = 0x72;
+	public static final byte FIFO_COUNTL = 0x73;
+	public static final byte FIFO_R_W = 0x74;
+	public static final byte WHO_AM_I = 0x75;
+	public static final byte XA_OFFSET_H = 0x77;
+	public static final byte XA_OFFSET_L = 0x78;
+	public static final byte YA_OFFSET_H = 0x7A;
+	public static final byte YA_OFFSET_L = 0x7B;
+	public static final byte ZA_OFFSET_H = 0x7D;
+	public static final byte ZA_OFFSET_L = 0x7E;
 
 	
 	
