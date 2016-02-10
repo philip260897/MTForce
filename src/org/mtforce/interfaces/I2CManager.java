@@ -42,6 +42,20 @@ public class I2CManager implements CommunicationManager
 		return false;
 	}
 	
+	public boolean write(byte address, byte[] val, boolean highByteFirst) {
+		try
+		{
+			current = bus.getDevice(address);
+			if(highByteFirst)
+				val = Utils.reverseBytes(val);
+			
+			current.write(val, 0, val.length);
+			return true;
+		}
+		catch(Exception ex){}
+		return false;
+	}
+	
 	public boolean write(byte address, byte reg, byte val) 
 	{
 		try 
