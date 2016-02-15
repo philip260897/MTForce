@@ -156,9 +156,8 @@ public class Barometer extends Sensor {
 	
 	public int calculateTemperatureCompensated(int temperature, int temperatureDifference)
 	{
-		//TODO: Compensated TESTEN!!!!!
 		long t2 = 0;
-		if(temperature < 2000)
+		if(temperature < 20000)
 		{
 			t2 = ((long)temperatureDifference*(long)temperatureDifference) / 2147483648l;
 		}
@@ -169,7 +168,7 @@ public class Barometer extends Sensor {
 	{
 		//TODO: Compensated TESTN!!!!!
 		long off2 = 0, sens2 = 0;
-		if(temperature < 2000)
+		if(temperature < 20000)
 		{
 			off2 = 61 * (temperature - 2000)*(temperature - 2000) / 16;
 			sens2 = 2 * (temperature - 2000)*(temperature - 2000);
