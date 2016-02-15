@@ -12,7 +12,6 @@ import org.mtforce.main.Utils;
  * 
  * TODO: Modultest
  */
-
 public class HumiditySensor extends Sensor 
 {
 	public final static byte kgsADDRESS 				= (byte) 0x40; 		//DEVICE ADDRESS
@@ -194,7 +193,7 @@ public class HumiditySensor extends Sensor
 	 * Liest die Serial-Number aus des Bausteins
 	 * @return	Serial-Number in 8 bytes (Siehe Datenblatt)
 	 */
-	private byte[] getSerialNumber()
+	public byte[] getSerialNumber()
 	{
 		gI2c.write(kgsADDRESS, Utils.toBytes(kgsREAD_ID_1ST_BYTE, 2), true);
 		byte[] sna = Utils.reverseBytes(gI2c.read(kgsADDRESS, 4));
@@ -212,7 +211,7 @@ public class HumiditySensor extends Sensor
 	 * Liest die Firmware-Revision aus
 	 * @return	Firmware-Revision als byte (siehe Datenblatt fuer interpretation)
 	 */
-	private byte getFirmwareRevision()
+	public byte getFirmwareRevision()
 	{
 		gI2c.write(kgsADDRESS, Utils.toBytes(kgsREAD_FIRMWARE_REV, 2), true);
 		return gI2c.read(kgsADDRESS);

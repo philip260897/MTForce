@@ -8,17 +8,21 @@ import org.mtforce.main.Sensors;
  * Konstanten: NICHT Komplett
  * Funktionen: NICHT Komplett
  * 
- * TODO: Modultest
+ * TODO: Modultest, Kommentare hinzufuegen
  */
-
-public class LightSensor extends Sensor{
+public class LightSensor extends Sensor
+{
 	private ADC adc;
+	
 	public LightSensor()
 	{
 		super();
 		adc=Sensors.getAdc();
 	}
-	public void init() {
+	
+	@Override
+	public void init() 
+	{
 		if(adc.isEnabled())
 		{
 			setEnabled(true);
@@ -30,19 +34,19 @@ public class LightSensor extends Sensor{
 		
 	}
 	
-	public String getBrightness(){
+	
+	public String getBrightness()
+	{
 		String[] brightness = {"Dunkel", "Hell"};
 		//TODO: Voltage von ADC getten
 		double voltage = 0;
-		if(voltage < 0.090){
+		if(voltage < 0.090)
+		{
 			return brightness[0];
 		}
-		else {
+		else 
+		{
 			return brightness[1];
 		}
-		
-		
 	}
-
-
 }
