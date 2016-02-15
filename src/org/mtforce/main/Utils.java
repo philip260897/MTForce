@@ -56,11 +56,18 @@ public class Utils
 	 * @return		Gibt die in der Reichweite definierten Bits zurueck in einem Byte
 	 */
 	public static byte isolateBits(byte b, int start, int stop){ //Retourniert ein Byte mit allen Bits 0 auser die Bits welche zwischen start und stop stehen
-		byte mask = 0x00;										 // start must be smaller than stop, start => 0, stop <= 7
-			for(int i = 0; i<=(stop-start); i++)
-				mask = (byte) ((mask << 1)+1); // creates a mask with (stop-start) times 1s
-			b = (byte) ((mask<<start) & b); // shifts 'start' times left and AND-Operator with b
-			return b;
+		byte mask = 0x00;		
+		int temp = 0;										//	start => 0, stop <= 7
+		if(start>stop){
+			temp = start;
+			start = stop;
+			stop = temp;
+			
+		}		
+		for(int i = 0; i<=(stop-start); i++)
+			mask = (byte) ((mask << 1)+1); // creates a mask with (stop-start) times 1s
+		b = (byte) ((mask<<start) & b); // shifts 'start' times left and AND-Operator with b
+		return b;
 	}
 
 	/**

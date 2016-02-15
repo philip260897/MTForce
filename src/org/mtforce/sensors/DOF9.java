@@ -1,11 +1,15 @@
 package org.mtforce.sensors;
 
+import org.mtforce.interfaces.I2CManager;
+import org.mtforce.main.Sensors;
+import org.mtforce.main.Utils;
+
 public class DOF9 extends Sensor 
 {
 	/**
 	 * Beschreibung: Gyrosensor
 	 * 
-	 * Konstanten: NICHT Komplett
+	 * Konstanten: Komplett
 	 * Funktionen: NICHT Komplett
 	 * 
 	 * TODO: Modultest
@@ -61,6 +65,10 @@ public class DOF9 extends Sensor
 	public static final byte kgsREG_TEMP_OUT_H = 0x41;
 	public static final byte kgsREG_TEMP_OUT_L = 0x42;
 	public static final byte kgsREG_GYRO_XOUT_H = 0x43;
+	public static final byte kgsREG_GYRO_XOUT_L = 0x44;
+	public static final byte kgsREG_GYRO_YOUT_H = 0x45;
+	public static final byte kgsREG_GYRO_YOUT_L = 0x46;
+	public static final byte kgsREG_GYRO_ZOUT_H = 0x47;
 	public static final byte kgsREG_GYRO_ZOUT_L = 0x48;
 	public static final byte kgsREG_EXT_SENS_DATA_00 = 0x49;
 	public static final byte kgsREG_EXT_SENS_DATA_01 = 0x4A;
@@ -89,7 +97,7 @@ public class DOF9 extends Sensor
 	public static final byte kgsREG_I2C_SLV0_DO = 0x63;
 	public static final byte kgsREG_I2C_SLV1_DO = 0x64;
 	public static final byte kgsREG_I2C_SLV2_DO = 0x65;
-	public static final byte kgsDEV_ADDRESS = 0x68;
+	public static final byte kgsADDRESS = 0x68;
 	public static final byte kgsREG_I2C_SLV3_DO = 0x66;
 	public static final byte kgsREG_I2C_MST_DELAY_CTRL = 0x67;
 	public static final byte kgsREG_SIGNAL_PATH_RESET = 0x68;
@@ -109,10 +117,253 @@ public class DOF9 extends Sensor
 	public static final byte kgsREG_ZA_OFFSET_L = 0x7E;
 
 
-
+	private I2CManager i2c;
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
+		i2c = (I2CManager)Sensors.getI2C();
+	}
+	/*****************
+	 * CONFIG REGISTER
+	 * @return
+	 */
+	public byte getFIFO()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 6, 6);
+		return packet;
+	}
+	public void setFIFO(byte fifo)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, fifo);
+	}
+	public byte getEXT_SYNC_SET()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 3, 5);
+		return packet;
+	}
+	public void setEXT_SYNC_SET(byte EXT_SYNC_SET)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, EXT_SYNC_SET);
+	}
+	public byte getDLPF_CFG()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 0, 2);
+		return packet;
+	}
+	public void setDLPF_CFG(byte DLPF_CFG)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, DLPF_CFG);
+	}
+	/*************************
+	 * Gyroscope Configuration
+	 */
+	public byte getXGYRO_Cten()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 7, 7);
+		return packet;
+	}
+	public void setXGYRO_Cten(byte XGYRO_Cten)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, XGYRO_Cten);
+	}
+	public byte getYGYRO_Cten()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 6, 6);
+		return packet;
+	}
+	public void setYGYRO_Cten(byte YGYRO_Cten)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, YGYRO_Cten);
+	}
+	public byte getZGYRO_Cten()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 5, 5);
+		return packet;
+	}
+	public void setZGYRO_Cten(byte ZGYRO_Cten)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, ZGYRO_Cten);
+	}
+	
+	public byte getGYRO_FS_SEL()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 4, 3);
+		return packet;
+	}
+	public void setGYRO_FS_SEL(byte GYRO_FS_SEL)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, GYRO_FS_SEL);
+	}
+	public byte getFchoice_b()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 1, 0);
+		return packet;
+	}
+	public void setFchoice_b(byte Fchoice_b)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, Fchoice_b);
+	}
+	
+	
+	/*****************************
+	 * Accelerometer Configuration
+	 * 
+	 */
+	public byte getAx_st_en()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 7, 7);
+		return packet;
+	}
+	public void setAx_st_en(byte ax_st_en)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, ax_st_en);
+	}
+	public byte getAy_st_en()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 6, 6);
+		return packet;
+	}
+	public void setAy_st_en(byte ay_st_en)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, ay_st_en);
+	}
+	public byte getAz_st_en()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 5, 5);
+		return packet;
+	}
+	public void setAz_st_en(byte az_st_en)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, az_st_en);
+	}
+	
+	public byte getACCEL_FS_SEL()
+	{
+		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
+		packet = Utils.isolateBits(packet, 4, 3);
+		return packet;
+	}
+	public void setACCEL_FS_SEL(byte ACCEL_FS_SEL)
+	{
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, ACCEL_FS_SEL);
+	}
 
+	/******************************
+	 * 
+	 * Accelerometer Measurements
+	 */
+	public int getACCEL_XOUT()
+	{
+		byte[] packet = new byte[2];
+		packet[0] = i2c.read(kgsADDRESS, kgsREG_ACCEL_XOUT_L);
+		packet[1] = i2c.read(kgsADDRESS, kgsREG_ACCEL_XOUT_H);
+		int iPacket = Utils.toInt(packet);
+		return iPacket;
+	}
+	public void setACCEL_XOUT(int ACCEL_XOUT)
+	{
+		byte[] packet = Utils.toBytes(ACCEL_XOUT, 2);
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
+	}
+	
+	public int getACCEL_YOUT()
+	{
+		byte[] packet = new byte[2];
+		packet[0] = i2c.read(kgsADDRESS, kgsREG_ACCEL_YOUT_L);
+		packet[1] = i2c.read(kgsADDRESS, kgsREG_ACCEL_YOUT_H);
+		int iPacket = Utils.toInt(packet);
+		return iPacket;
+	}
+	public void setACCEL_YOUT(int ACCEL_YOUT)
+	{
+		byte[] packet = Utils.toBytes(ACCEL_YOUT, 2);
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
+	}
+	public int getACCEL_ZOUT()
+	{
+		byte[] packet = new byte[2];
+		packet[0] = i2c.read(kgsADDRESS, kgsREG_ACCEL_ZOUT_L);
+		packet[1] = i2c.read(kgsADDRESS, kgsREG_ACCEL_ZOUT_H);
+		int iPacket = Utils.toInt(packet);
+		return iPacket;
+	}
+	public void setACCEL_ZOUT(int ACCEL_ZOUT)
+	{
+		byte[] packet = Utils.toBytes(ACCEL_ZOUT, 2);
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
+	}
+	
+	
+	/**
+	 * Temperature Measurement
+	 * @return
+	 */
+	public int getTEMP_OUT()
+	{
+		byte[] packet = new byte[2];
+		packet[0] = i2c.read(kgsADDRESS, kgsREG_TEMP_OUT_L);
+		packet[1] = i2c.read(kgsADDRESS, kgsREG_TEMP_OUT_H);
+		int iPacket = Utils.toInt(packet);
+		return iPacket;
+	}
+	public void setREG_TEMP_OUT(int REG_TEMP_OUT)
+	{
+		byte[] packet = Utils.toBytes(REG_TEMP_OUT, 2);
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
+	}
+
+	/**
+	 * Gyro Measurement
+	 * @return
+	 */
+	public int getGYRO_XOUT()
+	{
+		byte[] packet = new byte[2];
+		packet[0] = i2c.read(kgsADDRESS, kgsREG_GYRO_XOUT_L);
+		packet[1] = i2c.read(kgsADDRESS, kgsREG_GYRO_XOUT_H);
+		int iPacket = Utils.toInt(packet);
+		return iPacket;
+	}
+	public void setGYRO_XOUT(int GYRO_XOUT)
+	{
+		byte[] packet = Utils.toBytes(GYRO_XOUT, 2);
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
+	}
+	
+	public int getGYRO_YOUT()
+	{
+		byte[] packet = new byte[2];
+		packet[0] = i2c.read(kgsADDRESS, kgsREG_GYRO_YOUT_L);
+		packet[1] = i2c.read(kgsADDRESS, kgsREG_GYRO_YOUT_H);
+		int iPacket = Utils.toInt(packet);
+		return iPacket;
+	}
+	public void setGYRO_YOUT(int GYRO_YOUT)
+	{
+		byte[] packet = Utils.toBytes(GYRO_YOUT, 2);
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
+	}
+	public int getGYRO_ZOUT()
+	{
+		byte[] packet = new byte[2];
+		packet[0] = i2c.read(kgsADDRESS, kgsREG_GYRO_ZOUT_L);
+		packet[1] = i2c.read(kgsADDRESS, kgsREG_GYRO_ZOUT_H);
+		int iPacket = Utils.toInt(packet);
+		return iPacket;
+	}
+	public void setGYRO_ZOUT(int ACCEL_ZOUT)
+	{
+		byte[] packet = Utils.toBytes(ACCEL_ZOUT, 2);
+		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
 	}
 }
