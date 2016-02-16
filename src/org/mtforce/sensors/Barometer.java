@@ -11,7 +11,7 @@ import org.mtforce.main.Utils;
  * Funktionen: NICHT Komplett
  * 
  * TODO: Modultest
- *	getPressure()	-	gibt den Luftdruck in bar zurueck
+ *	CRC CHECK TESTEN
  */
 public class Barometer extends Sensor {
 
@@ -26,9 +26,9 @@ public class Barometer extends Sensor {
 	
 	public static final byte kgsRESOLUTION_256	= 0x00;
 	public static final byte kgsRESOLUTION_512	= 0x01;
-	public static final byte kgsRESOLTUION_1024	= 0x02;
-	public static final byte kgsRESOLTUION_2048	= 0x03;
-	public static final byte kgsRESOLTUION_4096	= 0x04;
+	public static final byte kgsRESOLUTION_1024	= 0x02;
+	public static final byte kgsRESOLUTION_2048	= 0x03;
+	public static final byte kgsRESOLUTION_4096	= 0x04;
 	
 	public static final byte kgsPROM_COEFF_1 = 0x02;
 	public static final byte kgsPROM_COEFF_2 = 0x04;
@@ -36,12 +36,18 @@ public class Barometer extends Sensor {
 	public static final byte kgsPROM_COEFF_4 = 0x08;
 	public static final byte kgsPROM_COEFF_5 = 0x0A;
 	public static final byte kgsPROM_COEFF_6 = 0x0C;
-	public static final byte kgsPROM_CRC = 0x0E;
+	public static final byte kgsPROM_CRC 	 = 0x0E;
 	
+	public static final int kgsWAIT_256  = 1;
+	public static final int kgsWAIT_512  = 3;
+	public static final int kgsWAIT_1024 = 4;
+	public static final int kgsWAIT_2048 = 6;
+	public static final int kgsWAIT_4096 = 10;
 	
 	private I2CManager i2c;									//Verweis auf I2CManager
 	private byte gResolutionPressure	= kgsRESOLUTION_256;//Von User eingestellte Umwandlungsaufloesung des Drucks
 	private byte gResolutionTemperature	= kgsRESOLUTION_256;//Von User eingestellte Umwandlungsaufloesung der Temperatur
+	private int[] gCoeffizients			= new int[6];		//Koeffizienten fuer die Umrechnung speichern
 	
 	/**
 	 * Initialisiert den Baustein
@@ -52,6 +58,8 @@ public class Barometer extends Sensor {
 		i2c = (I2CManager) Sensors.getI2C();
 		if(i2c.write(ADDRESS, RESET))
 		{
+			gCoeffizients = getCoeffizients();
+			checkCRC(gCoeffizients, getCRC());
 			setEnabled(true);
 		}
 	}
@@ -121,10 +129,27 @@ public class Barometer extends Sensor {
 		return Utils.toInt(Utils.reverseBytes(i2c.read(ADDRESS, 2)));
 	}
 	
+	public int[] getCoeffizients()
+	{
+		int coeff[] = new int[6];
+		coeff[0] = this.getCoeffizient(kgsPROM_COEFF_1);
+		coeff[1] = this.getCoeffizient(kgsPROM_COEFF_2);
+		coeff[2] = this.getCoeffizient(kgsPROM_COEFF_3);
+		coeff[3] = this.getCoeffizient(kgsPROM_COEFF_4);
+		coeff[4] = this.getCoeffizient(kgsPROM_COEFF_5);
+		coeff[5] = this.getCoeffizient(kgsPROM_COEFF_6);
+		return coeff;
+	}
+	
 	public int getCRC()
 	{
 		i2c.write(ADDRESS, (byte)(kgsCMD_READ_PROM | kgsPROM_CRC));
 		return Utils.toInt(Utils.reverseBytes(i2c.read(ADDRESS, 2)));
+	}
+	
+	public int calculateTemperatureDifference(int adcValue)
+	{
+		return calculateTemperatureDifference(adcValue, this.gCoeffizients[4]);
 	}
 	
 	public int calculateTemperatureDifference(int adcValue, int coeff5)
@@ -133,15 +158,30 @@ public class Barometer extends Sensor {
 		return dT;
 	}
 	
+	public int calculateTemperature(int temperatureDifference)
+	{
+		return this.calculateTemperature(temperatureDifference, gCoeffizients[5]);
+	}
+	
 	public int calculateTemperature(int temperatureDifference, int coeff6)
 	{
 		int temp = 2000 + (int)((temperatureDifference*(double)coeff6) / 8388608d);
 		return temp;
 	}
 	
+	public long calculatePressureOffset(int temperatureDifference)
+	{
+		return this.calculatePressureOffset(temperatureDifference, gCoeffizients[1], gCoeffizients[3]);
+	}
+	
 	public long calculatePressureOffset(int temperatureDifference, int coeff2, int coeff4)
 	{
 		return ((long)coeff2 * 131072l) + ((long)coeff4 * (long)temperatureDifference)/64l;
+	}
+	
+	public long calculatePressureSensitivity(int temperatureDifference)
+	{
+		return this.calculatePressureSensitivity(temperatureDifference, gCoeffizients[0], gCoeffizients[2]);
 	}
 	
 	public long calculatePressureSensitivity(int temperatureDifference, int coeff1, int coeff3)
@@ -166,7 +206,6 @@ public class Barometer extends Sensor {
 	
 	public int calculatePressureCompensated(int adcPressure, int temperature, long pressureSensitivity, long pressureOffset)
 	{
-		//TODO: Compensated TESTN!!!!!
 		long off2 = 0, sens2 = 0;
 		if(temperature < 20000)
 		{
@@ -182,5 +221,96 @@ public class Barometer extends Sensor {
 		pressureSensitivity = pressureSensitivity - sens2;
 		pressureOffset = pressureOffset - off2;
 		return calculatePressure(adcPressure, pressureSensitivity, pressureOffset);
+	}
+	
+	public double getTemperature()
+	{
+		this.startConversionTemperature();
+		sleepForResult(this.gResolutionTemperature);
+		int adcValue 	= getAdcValue();
+		int tempDiff	= calculateTemperatureDifference(adcValue);
+		int temp		= calculateTemperature(tempDiff);
+		int compTemp	= calculateTemperatureCompensated(temp, tempDiff);
+		return compTemp / 100;
+	}
+	
+	public double getPressure()
+	{
+		this.startConversionTemperature();
+		sleepForResult(this.gResolutionTemperature);
+		int adcValue 	= getAdcValue();
+		int tempDiff	= calculateTemperatureDifference(adcValue);
+		int temp		= calculateTemperature(tempDiff, 28165);
+		
+		
+		this.startConversionPressure();
+		sleepForResult(this.gResolutionPressure);
+		adcValue 	= getAdcValue();
+		long pOFF		= calculatePressureOffset(tempDiff);
+		long pSENS		= calculatePressureSensitivity(tempDiff);
+		int compPress	= calculatePressureCompensated(adcValue, temp, pSENS, pOFF);
+		return compPress / 100;
+	}
+	
+	private void sleepForResult(byte resolution)
+	{
+		try
+		{
+			int sleepTime = kgsWAIT_4096;
+			switch(resolution)
+			{
+				case kgsRESOLUTION_256: sleepTime = kgsWAIT_256; break;
+				case kgsRESOLUTION_512: sleepTime = kgsWAIT_512; break;
+				case kgsRESOLUTION_1024: sleepTime = kgsWAIT_1024; break;
+				case kgsRESOLUTION_2048: sleepTime = kgsWAIT_2048; break;
+				case kgsRESOLUTION_4096: sleepTime = kgsWAIT_4096; break;
+				default: sleepTime = kgsWAIT_4096;
+			}
+			Thread.sleep(sleepTime);
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+	
+	private char checkCRC(int[] coeff, int crc)
+	{
+		//TODO: CRC TESTEN!!!! SEHR WICHTIG!!!!
+		int cnt;
+		long n_rem;
+		long crc_read;
+		int n_bit;
+		n_rem = 0x00;
+		
+		crc_read = crc;
+		crc = (0xFF00 & (crc));
+		for(cnt = 0; cnt < 16; cnt++)
+		{
+			if(cnt % 2 == 1)
+			{
+				n_rem ^= (long) ((coeff[cnt>>1]) & 0x00FF);
+			}
+			else
+			{
+				n_rem ^= (long) (coeff[cnt>>1]>>8);
+			}
+			
+			for(n_bit = 8; n_bit > 0; n_bit--)
+			{
+				if((n_rem & (0x8000)) == (0x8000))
+				{
+					n_rem = (n_rem << 1) ^ 0x3000; 
+				}
+				else
+				{
+					n_rem = (n_rem << 1); 
+				}
+			}
+		}
+		
+		n_rem = (0x000F & (n_rem >> 12));
+		crc = (int) crc_read;
+		return (char)(n_rem ^ 0x0);
 	}
 }
