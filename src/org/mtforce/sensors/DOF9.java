@@ -118,14 +118,42 @@ public class DOF9 extends Sensor
 
 
 	private I2CManager i2c;
+	private int Vref = 3300; 	//Versorgung
+	private int VzeroG = 1650;	//Vref bei Zero G
+
 	@Override
 	public void init() {
 		i2c = (I2CManager)Sensors.getI2C();
 	}
+	
+	/**
+	 * Calculating
+	 */
+	public int getRx(){
+		int ADCRx = getACCEL_XOUT();
+		byte Sensitivity = getGYRO_FS_SEL();
+		int Rx=(ADCRx*Vref/1023 - VzeroG)/Sensitivity;
+		return Rx;
+	}
+	public int getRy(){
+		int ADCRy = getACCEL_YOUT();
+		byte Sensitivity = getGYRO_FS_SEL();
+		int Ry=(ADCRy*Vref/1023 - VzeroG)/Sensitivity;
+		return Ry;
+	}
+	public int getRz(){
+		int ADCRz = getACCEL_XOUT();
+		byte Sensitivity = getGYRO_FS_SEL();
+		int Rz=(ADCRz*Vref/1023 - VzeroG)/Sensitivity;
+		return Rz;
+	}
+	
 	/*****************
 	 * CONFIG REGISTER
 	 * @return
 	 */
+	
+
 	public byte getFIFO()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
