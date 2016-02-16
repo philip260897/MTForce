@@ -147,6 +147,28 @@ public class DOF9 extends Sensor
 		int Rz=(ADCRz*Vref/1023 - VzeroG)/Sensitivity;
 		return Rz;
 	}
+	public double getR(){
+		double R = Math.sqrt(getRx()^2 + getRy()^2 + getRz()^2);
+		return R; 
+	}
+	public double getX(){
+		double angle;
+		double R=getR();
+		angle = Math.acos(getRx()/R);
+		return angle;
+	}
+	public double getY(){
+		double angle;
+		double R=getR();
+		angle = Math.acos(getRy()/R);
+		return angle;
+	}
+	public double getZ(){
+		double angle;
+		double R=getR();
+		angle = Math.acos(getRz()/R);
+		return angle;
+	}
 	
 	/*****************
 	 * CONFIG REGISTER
