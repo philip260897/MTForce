@@ -34,19 +34,10 @@ public class LightSensor extends Sensor
 		
 	}
 	
-	
 	public String getBrightness()
 	{
 		String[] brightness = {"Dunkel", "Hell"};
-		//TODO: Voltage von ADC getten
-		double voltage = 0;
-		if(voltage < 0.090)
-		{
-			return brightness[0];
-		}
-		else 
-		{
-			return brightness[1];
-		}
+		double voltage = adc.getVoltage();
+		return voltage < 0.0900 ? brightness[0] : brightness[1];
 	}
 }
