@@ -77,7 +77,7 @@ public class Thermometer extends Sensor
 	{
 		this.gDefaultConfiguration = defaultConfiguration;
 	}
-	
+
 	//=====Configuration===== IMPLEMENTED
 	
 	/**

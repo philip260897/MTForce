@@ -31,7 +31,6 @@ public class LightSensor extends Sensor
 		{
 			System.out.println(this.getClass().getSimpleName() + ": init error! ADC not functional");
 		}
-		
 	}
 	
 	public String getBrightness()
