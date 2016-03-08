@@ -147,6 +147,22 @@ public class OceanPacket
 		return bytes;
 	}
 	
+	public void println()
+	{
+		System.out.print("Header("+ (isHeaderValid() ? "VALID" : "INVALID")+")["+Utils.byteToHexString(headerDataLength[1])+""+Utils.byteToHexString(headerDataLength[0]).replace("0x", ""));
+		System.out.print(", "+ Utils.byteToHexString(headerOptionalLength));
+		System.out.print(", "+ Utils.byteToHexString(headerPacketType));
+		System.out.print(", "+ Utils.byteToHexString(headerCRC8) + "] Data[");
+		for(byte b : data)
+			System.out.print(Utils.byteToHexString(b)+", ");
+		if(dataOptional != null) {
+		System.out.print("] Optional Data[");
+		for(byte b : dataOptional)
+			System.out.print(Utils.byteToHexString(b)+", ");
+		}
+		System.out.println("] CRC8("+(isDataValid() ? "VALID" : "INVALID")+")"+"["+Utils.byteToHexString(dataCRC8)+"]");
+	}
+	
 	public void print()
 	{
 		System.out.println("====HEADER====[" + (isHeaderValid() ? "VALID" : "INVALID")+"]");

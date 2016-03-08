@@ -78,6 +78,7 @@ public class PacketBuilder
 	}
 	
 	public OceanPacket getPacket() {
+		buildDone = false;
 		return packet;
 	}
 	
