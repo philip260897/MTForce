@@ -258,7 +258,7 @@ public class DOF9 extends Sensor
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, EXT_SYNC_SET);
 	}
 	/**
-	 * 
+	 * Gibt die DLPF-Konfiguration zurück
 	 * @return
 	 */
 	public byte getDLPF_CFG()
@@ -268,7 +268,7 @@ public class DOF9 extends Sensor
 		return packet;
 	}
 	/**
-	 * 
+	 * For the DLPF to be used, fchoice[1:0] must be set to 2’b11, fchoice_b[1:0] is 2’b00.
 	 * @param DLPF_CFG
 	 */
 	public void setDLPF_CFG(byte DLPF_CFG)
@@ -278,53 +278,100 @@ public class DOF9 extends Sensor
 	/*************************
 	 * Gyroscope Configuration
 	 */
+	/**
+	 * Returniert X Gyro self-test
+	 * @return
+	 */
 	public byte getXGYRO_Cten()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 7, 7);
 		return packet;
 	}
+	/**
+	 * setzt X Gyro self-test
+	 * @param XGYRO_Cten
+	 */
 	public void setXGYRO_Cten(byte XGYRO_Cten)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, XGYRO_Cten);
 	}
+	/**
+	 * Returniert Y Gyro self-test
+	 * @return
+	 */
 	public byte getYGYRO_Cten()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 6, 6);
 		return packet;
 	}
+	/**
+	 * Setzt Y Gyro self-test
+	 * @param YGYRO_Cten
+	 */
 	public void setYGYRO_Cten(byte YGYRO_Cten)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, YGYRO_Cten);
 	}
+	/**
+	 * Returniert Z Gyro self-test
+	 * @return
+	 */
 	public byte getZGYRO_Cten()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 5, 5);
 		return packet;
 	}
+	/**
+	 * Setzt Z Gyro self-test
+	 * @param ZGYRO_Cten
+	 */
 	public void setZGYRO_Cten(byte ZGYRO_Cten)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, ZGYRO_Cten);
 	}
-	
+	/**
+	 * Returniert die Full Scale Select- Konfiguration
+	 * @return
+	 */
 	public byte getGYRO_FS_SEL()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 4, 3);
 		return packet;
 	}
+	/**
+	 * Setzt die Full Scale
+	 * Gyro Full Scale Select:
+		00 = +250dps
+		01= +500 dps
+		10 = +1000 dps
+		11 = +2000 dps
+	 * @param GYRO_FS_SEL
+	 */
 	public void setGYRO_FS_SEL(byte GYRO_FS_SEL)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, GYRO_FS_SEL);
 	}
+	/**
+	 * Returniert die FChoice Konfiguration
+	 * @return
+	 */
 	public byte getFchoice_b()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 1, 0);
 		return packet;
 	}
+	/**
+	 * Setzt die FChoice Konfiguration
+		 * Used to bypass DLPF as shown in table 1 above. 
+		 * NOTE: Register is Fchoice_b (inverted version of Fchoice), 
+		 * table 1 uses Fchoice (which is the inverted version of this register).
+	 * @param Fchoice_b
+	 */
 	public void setFchoice_b(byte Fchoice_b)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, Fchoice_b);
@@ -335,43 +382,78 @@ public class DOF9 extends Sensor
 	 * Accelerometer Configuration
 	 * 
 	 */
+	/**
+	 * Returniert X Accel self-test
+	 * @return
+	 */
 	public byte getAx_st_en()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 7, 7);
 		return packet;
 	}
+	/**
+	 * Setzt den X Accel self-test
+	 * @param ax_st_en
+	 */
 	public void setAx_st_en(byte ax_st_en)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, ax_st_en);
 	}
+	/**
+	 * Returniert Y Accel self-test
+	 * @return
+	 */
 	public byte getAy_st_en()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 6, 6);
 		return packet;
 	}
+	/**
+	 * Setzt Y Accel self-test
+	 * @param ay_st_en
+	 */
 	public void setAy_st_en(byte ay_st_en)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, ay_st_en);
 	}
+	/**
+	 * Returniert Z Accel self-test
+	 * @return
+	 */
 	public byte getAz_st_en()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 5, 5);
 		return packet;
 	}
+	/**
+	 * Setzt den Z Accel self-test
+	 * @param az_st_en
+	 */
 	public void setAz_st_en(byte az_st_en)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, az_st_en);
 	}
-	
+	/**
+	 * Returniert die Acceleration Fullscale
+	 * @return
+	 */
 	public byte getACCEL_FS_SEL()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 4, 3);
 		return packet;
 	}
+	/**
+	 * Accel Full Scale Select:
+		±2g (00)
+		±4g (01)
+		±8g (10)
+		±16g (11)
+	 * @param ACCEL_FS_SEL
+	 */
 	public void setACCEL_FS_SEL(byte ACCEL_FS_SEL)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, ACCEL_FS_SEL);
