@@ -472,15 +472,6 @@ public class DOF9 extends Sensor
 		return iPacket;
 	}
 	/**
-	 * Setzt das Acceleration Register
-	 * @param ACCEL_XOUT
-	 */
-	public void setACCEL_XOUT(int ACCEL_XOUT)
-	{
-		byte[] packet = Utils.toBytes(ACCEL_XOUT, 2);
-		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
-	}
-	/**
 	 * Bekommt den aktuellen Beschleungigungswert in Y-Richtung
 	 * @return
 	 */
@@ -493,15 +484,6 @@ public class DOF9 extends Sensor
 		return iPacket;
 	}
 	/**
-	 * Setzt das Acceleration Register Y-Richtung
-	 * @param ACCEL_YOUT
-	 */
-	public void setACCEL_YOUT(int ACCEL_YOUT)
-	{
-		byte[] packet = Utils.toBytes(ACCEL_YOUT, 2);
-		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
-	}
-	/**
 	 * Bekommt den aktuellen Beschleungigungswert in Z-Richtung
 	 * @return
 	 */
@@ -512,15 +494,6 @@ public class DOF9 extends Sensor
 		packet[1] = i2c.read(kgsADDRESS, kgsREG_ACCEL_ZOUT_H);
 		int iPacket = Utils.toInt(packet);
 		return iPacket;
-	}
-	/**
-	 * Setzt das Acceleration Register Z-Richtung
-	 * @param ACCEL_YOUT
-	 */
-	public void setACCEL_ZOUT(int ACCEL_ZOUT)
-	{
-		byte[] packet = Utils.toBytes(ACCEL_ZOUT, 2);
-		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
 	}
 	/**
 	 * Temperatur Kalkulation
@@ -546,16 +519,6 @@ public class DOF9 extends Sensor
 		return iPacket;
 	}
 	/**
-	 * Setzt das High byte vom temperature sensor output
-	 * @param REG_TEMP_OUT
-	 */
-	public void setREG_TEMP_OUT(int REG_TEMP_OUT)
-	{
-		byte[] packet = Utils.toBytes(REG_TEMP_OUT, 2);
-		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
-	}
-
-	/**
 	 * Gyro Measurement
 	 * @return
 	 */
@@ -573,15 +536,6 @@ public class DOF9 extends Sensor
 		return iPacket;
 	}
 	/**
-	 * 
-	 * @param GYRO_XOUT
-	 */
-	public void setGYRO_XOUT(int GYRO_XOUT)
-	{
-		byte[] packet = Utils.toBytes(GYRO_XOUT, 2);
-		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
-	}
-	/**
 	 * Y-Axis gyroscope output
 	 * @return
 	 */
@@ -594,15 +548,6 @@ public class DOF9 extends Sensor
 		return iPacket;
 	}
 	/**
-	 * ????
-	 * @param GYRO_YOUT
-	 */
-	public void setGYRO_YOUT(int GYRO_YOUT)
-	{
-		byte[] packet = Utils.toBytes(GYRO_YOUT, 2);
-		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
-	}
-	/**
 	 * Z-Axis gyroscope output
 	 * @return
 	 */
@@ -613,14 +558,5 @@ public class DOF9 extends Sensor
 		packet[1] = i2c.read(kgsADDRESS, kgsREG_GYRO_ZOUT_H);
 		int iPacket = Utils.toInt(packet);
 		return iPacket;
-	}
-	/**
-	 * ???
-	 * @param ACCEL_ZOUT
-	 */
-	public void setGYRO_ZOUT(int ACCEL_ZOUT)
-	{
-		byte[] packet = Utils.toBytes(ACCEL_ZOUT, 2);
-		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
 	}
 }
