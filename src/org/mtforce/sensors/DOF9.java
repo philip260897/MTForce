@@ -120,49 +120,77 @@ public class DOF9 extends Sensor
 	private I2CManager i2c;
 	private int Vref = 3300; 	//Versorgung
 	private int VzeroG = 1650;	//Vref bei Zero G
-
+	private double ADCword = Math.pow(2, 16);
+	
+	int RoomTemp_Offset = 0;
+	int Temp_Sensitivity = 0;
 	@Override
 	public void init() {
 		i2c = (I2CManager)Sensors.getI2C();
 	}
 	
 	/**
-	 * Calculating
+	 * Rechnet Rx Komponente aus 
+	 * @return
 	 */
-	public int getRx(){
+	public double getRx(){
 		int ADCRx = getACCEL_XOUT();
 		byte Sensitivity = getGYRO_FS_SEL();
-		int Rx=(ADCRx*Vref/1023 - VzeroG)/Sensitivity;
+		double Rx=(ADCRx*Vref/ADCword - VzeroG)/Sensitivity;
 		return Rx;
 	}
-	public int getRy(){
+	/**
+	 * Rechnet Ry Komponente aus 
+	 * @return
+	 */
+	public double getRy(){
 		int ADCRy = getACCEL_YOUT();
 		byte Sensitivity = getGYRO_FS_SEL();
-		int Ry=(ADCRy*Vref/1023 - VzeroG)/Sensitivity;
+		double Ry=(ADCRy*Vref/ADCword - VzeroG)/Sensitivity;
 		return Ry;
 	}
-	public int getRz(){
+	/**
+	 * Rechnet Rz Komponente aus 
+	 * @return
+	 */
+	public double getRz(){
 		int ADCRz = getACCEL_XOUT();
 		byte Sensitivity = getGYRO_FS_SEL();
-		int Rz=(ADCRz*Vref/1023 - VzeroG)/Sensitivity;
+		double Rz=(ADCRz*Vref/ADCword - VzeroG)/Sensitivity;
 		return Rz;
 	}
+	/**
+	 * Berechnet aus Rx, Ry, Rz die R Komponente
+	 * @return
+	 */
 	public double getR(){
-		double R = Math.sqrt(getRx()^2 + getRy()^2 + getRz()^2);
+		double R = Math.sqrt(Math.pow(getRx(), 2) + Math.pow(getRy(), 2) + Math.pow(getRz(), 2));
 		return R; 
 	}
+	/**
+	 * Berechnet die X Lage
+	 * @return
+	 */
 	public double getX(){
 		double angle;
 		double R=getR();
 		angle = Math.acos(getRx()/R);
 		return angle;
 	}
+	/**
+	 * Berechnet die Y Lage
+	 * @return
+	 */
 	public double getY(){
 		double angle;
 		double R=getR();
 		angle = Math.acos(getRy()/R);
 		return angle;
 	}
+	/**
+	 * Berechnet die X Lage
+	 * @return
+	 */
 	public double getZ(){
 		double angle;
 		double R=getR();
@@ -175,33 +203,74 @@ public class DOF9 extends Sensor
 	 * @return
 	 */
 	
-
+	/** Gibt FIFO-Konfiguration Zurück
+	 * @return
+	 */
 	public byte getFIFO()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 6, 6);
 		return packet;
 	}
+	/**
+	 * When set to ‘1’, when the fifo is full, 
+	 * additional writes will not be written to fifo.
+	 *  
+	 * When set to ‘0’, when the fifo is full, 
+	 * additional writes will be written to the fifo, 
+	 * replacing the oldest data.
+	 * @return
+	 */
 	public void setFIFO(byte fifo)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, fifo);
 	}
+	/**
+	 * 
+	 * @return packet
+	 */
 	public byte getEXT_SYNC_SET()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 3, 5);
 		return packet;
 	}
+	/**
+	 * 	0		function disabled
+		1		TEMP_OUT_L[0]
+		2		GYRO_XOUT_L[0]
+		3		GYRO_YOUT_L[0]
+		4		GYRO_ZOUT_L[0]
+		5		ACCEL_XOUT_L[0]
+		6		ACCEL_YOUT_L[0]
+		7		ACCEL_ZOUT_L[0]
+		
+		Fsync will be latched to capture short strobes. 
+		This will be done such that if Fsync toggles, 
+		the latched value toggles, but won’t toggle again 
+		until the new latched value is captured by the sample 
+		rate strobe. This is a requirement for working with some 
+		3rd party devices that have fsync strobes shorter than our sample rate.
+	 * @param EXT_SYNC_SET
+	 */
 	public void setEXT_SYNC_SET(byte EXT_SYNC_SET)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, EXT_SYNC_SET);
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public byte getDLPF_CFG()
 	{
 		byte packet = i2c.read(kgsADDRESS, kgsREG_CONFIG);
 		packet = Utils.isolateBits(packet, 0, 2);
 		return packet;
 	}
+	/**
+	 * 
+	 * @param DLPF_CFG
+	 */
 	public void setDLPF_CFG(byte DLPF_CFG)
 	{
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, DLPF_CFG);
@@ -320,12 +389,19 @@ public class DOF9 extends Sensor
 		int iPacket = Utils.toInt(packet);
 		return iPacket;
 	}
+	/**
+	 * Setzt das Acceleration Register
+	 * @param ACCEL_XOUT
+	 */
 	public void setACCEL_XOUT(int ACCEL_XOUT)
 	{
 		byte[] packet = Utils.toBytes(ACCEL_XOUT, 2);
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
 	}
-	
+	/**
+	 * Bekommt den aktuellen Beschleungigungswert in Y-Richtung
+	 * @return
+	 */
 	public int getACCEL_YOUT()
 	{
 		byte[] packet = new byte[2];
@@ -334,11 +410,19 @@ public class DOF9 extends Sensor
 		int iPacket = Utils.toInt(packet);
 		return iPacket;
 	}
+	/**
+	 * Setzt das Acceleration Register Y-Richtung
+	 * @param ACCEL_YOUT
+	 */
 	public void setACCEL_YOUT(int ACCEL_YOUT)
 	{
 		byte[] packet = Utils.toBytes(ACCEL_YOUT, 2);
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
 	}
+	/**
+	 * Bekommt den aktuellen Beschleungigungswert in Z-Richtung
+	 * @return
+	 */
 	public int getACCEL_ZOUT()
 	{
 		byte[] packet = new byte[2];
@@ -347,15 +431,28 @@ public class DOF9 extends Sensor
 		int iPacket = Utils.toInt(packet);
 		return iPacket;
 	}
+	/**
+	 * Setzt das Acceleration Register Z-Richtung
+	 * @param ACCEL_YOUT
+	 */
 	public void setACCEL_ZOUT(int ACCEL_ZOUT)
 	{
 		byte[] packet = Utils.toBytes(ACCEL_ZOUT, 2);
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
 	}
-	
-	
 	/**
+	 * Temperatur Kalkulation
+	 * @param TEMP_OUT
+	 * @return
+	 */
+	public int getTemp(int TEMP_OUT)
+	{
+		int TEMP_degC = ((TEMP_OUT - RoomTemp_Offset)/Temp_Sensitivity)+21;
+		return TEMP_degC;
+	}
+	/*************************
 	 * Temperature Measurement
+	 * ((TEMP_OUT – RoomTemp_Offset)/Temp_Sensitivity) + 21degC
 	 * @return
 	 */
 	public int getTEMP_OUT()
@@ -366,6 +463,10 @@ public class DOF9 extends Sensor
 		int iPacket = Utils.toInt(packet);
 		return iPacket;
 	}
+	/**
+	 * Setzt das High byte vom temperature sensor output
+	 * @param REG_TEMP_OUT
+	 */
 	public void setREG_TEMP_OUT(int REG_TEMP_OUT)
 	{
 		byte[] packet = Utils.toBytes(REG_TEMP_OUT, 2);
@@ -376,6 +477,11 @@ public class DOF9 extends Sensor
 	 * Gyro Measurement
 	 * @return
 	 */
+	
+	/**
+	 * X-Axis gyroscope output
+	 * @return
+	 */
 	public int getGYRO_XOUT()
 	{
 		byte[] packet = new byte[2];
@@ -384,12 +490,19 @@ public class DOF9 extends Sensor
 		int iPacket = Utils.toInt(packet);
 		return iPacket;
 	}
+	/**
+	 * 
+	 * @param GYRO_XOUT
+	 */
 	public void setGYRO_XOUT(int GYRO_XOUT)
 	{
 		byte[] packet = Utils.toBytes(GYRO_XOUT, 2);
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
 	}
-	
+	/**
+	 * Y-Axis gyroscope output
+	 * @return
+	 */
 	public int getGYRO_YOUT()
 	{
 		byte[] packet = new byte[2];
@@ -398,11 +511,19 @@ public class DOF9 extends Sensor
 		int iPacket = Utils.toInt(packet);
 		return iPacket;
 	}
+	/**
+	 * ????
+	 * @param GYRO_YOUT
+	 */
 	public void setGYRO_YOUT(int GYRO_YOUT)
 	{
 		byte[] packet = Utils.toBytes(GYRO_YOUT, 2);
 		i2c.write(kgsADDRESS, kgsREG_CONFIG, packet);
 	}
+	/**
+	 * Z-Axis gyroscope output
+	 * @return
+	 */
 	public int getGYRO_ZOUT()
 	{
 		byte[] packet = new byte[2];
@@ -411,6 +532,10 @@ public class DOF9 extends Sensor
 		int iPacket = Utils.toInt(packet);
 		return iPacket;
 	}
+	/**
+	 * ???
+	 * @param ACCEL_ZOUT
+	 */
 	public void setGYRO_ZOUT(int ACCEL_ZOUT)
 	{
 		byte[] packet = Utils.toBytes(ACCEL_ZOUT, 2);
