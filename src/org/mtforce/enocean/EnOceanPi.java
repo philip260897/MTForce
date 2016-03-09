@@ -8,13 +8,27 @@ import com.pi4j.io.serial.SerialFactory;
 
 public class EnOceanPi
 {
+	public static final byte PACKETTYPE_RESERVED_1 			= 0x00; //RESERVED
+	public static final byte PACKETTYPE_RADIO 				= 0x01; //Radio telegram
+	public static final byte PACKETTYPE_RESPONSE 			= 0x02; //Response to any packet
+	public static final byte PACKETTYPE_RADIO_SUB_TEL 		= 0x03; //Radio subtelegram
+	public static final byte PACKETTYPE_EVENT 				= 0x04; //Event message
+	public static final byte PACKETTYPE_COMMON_COMMAND 		= 0x05; //Common command
+	public static final byte PACKETTYPE_SMART_ACK_COMMAND 	= 0x06; //Smart Ack command
+	public static final byte PACKETTYPE_REMOTE_MAN_COMMAND 	= 0x07; //Remote management command
+	public static final byte PACKETTYPE_RESERVED_2 			= 0x08; //Reserved for EnOcean
+	public static final byte PACKETTYPE_RADIO_MESSAGE 		= 0x09; //Radio message
+	public static final byte PACKETTYPE_RADIO_ADVANCED 		= 0x0A; //Advanced protocol radio telegram
+	
+	private Serial serial;
+	private boolean enabled = false;
+	
 	private List<OceanPacketReceivedEvent> listeners = new ArrayList<OceanPacketReceivedEvent>();
 	private Thread threadListener;
-	private Serial serial;
+	
 	private PacketBuilder builder;
 	private Response resp;
 	
-	private boolean enabled = false;
 	
 	public EnOceanPi()
 	{
@@ -31,7 +45,7 @@ public class EnOceanPi
 		listeners.remove(listener);
 	}
 	
-	public void init()
+	public void init(String comPort, int baud)
 	{
 		if(enabled)
 		{
@@ -40,7 +54,7 @@ public class EnOceanPi
 		}
 		
 		serial = SerialFactory.createInstance();
-		serial.open(Serial.DEFAULT_COM_PORT, 57600);
+		serial.open(comPort, baud);
 		if(serial.isOpen())
 		{
 			Runnable runnable = new Runnable(){
@@ -58,12 +72,13 @@ public class EnOceanPi
 			packet.setPacketType((byte)0x05);
 			packet.generateHeader();
 			Response response = this.sendPacketForResponse(packet);
-			if(response.getResponseCode() == Response.RET_OK)
+			if(response != null && response.getResponseCode() == Response.RET_OK)
 				enabled = true;
 		}
 		else
 		{
 			System.out.println("[EnOceanPi] Init error! Serial connection failed!");
+			
 		}
 	}
 	
@@ -72,19 +87,25 @@ public class EnOceanPi
 		serial.write(packet.toBytes());
 	}
 	
-	public Response sendPacketForResponse(OceanPacket packet)
+	public Response sendPacketForResponse(OceanPacket packet) {
+		return this.sendPacketForResponse(packet, 1000);
+	}
+	
+	public Response sendPacketForResponse(OceanPacket packet, int timeout)
 	{
 		serial.write(packet.toBytes());
-		synchronized(this) {
-			try {
-				this.wait();
-				return resp;
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+		synchronized(EnOceanPi.this) 
+		{
+			try 
+			{
+				this.wait(timeout);
+			} 
+			catch (InterruptedException e) 
+			{
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return resp;
 	}
 	
 	public void close()
@@ -108,17 +129,24 @@ public class EnOceanPi
 		if(builder.isPacketDone()) 
 		{
 			OceanPacket packet = builder.getPacket();
-			if(packet.getPacketType() != 0x02)
-				for(OceanPacketReceivedEvent event : listeners)
+			if(packet.getPacketType() != 0x02) 
+			{
+				for(OceanPacketReceivedEvent event : listeners) 
+				{
 					event.packetReceived(packet);
+				}
+			}
 			else
 			{
-				synchronized(this) {
-					resp = new Response(packet);
+				synchronized(EnOceanPi.this) 
+				{
+					this.resp = new Response(packet);
 					this.notifyAll();
 				}
 				for(OceanPacketReceivedEvent event : listeners)
+				{
 					event.responseReceived(new Response(packet));
+				}
 			}
 		}
 	}

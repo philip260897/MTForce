@@ -23,6 +23,7 @@ public class LightSensor extends Sensor
 	@Override
 	public void init() 
 	{
+		adc = Sensors.getAdc();
 		if(adc.isEnabled())
 		{
 			setEnabled(true);

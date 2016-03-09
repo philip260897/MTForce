@@ -33,8 +33,6 @@ public class DistanceSensor extends Sensor
 		points.add(new Double[] {3.0, 1/7d});
 		points.add(new Double[] {3.15, 1/6d});
 		points.add(new Double[] {3.10, 1/5d});
-		
-		adc = Sensors.getAdc();
 	}
 	
 	/**
@@ -43,6 +41,7 @@ public class DistanceSensor extends Sensor
 	@Override
 	public void init() 
 	{
+		adc = Sensors.getAdc();
 		if(adc.isEnabled())
 		{
 			setEnabled(true);
