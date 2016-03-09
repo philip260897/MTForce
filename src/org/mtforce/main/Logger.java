@@ -10,38 +10,18 @@ import java.util.Calendar;
 import java.util.List;
 
 
-public class Logger {
-
-	public enum Status {
-	    WARNING("WARNING"),
-	    ERROR("ERROR"), MESSAGE("MESSAGE");
-
-	    private final String text;
-
-	    private Status(final String text) {
-	        this.text = text;
-	    }
-	    @Override
-	    public String toString() {
-	        return text;
-	    }
-	}
-	static List<String> myList = new ArrayList<String>();
-	boolean console = false;
+public class Logger
+{
+	private static List<String> myList = new ArrayList<String>();
+	private boolean console = false;
 	
 	public void console(boolean onoff)
 	{
-		if(onoff)
-		{
-			console = true;
-		}else
-		{
-			console = false;
-		}
-		
+		console = onoff;
 	}
 
-	public void log(Status status, String prefix, String Message){
+	public void log(Status status, String prefix, String Message)
+	{
 		String logString = "[" + prefix + ":" + status + "] \t" + Message;
 		myList.add(logString);
 		
@@ -49,9 +29,10 @@ public class Logger {
 		{
 			System.out.println(logString);
 		}
-		
 	}
-	public void log(String prefix, String Message){
+	
+	public void log(String prefix, String Message)
+	{
 		String logString = "[" + prefix + ":" + Status.MESSAGE + "]\t" + Message;
 		myList.add(logString);
 		
@@ -59,9 +40,10 @@ public class Logger {
 		{
 			System.out.println(logString);
 		}
-		
 	}
-	public static void save() throws IOException{
+	
+	public static void save() throws IOException
+	{
 		FileWriter fw;
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 		fw = new FileWriter("C:\\Users\\Ben\\log_" + timeStamp + ".txt");
@@ -71,5 +53,21 @@ public class Logger {
 			bw.newLine();
 		}	    
 	    bw.close();
+	}
+	
+	public enum Status {
+	    WARNING("WARNING"),
+	    ERROR("ERROR"), MESSAGE("MESSAGE");
+
+	    private final String text;
+
+	    private Status(final String text) {
+	        this.text = text;
+	    }
+	    
+	    @Override
+	    public String toString() {
+	        return text;
+	    }
 	}
 }

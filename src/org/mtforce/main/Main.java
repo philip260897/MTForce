@@ -4,7 +4,6 @@ import org.mtforce.enocean.EnOceanPi;
 import org.mtforce.enocean.OceanPacket;
 import org.mtforce.enocean.OceanPacketReceivedEvent;
 import org.mtforce.enocean.Response;
-import org.mtforce.sensors.Sensor;
 
 import com.pi4j.io.serial.Serial;
 
@@ -16,11 +15,6 @@ public class Main
 		try
 		{
 			Sensors.initialize();
-			
-			for(Sensor sensor : Sensors.getSensors()) {
-				if(sensor.isEnabled())
-					System.out.println(Sensors.class.getName());
-			}
 			
 			EnOceanPi pi = new EnOceanPi();
 			pi.init(Serial.DEFAULT_COM_PORT, 57600);
