@@ -20,9 +20,9 @@ public class Logger
 		console = onoff;
 	}
 
-	public void log(Status status, String prefix, String Message)
+	public void log(Status status, String prefix, String message)
 	{
-		String logString = "[" + prefix + ":" + status + "] \t" + Message;
+		String logString = "[" + prefix + ":" + status + "] \t" + message;
 		myList.add(logString);
 		
 		if(console)
@@ -31,15 +31,9 @@ public class Logger
 		}
 	}
 	
-	public void log(String prefix, String Message)
+	public void log(String prefix, String message)
 	{
-		String logString = "[" + prefix + ":" + Status.MESSAGE + "]\t" + Message;
-		myList.add(logString);
-		
-		if(console)
-		{
-			System.out.println(logString);
-		}
+		log(Status.MESSAGE, prefix, message);
 	}
 	
 	public static void save() throws IOException
@@ -55,7 +49,8 @@ public class Logger
 	    bw.close();
 	}
 	
-	public enum Status {
+	public enum Status 
+	{
 	    WARNING("WARNING"),
 	    ERROR("ERROR"), MESSAGE("MESSAGE");
 
