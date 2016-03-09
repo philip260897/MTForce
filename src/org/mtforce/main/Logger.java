@@ -13,14 +13,14 @@ import java.util.List;
 public class Logger
 {
 	private static List<String> myList = new ArrayList<String>();
-	private boolean console = false;
+	private static boolean console = false;
 	
-	public void console(boolean onoff)
+	public static void console(boolean onoff)
 	{
 		console = onoff;
 	}
 
-	public void log(Status status, String prefix, String message)
+	public static void log(Status status, String prefix, String message)
 	{
 		String logString = "[" + prefix + ":" + status + "] \t" + message;
 		myList.add(logString);
@@ -31,7 +31,7 @@ public class Logger
 		}
 	}
 	
-	public void log(String prefix, String message)
+	public static void log(String prefix, String message)
 	{
 		log(Status.MESSAGE, prefix, message);
 	}
