@@ -95,6 +95,14 @@ public class OceanPacket
 		return dataCRC8;
 	}
 	
+	public void setData(byte ...data) {
+		this.data = data;
+	}
+	
+	public void setDataOptional(byte ...dataOptional) {
+		this.dataOptional = dataOptional;
+	}
+	
 	public boolean isHeaderValid() {
 		return headerCRC8 == this.calculateHeaderCrc8();
 	}
@@ -174,15 +182,12 @@ public class OceanPacket
 		System.out.println("====DATA====[" + (isDataValid() ? "VALID" : "INVALID")+"]");
 		
 		String data = "";
-		String charData = "";
 		for(byte b : getData())
 		{
 			data += Utils.byteToHexString(b) + " ";
-			charData += (char)b;
 		}
 		data = data.substring(0, data.length()-1);
 		System.out.println("Data: "+data);
-		//System.out.println("CharData: "+charData);
 		
 		data = "";
 		if(dataOptional != null)
@@ -225,14 +230,6 @@ public class OceanPacket
 
 	protected void setHeaderCRC8(byte headerCRC8) {
 		this.headerCRC8 = headerCRC8;
-	}
-
-	protected void setData(byte[] data) {
-		this.data = data;
-	}
-
-	protected void setDataOptional(byte[] dataOptional) {
-		this.dataOptional = dataOptional;
 	}
 
 	protected void setDataCRC8(byte dataCRC8) {

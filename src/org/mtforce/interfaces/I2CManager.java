@@ -79,7 +79,7 @@ public class I2CManager implements CommunicationManager
 			if(highByteFirst)
 				val = Utils.reverseBytes(val);
 			
-			System.out.println("W: 0x"+Utils.byteToHexString(val[0]) + " 0x"+Utils.byteToHexString(val[1]));
+			//System.out.println("W: 0x"+Utils.byteToHexString(val[0]) + " 0x"+Utils.byteToHexString(val[1]));
 			
 			current.write(reg, val, 0, val.length);
 			return true;
@@ -132,7 +132,7 @@ public class I2CManager implements CommunicationManager
 			current.read(reg, buffer, 0, buffer.length);
 			if(lowByteFirst)
 				buffer = Utils.reverseBytes(buffer);
-			System.out.println("R: 0x"+Utils.byteToHexString(buffer[0]) + " 0x"+Utils.byteToHexString(buffer[1]));
+			//System.out.println("R: 0x"+Utils.byteToHexString(buffer[0]) + " 0x"+Utils.byteToHexString(buffer[1]));
 			return buffer;
 		}
 		catch(Exception ex){}

@@ -56,6 +56,10 @@ public class ADC extends Sensor
 		{
 			setEnabled(true);
 		}
+		else
+		{
+			System.out.println(this.getClass().getSimpleName() + ": init error! Device not functional");
+		}
 	}
 	
 	/**

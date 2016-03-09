@@ -61,6 +61,10 @@ public class Barometer extends Sensor {
 			checkCRC(gCoeffizients, getCRC());
 			setEnabled(true);
 		}
+		else
+		{
+			System.out.println(this.getClass().getSimpleName() + ": init error! Device not functional");
+		}
 	}
 	
 	/**
