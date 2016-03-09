@@ -140,6 +140,6 @@ public class Utils
 	 */
 	public static String byteToHexString(byte b)
 	{
-		return String.format("%02x", b & 0xff);
+		return "0x"+String.format("%02x", b & 0xff);
 	}
 }

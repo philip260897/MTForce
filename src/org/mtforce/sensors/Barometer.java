@@ -8,7 +8,7 @@ import org.mtforce.main.Utils;
  * Beschreibung: Barometer - Misst den Luftdruck
  * 
  * Konstanten: Komplett
- * Funktionen: NICHT Komplett
+ * Funktionen: Komplett
  * 
  * TODO: Modultest
  *	CRC CHECK TESTEN

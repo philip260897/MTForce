@@ -41,9 +41,9 @@ public class ADC extends Sensor
 	
 	public static final byte kgsNO_EFFECT 			= 0x00;	//One-Shot Conversion mode, No effect
 	public static final int	 kgsINIT_NEW_CONV 		= 0x80;	//One-Shot Conversion mode, Initiate a new conversion.
-
-	private I2CManager i2c;									//Verweis auf I2CManager
 	
+	private I2CManager i2c;									//Verweis auf I2CManager
+	private byte gSelected_Channel = kgsSELECT_CH1;
 	
 	/**
 	 * Initialisiert den Baustein
@@ -52,6 +52,10 @@ public class ADC extends Sensor
 	public void init() 
 	{
 		i2c = (I2CManager)Sensors.getI2C();
+		if(i2c.write(kgsADDRESS, kgsSTD_CONFIG))
+		{
+			setEnabled(true);
+		}
 	}
 	
 	/**
@@ -122,5 +126,18 @@ public class ADC extends Sensor
 		byte packet = i2c.read(kgsADDRESS);
 		packet = Utils.isolateBits(packet, 6, 5);
 		return packet;
+	}
+	
+	/**
+	 * Gemessenen Spannungswert auslesen
+	 * @return	Spannung in Volt
+	 */
+	public double getVoltage()
+	{
+		byte[] packet = i2c.read(kgsADDRESS, 2);
+		int wert = Utils.toInt(Utils.reverseBytes(packet));
+		wert &= 0x0FFF;
+		double volts = (double)wert * (2.048/2047d);
+		return volts;
 	}
 }
