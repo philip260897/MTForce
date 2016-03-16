@@ -18,7 +18,7 @@ public class Ser7Seg extends Sensor
 	private byte max7219_reg_digit5      = 0x06;
 	private byte max7219_reg_digit6      = 0x07;
 	private byte max7219_reg_digit7      = 0x08;
-	private byte max7219_reg_decodeMode  = 0x09;
+	private byte max7219_reg_decodeMode  = 0x09;		
 	private byte max7219_reg_intensity   = 0x0a;
 	private byte max7219_reg_scanLimit   = 0x0b;
 	private byte max7219_reg_shutdown    = 0x0c;

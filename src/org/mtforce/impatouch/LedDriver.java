@@ -3,6 +3,7 @@ package org.mtforce.impatouch;
 import java.awt.Point;
 
 import org.mtforce.interfaces.I2CManager;
+import org.mtforce.interfaces.SPIManager;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
@@ -94,6 +95,7 @@ public class LedDriver
 	private byte valueOrder[] = new byte[] {0,1,2,3,4,5,6,7};
 	
 	private I2CManager i2c;
+	private SPIManager spi;
 	
 	public LedDriver()
 	{
@@ -103,6 +105,7 @@ public class LedDriver
 	public void initialize()
 	{
 		i2c = (I2CManager)Sensors.getI2C();
+		spi = (SPIManager)Sensors.getSPI();
 	}
 	
 	/**
@@ -130,5 +133,88 @@ public class LedDriver
 			values[valueOrder[(int)p.getY()]] = currB;
 		}
 		return values;
+	}
+	
+	public void setDecodeMode(byte decodeMode)
+	{
+		spi.write(decodeMode, (byte)(this.kgsDECODE_MODE | 0x40));
+	}
+	
+	//val 0...16
+	public void setGlobalIntensity(int intensity)
+	{
+		spi.write((byte)intensity, (byte)(this.kgsGLOBAL_INTENSITY | 0x40));
+	}
+	
+	public void setScanLimit(byte scanLimit)
+	{
+		spi.write(scanLimit, (byte)(this.kgsSCAN_LIMIT | 0x40));
+	}
+	
+	public void setShutdownMode(byte shdnMode)
+	{
+		spi.write(shdnMode, (byte)(this.kgsSHUTDOWN | 0x40));
+	}
+	
+	public void setFeature(byte feature)
+	{
+		spi.write(feature, (byte)(this.kgsFEATURE | 0x40));
+	}
+	
+	public void setDisplayTest(byte dispTest)
+	{
+		spi.write(dispTest, (byte)(this.kgsDISPLAY_TEST | 0x40));
+	}
+	
+	private byte[] digitIntensities = new byte[8];
+	//digit 0..7
+	public void setIntensity(int digit, int intensity)
+	{
+		if(digit > 16)
+			digit = 16;
+		digitIntensities[digit] = (byte)intensity;
+		
+		if(digit == 0)
+		{
+			byte b = (byte) (digitIntensities[1] << 4);
+			spi.write((byte)(b | intensity), (byte)(this.kgs01INTENSITY | 0x40));
+		}
+		if(digit == 1)
+		{
+			byte b = (byte) (intensity << 4);
+			spi.write((byte)(b | digitIntensities[0]), (byte)(this.kgs01INTENSITY | 0x40));
+		}
+		if(digit == 2)
+		{
+			byte b = (byte) (digitIntensities[3] << 4);
+			spi.write((byte)(b | intensity), (byte)(this.kgs23INTENSITY | 0x40));
+		}
+		if(digit == 3)
+		{
+			byte b = (byte) (intensity << 4);
+			spi.write((byte)(b | digitIntensities[2]), (byte)(this.kgs23INTENSITY | 0x40));
+		}
+		
+		if(digit == 4)
+		{
+			byte b = (byte) (digitIntensities[5] << 4);
+			spi.write((byte)(b | intensity), (byte)(this.kgs45INTENSITY | 0x40));
+		}
+		if(digit == 5)
+		{
+			byte b = (byte) (intensity << 4);
+			spi.write((byte)(b | digitIntensities[4]), (byte)(this.kgs45INTENSITY | 0x40));
+		}
+		
+		if(digit == 6)
+		{
+			byte b = (byte) (digitIntensities[7] << 4);
+			spi.write((byte)(b | intensity), (byte)(this.kgs67INTENSITY | 0x40));
+		}
+		if(digit == 7)
+		{
+			byte b = (byte) (intensity << 4);
+			spi.write((byte)(b | digitIntensities[6]), (byte)(this.kgs67INTENSITY | 0x40));
+		}
 	}
 }
