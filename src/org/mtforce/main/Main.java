@@ -47,7 +47,8 @@ public class Main
 				System.out.println("EnOceanPi initialization failed!");
 			}
 			
-			Logger.log("", "");
+			Logger.console(true);
+			Logger.log("Main", "Testing");
 
 			//System.out.println("Waited for response: "+Utils.byteToHexString(resp.getResponseCode()));*/
 			
