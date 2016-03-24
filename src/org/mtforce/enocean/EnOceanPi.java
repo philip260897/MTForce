@@ -3,11 +3,23 @@ package org.mtforce.enocean;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mtforce.main.Logger;
+import org.mtforce.main.Logger.Status;
+
 import com.pi4j.io.serial.Serial;
 import com.pi4j.io.serial.SerialFactory;
 
+/**
+ * WICHTIG fuers Protokoll: UART Port von console output freigeben -> googlen
+ * 							I2C in rpi system aktivieren
+ * 							SPI in rpi system aktivieren
+ * @author Philip
+ *
+ */
 public class EnOceanPi
 {
+	private static String PREFIX = "EnOceanPi";
+	
 	public static final byte PACKETTYPE_RESERVED_1 			= 0x00; //RESERVED
 	public static final byte PACKETTYPE_RADIO 				= 0x01; //Radio telegram
 	public static final byte PACKETTYPE_RESPONSE 			= 0x02; //Response to any packet
@@ -49,7 +61,8 @@ public class EnOceanPi
 	{
 		if(enabled)
 		{
-			System.out.println("[EnOceanPi] Init error! Already initialized!");
+			//System.out.println("[EnOceanPi] Init error! Already initialized!");
+			Logger.log(Status.ERROR, PREFIX, "Init error! Already initialized!");
 			return;
 		}
 		
@@ -66,20 +79,27 @@ public class EnOceanPi
 			};
 			threadListener = new Thread(runnable);
 			threadListener.start();
-			System.out.println("[EnOceanPi] Initialized!");
+			
 			
 			OceanPacket packet = new OceanPacket(new byte[]{(byte) 0x02});
 			packet.setPacketType((byte)0x05);
 			packet.generateHeader();
 			Response response = this.sendPacketForResponse(packet);
-			if(response != null && response.getResponseCode() == Response.RET_OK)
+			if(response != null && response.getResponseCode() == Response.RET_OK) {
 				enabled = true;
+				Logger.log(PREFIX, "initialized!");
+				return;
+			} else {
+				Logger.log(Status.ERROR, PREFIX, "init error! Device not functional");
+			}
 		}
 		else
 		{
-			System.out.println("[EnOceanPi] Init error! Serial connection failed!");
-			
+			Logger.log(Status.ERROR, PREFIX, "Init error! Serial connection failed!");
 		}
+		builder.setEnabled(false);
+		Logger.log(Status.WARNING, PREFIX, "Disabling PacketBuilder");
+		close();
 	}
 	
 	public void sendPacket(OceanPacket packet)

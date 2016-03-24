@@ -3,7 +3,9 @@ package org.mtforce.sensors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mtforce.main.Logger;
 import org.mtforce.main.Sensors;
+import org.mtforce.main.Logger.Status;
 
 /**
  * Beschreibung: Analoger Distanzsensor, haengt am ADC
@@ -48,7 +50,7 @@ public class DistanceSensor extends Sensor
 		}
 		else
 		{
-			System.out.println(this.getClass().getSimpleName() + ": init error! ADC not functional");
+			Logger.log(Status.ERROR, this.getClass().getSimpleName(), "init failed! ADC not functional");
 		}
 	}
 	

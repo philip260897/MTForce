@@ -1,6 +1,8 @@
 package org.mtforce.sensors;
 
+import org.mtforce.main.Logger;
 import org.mtforce.main.Sensors;
+import org.mtforce.main.Logger.Status;
 
 /**
  * Beschreibung: Analoger Helligkeitssensor, haengt am ADC auf Kanal 2
@@ -30,7 +32,7 @@ public class LightSensor extends Sensor
 		}
 		else
 		{
-			System.out.println(this.getClass().getSimpleName() + ": init error! ADC not functional");
+			Logger.log(Status.ERROR, this.getClass().getSimpleName(), "init failed! ADC not functional");
 		}
 	}
 	
