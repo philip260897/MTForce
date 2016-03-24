@@ -17,7 +17,7 @@ import org.mtforce.main.Logger.Status;
  */
 public class Barometer extends Sensor {
 
-	public static final byte kgsADDRESS 					= 0x76;	//Addresse des Bausteins
+	public static final byte kgsADDRESS 					= 0x77;	//Addresse des Bausteins
 	
 	public static final byte kgsCMD_RESET 					= 0x1E; //PROM Resetten
 	public static final byte kgsCMD_READ_PROM 				= (byte) 0xA0;	//READ PROM - Befehl
@@ -59,8 +59,8 @@ public class Barometer extends Sensor {
 		i2c = (I2CManager) Sensors.getI2C();
 		if(i2c.write(kgsADDRESS, kgsCMD_RESET))
 		{
-			gCoeffizients = getCoeffizients();
-			checkCRC(gCoeffizients, getCRC());
+			//gCoeffizients = getCoeffizients();
+			//checkCRC(gCoeffizients, getCRC());
 			setEnabled(true);
 		}
 		else

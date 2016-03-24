@@ -1,8 +1,10 @@
 package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CManager;
+import org.mtforce.main.Logger;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
+import org.mtforce.main.Logger.Status;
 
 public class DOF9 extends Sensor 
 {
@@ -127,6 +129,14 @@ public class DOF9 extends Sensor
 	@Override
 	public void init() {
 		i2c = (I2CManager)Sensors.getI2C();
+		if(i2c.write(this.kgsADDRESS, kgsREG_CONFIG, (byte)0x00))
+		{
+			setEnabled(true);
+		}
+		else
+		{
+			Logger.log(Status.ERROR, this.getClass().getSimpleName(), "init failed! Device not functional");
+		}
 	}
 	
 	/**

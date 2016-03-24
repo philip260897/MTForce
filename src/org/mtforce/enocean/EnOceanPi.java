@@ -13,6 +13,7 @@ import com.pi4j.io.serial.SerialFactory;
  * WICHTIG fuers Protokoll: UART Port von console output freigeben -> googlen
  * 							I2C in rpi system aktivieren
  * 							SPI in rpi system aktivieren
+ * 							ENOCEAN MODULE IN UNSECURE MODE BRINGEN!!!
  * @author Philip
  *
  */

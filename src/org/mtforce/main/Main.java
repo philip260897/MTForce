@@ -4,6 +4,8 @@ import org.mtforce.enocean.EnOceanPi;
 import org.mtforce.enocean.OceanPacket;
 import org.mtforce.enocean.OceanPacketReceivedEvent;
 import org.mtforce.enocean.Response;
+import org.mtforce.sensors.DOF9;
+import org.mtforce.sensors.Sensor;
 
 import com.pi4j.io.serial.Serial;
 
@@ -17,6 +19,14 @@ public class Main
 		try
 		{
 			Sensors.initialize();
+			
+			for(Sensor sensor : Sensors.getSensors())
+			{
+				if(sensor.isEnabled())
+				{
+					System.out.println(sensor.getClass().getSimpleName()+" AKTIVIERT!!!!!!!");
+				}
+			}
 			
 			EnOceanPi pi = new EnOceanPi();
 			pi.init(Serial.DEFAULT_COM_PORT, 57600);
@@ -45,6 +55,22 @@ public class Main
 			}
 
 			//System.out.println("Waited for response: "+Utils.byteToHexString(resp.getResponseCode()));*/
+			
+			try
+			{
+				DOF9 dof = Sensors.getDof9();
+				while(true)
+				{
+					//System.out.println(dof.getGYRO_XOUT() + " " + dof.getGYRO_YOUT() + " " + dof.getGYRO_ZOUT());
+					//System.out.println(dof.getGYRO_XOUT() + " " + dof.getGYRO_YOUT() + " " + dof.getGYRO_ZOUT());
+					
+					Thread.sleep(2000);
+				}
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
 			
 			System.in.read();
 		}
