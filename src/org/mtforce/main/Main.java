@@ -6,6 +6,7 @@ import org.mtforce.enocean.OceanPacketReceivedEvent;
 import org.mtforce.enocean.Response;
 import org.mtforce.sensors.DOF9;
 import org.mtforce.sensors.Sensor;
+import org.mtforce.sensors.Thermometer;
 
 import com.pi4j.io.serial.Serial;
 
@@ -20,7 +21,7 @@ public class Main
 		{
 			Sensors.initialize();
 			
-			for(Sensor sensor : Sensors.getSensors())
+			/*for(Sensor sensor : Sensors.getSensors())
 			{
 				if(sensor.isEnabled())
 				{
@@ -52,24 +53,34 @@ public class Main
 				packet.generateHeader();
 				packet.println();
 				Response resp = pi.sendPacketForResponse(packet);
-			}
+			}*/
 
-			//System.out.println("Waited for response: "+Utils.byteToHexString(resp.getResponseCode()));*/
-			
-			try
+			Thermometer therm = Sensors.getThermometer();
+			therm.setTCritical(20);
+			therm.setConfiguration(Thermometer.kgsCONF_HYST_15 | Thermometer.kgsCONF_WIN_LOCK);
+			therm.setResolution(Thermometer.kgsRES_5);
+			if(therm.isEnabled())
 			{
-				DOF9 dof = Sensors.getDof9();
-				while(true)
-				{
-					//System.out.println(dof.getGYRO_XOUT() + " " + dof.getGYRO_YOUT() + " " + dof.getGYRO_ZOUT());
-					//System.out.println(dof.getGYRO_XOUT() + " " + dof.getGYRO_YOUT() + " " + dof.getGYRO_ZOUT());
-					
-					Thread.sleep(2000);
-				}
-			}
-			catch(Exception ex)
-			{
-				ex.printStackTrace();
+				System.out.println("Temperature: "+Sensors.getThermometer().getTemperature());
+				System.out.println("ManufacturerID: "+Sensors.getThermometer().getManufacturerID());
+				System.out.println("DeviceID: "+Sensors.getThermometer().getDeviceID());
+				System.out.println("Revision: "+Sensors.getThermometer().getRevision());
+				System.out.println("TCritical: "+Sensors.getThermometer().getTCriticalLimit());
+				System.out.println("TUpper: "+Sensors.getThermometer().getTUpperLimit());
+				System.out.println("TLower: "+Sensors.getThermometer().getTLowerLimit());
+				System.out.println("isCritical: "+Sensors.getThermometer().isTemperatureCritical());
+				System.out.println("isUpper: "+Sensors.getThermometer().isTemperatureUpper());
+				System.out.println("isLower: "+Sensors.getThermometer().isTemperatureLower());
+				System.out.println("isCriticalLockSet: "+Sensors.getThermometer().isCriticalLockSet());
+				System.out.println("isWindowLockSet: "+Sensors.getThermometer().isWindowLockSet());
+				System.out.println("isInterruptClearSet: "+Sensors.getThermometer().isInterruptClearSet());
+				System.out.println("isAlertOutputStatusSet: "+Sensors.getThermometer().isAlertOutputStatusSet());
+				System.out.println("isAlertOutputControl: "+Sensors.getThermometer().isAlertOutputControlSet());
+				System.out.println("isAlertOutputSelectSet: "+Sensors.getThermometer().isAlertOutputSelectSet());
+				System.out.println("isAlertOutputPolaritySet: "+Sensors.getThermometer().isAlertOutputPolaritySet());
+				System.out.println("isAlertOutputModeSet: "+Sensors.getThermometer().isAlertOutputModeSet());
+				if(Sensors.getThermometer().getHysteresis() == Thermometer.kgsCONF_HYST_15)
+					System.out.println("Hysteresis: 1.5");
 			}
 			
 			System.in.read();
@@ -78,5 +89,17 @@ public class Main
 		{
 			ex.printStackTrace();
 		}
+	}
+	
+	private void testThermoter()
+	{
+		Logger.log("Thermometer", "Checking availability...");
+		Thermometer therm = Sensors.getThermometer();
+		if(therm.isEnabled())
+		{
+			
+			double temp = 
+		}
+		
 	}
 }

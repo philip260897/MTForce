@@ -13,7 +13,8 @@ public class PacketBuilder
 	private int countData = 0;
 	private int countOptional = 0;
 	private byte[] headerDataLength = new byte[] {0x00,0x00};
-	private byte[] data, dataOptional;
+	private byte[] data;
+	private byte[] dataOptional;
 	private boolean enabled = true;
 	
 	public PacketBuilder(){}

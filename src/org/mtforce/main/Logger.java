@@ -22,18 +22,31 @@ public class Logger
 
 	public static void log(Status status, String prefix, String message)
 	{
+		log(status, prefix, message, true);
+	}
+	
+	public static void log(Status status, String prefix, String message, boolean nl)
+	{
 		String logString = "[" + prefix + ":" + status + "] " + message;
 		myList.add(logString);
 		
 		if(console)
 		{
-			System.out.println(logString);
+			if(nl)
+				System.out.println(logString);
+			else
+				System.out.print(logString);
 		}
+	}
+	
+	public static void log(String prefix, String message, boolean nl)
+	{
+		log(Status.MESSAGE, prefix, message, nl);
 	}
 	
 	public static void log(String prefix, String message)
 	{
-		log(Status.MESSAGE, prefix, message);
+		log(Status.MESSAGE, prefix, message, true);
 	}
 	
 	public static void save() throws IOException

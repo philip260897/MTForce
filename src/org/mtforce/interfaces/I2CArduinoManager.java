@@ -54,7 +54,7 @@ public class I2CArduinoManager {
 		return true;
 	}	
 	
-	public static boolean write(byte address, byte reg, byte...val)
+	public static boolean write(byte address, byte reg, byte ...val)
 	{
 		try
 		{
