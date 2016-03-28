@@ -115,7 +115,16 @@ public class DOF9 extends Sensor
 	public static final byte kgsREG_YA_OFFSET_L = 0x7B;
 	public static final byte kgsREG_ZA_OFFSET_H = 0x7D;
 	public static final byte kgsREG_ZA_OFFSET_L = 0x7E;
+	public static final byte kgsREG_MAGNET_HX_L = 0x03;
+	public static final byte kgsREG_MAGNET_HX_H = 0x04;
+	public static final byte kgsREG_MAGNET_HY_L = 0x05;
+	public static final byte kgsREG_MAGNET_HY_H = 0x06;
+	public static final byte kgsREG_MAGNET_HZ_L = 0x07;
+	public static final byte kgsREG_MAGNET_HZ_H = 0x08;
+	
+	
 
+			
 
 	private I2CManager i2c;
 	private int Vref = 3300; 	//Versorgung
@@ -197,7 +206,51 @@ public class DOF9 extends Sensor
 		angle = Math.acos(getRz()/R);
 		return angle;
 	}
+	/*****************
+	 * MAGNETOMETER OUTPUT
+	 * @return
+	 */
+	public int getMicroTesla_X()
+	{
+		return (int) (getMAGNETO_XOUT() * 0.15);
+	}
 	
+	public int getMicroTesla_Y()
+	{
+		return (int) (getMAGNETO_YOUT() * 0.15);
+	}
+	
+	public int getMicroTeslaZ()
+	{
+		return (int) (getMAGNETO_ZOUT() * 0.15);
+	}
+	
+	public int getMAGNETO_XOUT()
+	{
+		byte[] packet = new byte[2];
+		packet[0] = i2c.read(kgsADDRESS, kgsREG_MAGNET_HX_H);
+		packet[1] = i2c.read(kgsADDRESS, kgsREG_MAGNET_HX_L);
+		int iPacket = Utils.toInt(packet);
+		return iPacket;
+	}
+	
+	public int getMAGNETO_YOUT()
+	{
+		byte[] packet = new byte[2];
+		packet[0] = i2c.read(kgsADDRESS, kgsREG_MAGNET_HY_H);
+		packet[1] = i2c.read(kgsADDRESS, kgsREG_MAGNET_HY_L);
+		int iPacket = Utils.toInt(packet);
+		return iPacket;
+	}
+	
+	public int getMAGNETO_ZOUT()
+	{
+		byte[] packet = new byte[2];
+		packet[0] = i2c.read(kgsADDRESS, kgsREG_MAGNET_HZ_H);
+		packet[1] = i2c.read(kgsADDRESS, kgsREG_MAGNET_HZ_L);
+		int iPacket = Utils.toInt(packet);
+		return iPacket;
+	}
 	/*****************
 	 * CONFIG REGISTER
 	 * @return
