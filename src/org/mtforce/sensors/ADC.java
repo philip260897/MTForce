@@ -15,37 +15,41 @@ import org.mtforce.main.Logger.Status;
  * Konstanten: Komplett
  * Funktionen: NICHT Komplett
  * 
+ * FUERS PROTOKOLL: Wenn in one-Shot konversion => Siehe Datenblatt fuer konversion befor auslesen
+ * 					
+ * 
  * TODO: Modultest
  * 	getVoltage(int Kanal) 	- Spannungswert von bestimmten Kanal einlesen
  * 	getVoltage()			- Spannungswert von momentan ausgewaehlten Kanal einlesen
  */
 public class ADC extends Sensor 
 {
-	public static final byte kgsADDRESS				= 0x68;	//Bausteinaddresse
-	public static final byte kgsSTD_CONFIG			= (byte) 0x90;	//Standard Konfiguration
+	public static final byte kgsADDRESS					= 0x69;	//Bausteinaddresse
+	public static final byte kgsSTD_CONFIG				= (byte) 0x90;	//Standard Konfiguration
 	
-	public static final byte kgsPGA_GAIN_x1			= 0x00;	//PGA Gain Selection Bits PGA=1
-	public static final byte kgsPGA_GAIN_x2 		= 0x01;	//PGA Gain Selection Bits, PGA=2
-	public static final byte kgsPGA_GAIN_x4 		= 0x02;	//PGA Gain Selection Bits, PGA=4
-	public static final byte kgsPGA_GAIN_x8 		= 0x03;	//PGA Gain Selection Bits, PGA=8
+	public static final byte kgsCONF_PGA_GAIN_x1		= 0x00;	//PGA Gain Selection Bits PGA=1
+	public static final byte kgsCONF_PGA_GAIN_x2 		= 0x01;	//PGA Gain Selection Bits, PGA=2
+	public static final byte kgsCONF_PGA_GAIN_x4 		= 0x02;	//PGA Gain Selection Bits, PGA=4
+	public static final byte kgsCONF_PGA_GAIN_x8 		= 0x03;	//PGA Gain Selection Bits, PGA=8
 	
-	public static final byte kgsSPS_240 			= 0x00;	//Sample Rate Selection Bit, 240 SPS, 12 bits
-	public static final byte kgsSPS_60 				= 0x04;	//Sample Rate Selection Bit, 60 SPS, 14 bits
-	public static final byte kgsSPS_15 				= 0x08;	//Sample Rate Selection Bit, 15 SPS, 16 bits
+	public static final byte kgsCONF_RES_12 			= 0x00;	//Sample Rate Selection Bit, 240 SPS, 12 bits
+	public static final byte kgsCONF_RES_14 			= 0x04;	//Sample Rate Selection Bit, 60 SPS, 14 bits
+	public static final byte kgsCONF_RES_16 			= 0x08;	//Sample Rate Selection Bit, 15 SPS, 16 bits
 	
-	public static final byte kgsONE_SHOT_CONV 		= 0x00;	//Conversion Mode Bit, One-Shot Conversion Mode
-	public static final byte kgsCONTINUOUS_CONV 	= 0x10;	//Conversion Mode Bit, Continuous Conversion Mode
+	public static final byte kgsCONF_ONE_SHOT_CONV 		= 0x00;	//Conversion Mode Bit, One-Shot Conversion Mode
+	public static final byte kgsCONF_CONTINUOUS_CONV 	= 0x10;	//Conversion Mode Bit, Continuous Conversion Mode
 	
-	public static final byte kgsSELECT_CH1 			= 0x00;	//Channel Selection Bits, Select Channel 1
-	public static final byte kgsSELECT_CH2 			= 0x20;	//Channel Selection Bits, Select Channel 2
-	public static final byte kgsSELECT_CH3 			= 0x40;	//Channel Selection Bits, Select Channel 3
-	public static final byte kgsSELECT_CH4 			= 0x60;	//Channel Selection Bits, Select Channel 4
+	public static final byte kgsCONF_SELECT_CH1 		= 0x00;	//Channel Selection Bits, Select Channel 1
+	public static final byte kgsCONF_SELECT_CH2 		= 0x20;	//Channel Selection Bits, Select Channel 2
+	public static final byte kgsCONF_SELECT_CH3 		= 0x40;	//Channel Selection Bits, Select Channel 3
+	public static final byte kgsCONF_SELECT_CH4 		= 0x60;	//Channel Selection Bits, Select Channel 4
 	
-	public static final byte kgsNO_EFFECT 			= 0x00;	//One-Shot Conversion mode, No effect
-	public static final int	 kgsINIT_NEW_CONV 		= 0x80;	//One-Shot Conversion mode, Initiate a new conversion.
+	public static final byte kgsNO_EFFECT 				= 0x00;	//One-Shot Conversion mode, No effect
+	public static final int	 kgsCONF_INIT_NEW_CONV 		= 0x80;	//One-Shot Conversion mode, Initiate a new conversion.
 	
 	private I2CManager i2c;									//Verweis auf I2CManager
-	private byte gSelected_Channel = kgsSELECT_CH1;
+	private byte gSelected_Channel = kgsCONF_SELECT_CH1;
+	private int currentResolution;
 	
 	/**
 	 * Initialisiert den Baustein
@@ -73,6 +77,18 @@ public class ADC extends Sensor
 	}
 	
 	/**
+	 * Wenn der ADC im One-Shot Conversion Mode ist, wird eine Umwandlung gestartet
+	 * Wichtig: Je nach Samplerate muss eine bestimmte zeit gewartet werden, bevor man den gemessenen Wert ausliest (Siehe Datenblatt)
+	 */
+	public void startConversion()
+	{
+		if(getConvMode() == ADC.kgsCONF_ONE_SHOT_CONV)
+		{
+			i2c.write(kgsADDRESS, (byte)(getConfiguration() | 0x80));
+		}
+	}
+	
+	/**
 	 * Setzt die gewünschte Konfiguration
 	 * @param configuration	Bausteinkonfiguration
 	 */
@@ -82,12 +98,21 @@ public class ADC extends Sensor
 	}
 	
 	/**
+	 * Liest das Konfigurationsregister aus dem Baustein aus.
+	 * @return	Konfigurationsregister
+	 */
+	public byte getConfiguration()
+	{
+		return i2c.read(kgsADDRESS, 3)[2];
+	}
+	
+	/**
 	 * Returned die Gain-Konfiguration
 	 * @return	Gibt die Gain-Konstante zurueck
 	 */
 	public int getGain()
 	{
-		byte packet = i2c.read(kgsADDRESS);
+		byte packet = getConfiguration();
 		packet = Utils.isolateBits(packet, 0, 1);
 		return packet;
 	}
@@ -98,7 +123,7 @@ public class ADC extends Sensor
 	 */
 	public int getConvMode()
 	{
-		byte packet = i2c.read(kgsADDRESS);
+		byte packet = getConfiguration();
 		return Utils.isolateBits(packet, 4, 4);
 	}
 	
@@ -108,7 +133,7 @@ public class ADC extends Sensor
 	 */
 	public int getReadyBit()
 	{
-		byte packet = i2c.read(kgsADDRESS);
+		byte packet = getConfiguration();
 		return Utils.isolateBits(packet, 7, 7);
 	}
 	
@@ -118,7 +143,7 @@ public class ADC extends Sensor
 	 */
 	public int getSampleRate()
 	{
-		byte packet = i2c.read(kgsADDRESS);
+		byte packet = getConfiguration();
 		packet = Utils.isolateBits(packet, 2, 3);
 		return packet;
 	}
@@ -129,9 +154,8 @@ public class ADC extends Sensor
 	 */
 	public int getChannelSelection()
 	{
-		byte packet = i2c.read(kgsADDRESS);
-		packet = Utils.isolateBits(packet, 6, 5);
-		return packet;
+		byte packet1 = Utils.isolateBits(getConfiguration(), 6, 5);
+		return packet1;
 	}
 	
 	/**
@@ -140,10 +164,20 @@ public class ADC extends Sensor
 	 */
 	public double getVoltage()
 	{
-		byte[] packet = i2c.read(kgsADDRESS, 2);
-		int wert = Utils.toInt(Utils.reverseBytes(packet));
-		wert &= 0x0FFF;
-		double volts = (double)wert * (2.048/2047d);
+		byte[] packet = i2c.read(kgsADDRESS, 3);
+		
+		byte config = Utils.isolateBits(packet[2], 2, 3);
+		double res = 2048;
+				
+		packet = new byte[]{packet[0], packet[1]};
+		short wert = (short)Utils.toInt(Utils.reverseBytes(packet));
+		if(config == ADC.kgsCONF_RES_12) res = 2048;
+		if(config == ADC.kgsCONF_RES_14) res = 8192;
+		if(config == ADC.kgsCONF_RES_16) res = 32768;
+		
+		System.out.println(Utils.byteToHexString(packet[0]) + " " + Utils.byteToHexString(packet[1]));
+		
+		double volts = (double)wert * (2.048/res);
 		return volts;
 	}
 }

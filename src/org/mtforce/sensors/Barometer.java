@@ -31,6 +31,7 @@ public class Barometer extends Sensor {
 	public static final byte kgsRESOLUTION_2048	= 0x03;				//ADC-Aufloesung 11-bit
 	public static final byte kgsRESOLUTION_4096	= 0x04; 			//ADC-Aufloesung 12-bit
 	
+	public static final byte kgsPROM_COEFF_0 = 0x00;				//Addresse des Reserved-Register
 	public static final byte kgsPROM_COEFF_1 = 0x02;				//Addresse des Koeffizient 1
 	public static final byte kgsPROM_COEFF_2 = 0x04;				//Addresse des Koeffizient 2
 	public static final byte kgsPROM_COEFF_3 = 0x06;				//Addresse des Koeffizient 3
@@ -48,7 +49,7 @@ public class Barometer extends Sensor {
 	private I2CManager i2c;											//Verweis auf I2CManager
 	private byte gResolutionPressure	= kgsRESOLUTION_256;		//Von User eingestellte Umwandlungsaufloesung des Drucks
 	private byte gResolutionTemperature	= kgsRESOLUTION_256;		//Von User eingestellte Umwandlungsaufloesung der Temperatur
-	private int[] gCoeffizients			= new int[6];				//Koeffizienten fuer die Umrechnung speichern
+	private int[] gCoeffizients			= new int[7];				//Koeffizienten fuer die Umrechnung speichern
 	
 	/**
 	 * Initialisiert den Baustein
@@ -59,8 +60,14 @@ public class Barometer extends Sensor {
 		i2c = (I2CManager) Sensors.getI2C();
 		if(i2c.write(kgsADDRESS, kgsCMD_RESET))
 		{
-			//gCoeffizients = getCoeffizients();
-			//checkCRC(gCoeffizients, getCRC());
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			gCoeffizients = getCoeffizients();
+			System.out.println(checkCRC(gCoeffizients, getCRC()));
 			setEnabled(true);
 		}
 		else
@@ -135,8 +142,8 @@ public class Barometer extends Sensor {
 	{
 		if(coeffizient != kgsPROM_COEFF_1 && coeffizient != kgsPROM_COEFF_2 && coeffizient != kgsPROM_COEFF_3 && coeffizient != kgsPROM_COEFF_4 && coeffizient != kgsPROM_COEFF_5 && coeffizient != kgsPROM_COEFF_6)
 			return -1;
-		i2c.write(kgsADDRESS, (byte)(kgsCMD_READ_PROM | coeffizient));
-		return Utils.toInt(Utils.reverseBytes(i2c.read(kgsADDRESS, 2)));
+		//i2c.write(kgsADDRESS, (byte)(kgsCMD_READ_PROM | coeffizient));
+		return Utils.toInt(Utils.reverseBytes(i2c.read(kgsADDRESS,(byte)(kgsCMD_READ_PROM | coeffizient), 2)));
 	}
 	
 	/**
@@ -145,13 +152,14 @@ public class Barometer extends Sensor {
 	 */
 	public int[] getCoeffizients()
 	{
-		int coeff[] = new int[6];
-		coeff[0] = this.getCoeffizient(kgsPROM_COEFF_1);
-		coeff[1] = this.getCoeffizient(kgsPROM_COEFF_2);
-		coeff[2] = this.getCoeffizient(kgsPROM_COEFF_3);
-		coeff[3] = this.getCoeffizient(kgsPROM_COEFF_4);
-		coeff[4] = this.getCoeffizient(kgsPROM_COEFF_5);
-		coeff[5] = this.getCoeffizient(kgsPROM_COEFF_6);
+		int coeff[] = new int[7];
+		coeff[0] = this.getCoeffizient(kgsPROM_COEFF_0);
+		coeff[1] = this.getCoeffizient(kgsPROM_COEFF_1);
+		coeff[2] = this.getCoeffizient(kgsPROM_COEFF_2);
+		coeff[3] = this.getCoeffizient(kgsPROM_COEFF_3);
+		coeff[4] = this.getCoeffizient(kgsPROM_COEFF_4);
+		coeff[5] = this.getCoeffizient(kgsPROM_COEFF_5);
+		coeff[6] = this.getCoeffizient(kgsPROM_COEFF_6);
 		return coeff;
 	}
 	
@@ -161,8 +169,8 @@ public class Barometer extends Sensor {
 	 */
 	public int getCRC()
 	{
-		i2c.write(kgsADDRESS, (byte)(kgsCMD_READ_PROM | kgsPROM_CRC));
-		return Utils.toInt(Utils.reverseBytes(i2c.read(kgsADDRESS, 2)));
+		//i2c.write(kgsADDRESS, (byte)(kgsCMD_READ_PROM | kgsPROM_CRC));
+		return Utils.toInt(Utils.reverseBytes(i2c.read(kgsADDRESS, (byte)(kgsCMD_READ_PROM | kgsPROM_CRC), 2)));
 	}
 	
 	/**
@@ -377,8 +385,15 @@ public class Barometer extends Sensor {
 	 * @param crc	CRC zum ueberpruefen
 	 * @return		?
 	 */
-	private char checkCRC(int[] coeff, int crc)
+	public char checkCRC(int[] coeff, int crc)
 	{
+		Logger.log("Barometer", "Starting crc");
+		int[] coeff2 = new int[8];
+		for(int i = 0; i < 7; i++)
+			coeff2[i] = coeff[i];
+		coeff2[7] = crc & 0xFF00;
+		coeff = coeff2;
+		
 		//TODO: CRC TESTEN!!!! SEHR WICHTIG!!!!
 		int cnt;
 		long n_rem;
@@ -414,6 +429,7 @@ public class Barometer extends Sensor {
 		
 		n_rem = (0x000F & (n_rem >> 12));
 		crc = (int) crc_read;
+		Logger.log("Barometer", "crc done "+Utils.byteToHexString((byte)(n_rem ^ 0x0)) + " read crc: "+Utils.byteToHexString((byte)crc));
 		return (char)(n_rem ^ 0x0);
 	}
 }

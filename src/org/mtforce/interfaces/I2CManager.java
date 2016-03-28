@@ -116,7 +116,7 @@ public class I2CManager implements CommunicationManager
 			byte[] buffer = new byte[bytes];
 			current.read(buffer, 0, buffer.length);
 			return buffer;
-		}catch(Exception ex){}
+		}catch(Exception ex){ex.printStackTrace();}
 		return null;
 	}
 	
@@ -124,18 +124,18 @@ public class I2CManager implements CommunicationManager
 		return read(address, reg, bytes, false);
 	}
 	
-	public byte[] read(byte address, byte reg, int bytes, boolean lowByteFirst) {
+	public byte[] read(byte address, int reg, int bytes, boolean lowByteFirst) {
 		try
 		{
 			current = bus.getDevice(address);
 			byte[] buffer = new byte[bytes];
-			current.read(reg, buffer, 0, buffer.length);
+			current.read(reg, buffer, 0, bytes);
 			if(lowByteFirst)
 				buffer = Utils.reverseBytes(buffer);
 			//System.out.println("R: 0x"+Utils.byteToHexString(buffer[0]) + " 0x"+Utils.byteToHexString(buffer[1]));
 			return buffer;
 		}
-		catch(Exception ex){}
+		catch(Exception ex){ex.printStackTrace();}
 		return null;
 	}
 }
