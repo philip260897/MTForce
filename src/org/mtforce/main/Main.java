@@ -12,6 +12,8 @@ public class Main
 	//TODO: sendPacketForResponse Timeout einfuehren
 	public static void main(String[] args) 
 	{
+		Logger.console(true);
+		
 		try
 		{
 			Sensors.initialize();
@@ -20,7 +22,6 @@ public class Main
 			pi.init(Serial.DEFAULT_COM_PORT, 57600);
 			if(pi.isEnabled())
 			{
-				System.out.println("EnOceanPi initialized");
 				pi.addOceanPacketReceivedEvent(new OceanPacketReceivedEvent()
 				{
 					@Override
@@ -42,13 +43,6 @@ public class Main
 				packet.println();
 				Response resp = pi.sendPacketForResponse(packet);
 			}
-			else
-			{
-				System.out.println("EnOceanPi initialization failed!");
-			}
-			
-			Logger.console(true);
-			Logger.log("Main", "Testing");
 
 			//System.out.println("Waited for response: "+Utils.byteToHexString(resp.getResponseCode()));*/
 			

@@ -22,7 +22,7 @@ public class Logger
 
 	public static void log(Status status, String prefix, String message)
 	{
-		String logString = "[" + prefix + ":" + status + "] \t" + message;
+		String logString = "[" + prefix + ":" + status + "] " + message;
 		myList.add(logString);
 		
 		if(console)

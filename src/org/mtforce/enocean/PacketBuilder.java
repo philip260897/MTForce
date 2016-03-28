@@ -1,9 +1,12 @@
 package org.mtforce.enocean;
 
+import org.mtforce.main.Logger;
 import org.mtforce.main.Utils;
+import org.mtforce.main.Logger.Status;
 
 public class PacketBuilder 
 {
+	private String PREFIX = "PacketBuilder";
 	private boolean buildStart = false;
 	private boolean buildDone = false;
 	private int count = 0;
@@ -11,12 +14,15 @@ public class PacketBuilder
 	private int countOptional = 0;
 	private byte[] headerDataLength = new byte[] {0x00,0x00};
 	private byte[] data, dataOptional;
+	private boolean enabled = true;
 	
 	public PacketBuilder(){}
 	public OceanPacket packet = new OceanPacket();
 	
 	public void build(byte b)
 	{
+		if(!enabled)
+			return;
 		if(buildStart)
 		{
 			switch(count)
@@ -52,7 +58,8 @@ public class PacketBuilder
 						//System.out.println("Data Length: "+Utils.toInt(headerDataLength));
 						//System.out.println("Data Optional: "+(int)packet.getHeaderOptionalLength());
 						//System.out.println("CRC8: "+Utils.byteToHexString(packet.getDataCRC8()) + " "+ Utils.byteToHexString(packet.calculateDataCrc8()));
-						System.out.println("[PacketBuilder] Building done!");
+						//System.out.println("[PacketBuilder] Building done!");
+						Logger.log(PREFIX, "Building done!");
 					}
 				}
 			}
@@ -72,7 +79,8 @@ public class PacketBuilder
 			}
 			else
 			{
-				System.out.println("[PacketBuilder] Ignoring transmission: "+Utils.byteToHexString(b));
+				//System.out.println("[PacketBuilder] Ignoring transmission: "+Utils.byteToHexString(b));
+				Logger.log(Status.WARNING, PREFIX, "Ignoring transmission: "+Utils.byteToHexString(b));
 			}
 		}
 	}
@@ -84,5 +92,13 @@ public class PacketBuilder
 	
 	public boolean isPacketDone() {
 		return buildDone;
+	}
+	
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
 	}
 }

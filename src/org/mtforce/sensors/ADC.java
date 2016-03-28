@@ -1,8 +1,10 @@
 package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CManager;
+import org.mtforce.main.Logger;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
+import org.mtforce.main.Logger.Status;
 
 
 /**
@@ -58,7 +60,7 @@ public class ADC extends Sensor
 		}
 		else
 		{
-			System.out.println(this.getClass().getSimpleName() + ": init error! Device not functional");
+			Logger.log(Status.ERROR, this.getClass().getSimpleName(), "init failed! Device not functional");
 		}
 	}
 	

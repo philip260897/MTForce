@@ -33,13 +33,17 @@ public class SPIManager implements CommunicationManager
     }
 
 	
-	public void write(byte[] bytes)
+	public void write(byte ...bytes)
 	{
-		//TODO: Methode schreiben
+		try {
+			spi.write(bytes);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//DEBUG: noch nicht fertig
-	public boolean write(byte address, byte val) {
+	/*public boolean write(byte address, byte val) {
 		// TODO Auto-generated method stub
 		//byte[] packet = new byte[] {address, val};
 		try {
@@ -49,6 +53,6 @@ public class SPIManager implements CommunicationManager
 			e.printStackTrace();
 		}
 		return false;
-	}
+	}*/
 
 }

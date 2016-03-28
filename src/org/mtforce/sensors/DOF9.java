@@ -12,7 +12,7 @@ public class DOF9 extends Sensor
 	 * Konstanten: Komplett
 	 * Funktionen: NICHT Komplett
 	 * 
-	 * TODO: Modultest
+	 * TODO: Modultest, INIT!!!! 
 	 */
 	public static final byte kgsREG_SELF_TEST_X_GYRO = 0x00;
 	public static final byte kgsREG_SELF_TEST_Y_GYRO = 0x01;

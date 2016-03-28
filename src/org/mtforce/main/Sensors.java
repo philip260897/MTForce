@@ -55,12 +55,12 @@ public final class Sensors
 	 */
 	public static void initialize() throws Exception
 	{
+		sensorList.add(adc);
 		sensorList.add(distanceSensor);
 		sensorList.add(lightSensor);
 		//sensorList.add(ser7seg);
 		//sensorList.add(ipExp);
 		sensorList.add(thermometer);
-		sensorList.add(adc);
 		sensorList.add(humidity);
 		sensorList.add(dof9);
 		sensorList.add(barometer);
