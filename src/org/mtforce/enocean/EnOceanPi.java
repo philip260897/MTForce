@@ -14,7 +14,6 @@ import com.pi4j.io.serial.SerialFactory;
  * 							I2C in rpi system aktivieren
  * 							SPI in rpi system aktivieren
  * 							ENOCEAN MODULE IN UNSECURE MODE BRINGEN!!!
- * @author Philip
  *
  */
 public class EnOceanPi

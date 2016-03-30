@@ -27,6 +27,31 @@ public class Main
 		{
 			Sensors.initialize();
 			
+			/*Thermometer thermometer = Sensors.getThermometer();
+			thermometer.setConfiguration(Thermometer.kgsCONF_HYST_15 | Thermometer.kgsCONF_WIN_LOCK);
+			
+			if(thermometer.getHysteresis() == Thermometer.kgsCONF_HYST_15)
+			{
+				//Etwas tun
+			}
+			
+			if(thermometer.isWindowLockSet())
+			{
+				//Etwas tun
+			}
+			
+			thermometer.setTUpperLimit(20.5);*/
+			Sensors.initialize();
+			Thermometer thermometer = Sensors.getThermometer();
+			if(thermometer.isEnabled())
+			{
+				thermometer.setConfiguration(Thermometer.kgsCONF_HYST_15);
+				thermometer.setTUpperLimit(30.0);
+				thermometer.setTLowerLimit(20.0);
+				thermometer.setTCritical(32.0);
+				thermometer.setConfiguration(thermometer.getConfiguration() | Thermometer.kgsCONF_CRIT_LOCK | Thermometer.kgsCONF_WIN_LOCK);
+			}
+			
 			/*for(Sensor sensor : Sensors.getSensors())
 			{
 				if(sensor.isEnabled())
