@@ -98,6 +98,15 @@ public class ADC extends Sensor
 	}
 	
 	/**
+	 * Aendert den Kanal auf dem man Spannungswerte misst
+	 * @param channel	Kanal auf dem gemessen werden soll
+	 */
+	public void selectChannel(byte channel)
+	{
+		setConfiguration((byte)((getConfiguration() & 0x9F) | channel));
+	}
+	
+	/**
 	 * Liest das Konfigurationsregister aus dem Baustein aus.
 	 * @return	Konfigurationsregister
 	 */

@@ -65,6 +65,7 @@ public class DistanceSensor extends Sensor
 		
 		if(adc.isEnabled())
 		{
+			
 			distance = convertVoltageToDistance(5);
 		}
 		

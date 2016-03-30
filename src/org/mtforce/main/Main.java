@@ -42,14 +42,18 @@ public class Main
 			
 			thermometer.setTUpperLimit(20.5);*/
 			Sensors.initialize();
-			Thermometer thermometer = Sensors.getThermometer();
+			
 			if(thermometer.isEnabled())
 			{
-				thermometer.setConfiguration(Thermometer.kgsCONF_HYST_15);
+				Thermometer thermometer = Sensors.getThermometer();
+				thermometer.setConfiguration(Thermometer.kgsCONF_HYST_15 | Thermometer.kgsCONF_ALERT_MOD);
 				thermometer.setTUpperLimit(30.0);
 				thermometer.setTLowerLimit(20.0);
 				thermometer.setTCritical(32.0);
 				thermometer.setConfiguration(thermometer.getConfiguration() | Thermometer.kgsCONF_CRIT_LOCK | Thermometer.kgsCONF_WIN_LOCK);
+			
+				int config = thermometer.getConfiguration();
+				
 			}
 			
 			/*for(Sensor sensor : Sensors.getSensors())
