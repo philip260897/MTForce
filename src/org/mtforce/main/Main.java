@@ -11,6 +11,7 @@ import org.mtforce.sensors.DOF9;
 import org.mtforce.sensors.Sensor;
 import org.mtforce.sensors.Thermometer;
 
+import com.pi4j.component.sensor.DistanceSensor;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
@@ -43,9 +44,13 @@ public class Main
 			thermometer.setTUpperLimit(20.5);*/
 			Sensors.initialize();
 			
+			DistanceSensor distanceSensor = Sensors.getDistanceSensor();
+			double distanz = distanceSensor.getDistance();
+			
+			Thermometer thermometer = Sensors.getThermometer();
 			if(thermometer.isEnabled())
 			{
-				Thermometer thermometer = Sensors.getThermometer();
+				
 				thermometer.setConfiguration(Thermometer.kgsCONF_HYST_15 | Thermometer.kgsCONF_ALERT_MOD);
 				thermometer.setTUpperLimit(30.0);
 				thermometer.setTLowerLimit(20.0);

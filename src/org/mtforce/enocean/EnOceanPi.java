@@ -32,14 +32,14 @@ public class EnOceanPi
 	public static final byte PACKETTYPE_RADIO_MESSAGE 		= 0x09; //Radio message
 	public static final byte PACKETTYPE_RADIO_ADVANCED 		= 0x0A; //Advanced protocol radio telegram
 	
-	private Serial serial;
-	private boolean enabled = false;
+	private Serial serial;				//Serielles Interface
+	private boolean enabled = false;	//Gibt an ob EnOcean aktiviert ist oder nicht
 	
-	private List<OceanPacketReceivedEvent> listeners = new ArrayList<OceanPacketReceivedEvent>();
-	private Thread threadListener;
+	private List<OceanPacketReceivedEvent> listeners = new ArrayList<OceanPacketReceivedEvent>();	//Speichert alle EventListener
+	private Thread threadListener;		//Thread welcher fuer die Serielle Kommunikation verantwortlich ist
 	
-	private PacketBuilder builder;
-	private Response resp;
+	private PacketBuilder builder;		//PacketBuilder welcher packete Parsed
+	private Response resp;				//Zuletzt erhaltene Antwort vom EnOcean
 	
 	
 	public EnOceanPi()
@@ -47,16 +47,29 @@ public class EnOceanPi
 		builder = new PacketBuilder();
 	}
 	
+	/**
+	 * Fuegt einen neuen EventListener hinzu
+	 * @param listener	EventListener welcher hinzugefuegt werden soll
+	 */
 	public void addOceanPacketReceivedEvent(OceanPacketReceivedEvent listener)
 	{
 		listeners.add(listener);
 	}
 	
+	/**
+	 * Entfernt einen EventListener
+	 * @param listener	EventListener welcher entfernt werden soll
+	 */
 	public void removeOceanPacketReceivedEvent(OceanPacketReceivedEvent listener)
 	{
 		listeners.remove(listener);
 	}
 	
+	/**
+	 * Initialisiert den EnOcean
+	 * @param comPort	COM-Port welcher mit dem EnOcean verbunden ist
+	 * @param baud		Baudrate mit der der datentransfer ablaeuft
+	 */
 	public void init(String comPort, int baud)
 	{
 		if(enabled)
@@ -102,15 +115,32 @@ public class EnOceanPi
 		close();
 	}
 	
+	/**
+	 * Schickt ein Packet an den EnOcean
+	 * @param packet	Packet welches geschickt werden soll
+	 */
 	public void sendPacket(OceanPacket packet)
 	{
 		serial.write(packet.toBytes());
 	}
 	
+	/**
+	 * Schickt ein Packet und wartet auf eine Antwort vom EnOcean. Achtung! Diese Methode Blockiert bis eine Antwort kommt oder 
+	 * ein Timeout von 1 Sekunde erreicht wurde
+	 * @param packet	Packet welches geschickt werden soll
+	 * @return			Gibt die Antwort vom EnOcean zurueck, oder NULL wenn timeout
+	 */
 	public Response sendPacketForResponse(OceanPacket packet) {
 		return this.sendPacketForResponse(packet, 1000);
 	}
 	
+	/**
+	 * Schickt ein Packet und wartet auf eine Antwort vom EnOcean. Achtung! Diese Methode Blockiert bis eine Antwort kommt oder 
+	 * die Timeoutzeit erreicht wurde
+	 * @param packet	Packet welches geschickt werden soll
+	 * @param timeout	Zeit nachdem die Blockade aufgehoben wird wenn keine Antwort rechtzeitig kommt
+	 * @return			Gibt die Antwort vom EnOcean zurueck, oder NULL wenn timeout
+	 */
 	public Response sendPacketForResponse(OceanPacket packet, int timeout)
 	{
 		serial.write(packet.toBytes());
@@ -128,6 +158,9 @@ public class EnOceanPi
 		return resp;
 	}
 	
+	/**
+	 * Schliest die serielle Kommunikation mit dem EnOcean
+	 */
 	public void close()
 	{
 		threadListener.stop();
@@ -135,11 +168,18 @@ public class EnOceanPi
 		serial.close();
 	}
 	
+	/**
+	 * Gibt an ob diese der EnOcean aktiv ist oder nicht
+	 * @return	Aktiviert = true; Nicht Aktiviert = false
+	 */
 	public boolean isEnabled()
 	{
 		return enabled;
 	}
 	
+	/**
+	 * Liest bytes vom COM-Port ein und baut ein Packet auf
+	 */
 	private void readSerial()
 	{
 		int i = serial.read();
