@@ -2,7 +2,6 @@ package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Logger;
-import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 import org.mtforce.main.Logger.Status;
 
@@ -38,6 +37,8 @@ public class HumiditySensor extends Sensor
 	public final static byte kgsCONF_HEATER_ENABLE		= 0x04;				//Heizung anschalten
 	
 	private I2CManager gI2c;												//Verweis auf I2CManager
+	
+	protected HumiditySensor() {}
 	
 	/**
 	 * Initialisierung des Sensors

@@ -2,7 +2,6 @@ package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Logger;
-import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 import org.mtforce.main.Logger.Status;
 
@@ -135,6 +134,9 @@ public class DOF9 extends Sensor
 	
 	int RoomTemp_Offset = 0;
 	int Temp_Sensitivity = 0;
+	
+	protected DOF9() {}
+	
 	@Override
 	public void init() {
 		i2c = (I2CManager)Sensors.getI2C();

@@ -1,4 +1,4 @@
-package org.mtforce.main;
+package org.mtforce.sensors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,17 +6,6 @@ import java.util.List;
 import org.mtforce.interfaces.CommunicationManager;
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.interfaces.SPIManager;
-import org.mtforce.sensors.ADC;
-import org.mtforce.sensors.Barometer;
-import org.mtforce.sensors.DOF9;
-import org.mtforce.sensors.DistanceSensor;
-import org.mtforce.sensors.HumiditySensor;
-import org.mtforce.sensors.IOExpander;
-import org.mtforce.sensors.LightSensor;
-
-import org.mtforce.sensors.Sensor;
-import org.mtforce.sensors.Ser7Seg;
-import org.mtforce.sensors.Thermometer;
 
 /**
  * Beschreibung: Die Sensors-Klasse enthaelt alle Instanzen der verschiedenen Sensoren.
@@ -44,7 +33,7 @@ public final class Sensors
 	private static CommunicationManager i2c = null;
 	private static CommunicationManager spi = null;
 	
-	private Sensors()
+	protected Sensors()
 	{
 		
 	}

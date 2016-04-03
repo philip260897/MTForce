@@ -4,5 +4,5 @@ public interface RORGDecodeEvent
 {
 	public void thermometerReceived(double temperature);
 	
-	public void buttonReceived(int button);
+	public void buttonReceived(int button1, int button2);
 }

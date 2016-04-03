@@ -2,7 +2,6 @@ package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Main;
-import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
 import com.pi4j.io.i2c.I2CBus;

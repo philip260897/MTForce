@@ -2,7 +2,6 @@ package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Logger;
-import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 import org.mtforce.main.Logger.Status;
 
@@ -50,6 +49,8 @@ public class ADC extends Sensor
 	private I2CManager i2c;									//Verweis auf I2CManager
 	private byte gSelected_Channel = kgsCONF_SELECT_CH1;
 	private int currentResolution;
+	
+	protected ADC() {}
 	
 	/**
 	 * Initialisiert den Baustein

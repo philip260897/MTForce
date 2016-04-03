@@ -2,7 +2,6 @@ package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Logger;
-import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 import org.mtforce.main.Logger.Status;
 
@@ -50,6 +49,8 @@ public class Barometer extends Sensor {
 	private byte gResolutionPressure	= kgsRESOLUTION_256;		//Von User eingestellte Umwandlungsaufloesung des Drucks
 	private byte gResolutionTemperature	= kgsRESOLUTION_256;		//Von User eingestellte Umwandlungsaufloesung der Temperatur
 	private int[] gCoeffizients			= new int[7];				//Koeffizienten fuer die Umrechnung speichern
+	
+	protected Barometer() {}
 	
 	/**
 	 * Initialisiert den Baustein

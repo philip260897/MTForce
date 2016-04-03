@@ -16,6 +16,7 @@ public class RORGDecoder
 	public RORGDecoder()
 	{
 		knownIds.put("Thermometer", Utils.toInt(new byte[]{0x01, (byte) 0x9b, (byte) 0xcf, 0x5e}));
+		knownIds.put("Button", Utils.toInt(new byte[]{0x01, (byte) 0xa1, 0x31, (byte) 0xc0}));
 	}
 	
 	public void addRORGDecodeEventListener(RORGDecodeEvent listener) {
@@ -56,9 +57,38 @@ public class RORGDecoder
 				System.out.println("Invalid Length");
 			}
 		}
+		else if(telegram[0] == (byte)0xf6)
+		{
+			if(telegram.length == 7)
+			{
+				if(Utils.isBitSet(telegram[6], 4))
+				{
+					if(Utils.isBitSet(telegram[6], 0)) {
+						this.fireButtonEvent(1, 1);
+					} else {
+						if(Utils.isBitSet(telegram[1], 5))
+							this.fireButtonEvent(1, 0);
+						else
+							this.fireButtonEvent( 0, 1);
+					}
+				}
+				else
+				{
+					
+					if(Utils.isolateBits(telegram[1], 5, 7) == 0x00)
+						this.fireButtonEvent(0, 0);
+					else
+						this.fireButtonEvent(1, 1);
+				}
+			}
+			else
+			{
+				System.out.println("Wrong length");
+			}
+		}
 		else
 		{
-			System.out.println("wrong telegram diggah");
+			System.out.println("unsupported telegram");
 		}
 	}
 	
@@ -68,9 +98,9 @@ public class RORGDecoder
 			event.thermometerReceived(temp);
 	}
 	
-	public void fireButtonEvent(int button)
+	public void fireButtonEvent(int button1, int button2)
 	{
 		for(RORGDecodeEvent event: listeners)
-			event.buttonReceived(button);
+			event.buttonReceived(button1, button2);
 	}
 }

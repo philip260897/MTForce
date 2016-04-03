@@ -2,7 +2,6 @@ package org.mtforce.sensors;
 
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Logger;
-import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 import org.mtforce.main.Logger.Status;
 
@@ -50,6 +49,8 @@ public class Thermometer extends Sensor
 	private int gDefaultConfiguration 			=	kgsCONF_DEFAULT;
 	
 	private I2CManager i2c;
+	
+	protected Thermometer() {}
 	
 	/**
 	 * Schreibt einen Testwert in das Konfigurationsregister und aktiviert nach Erfolg den Sensor

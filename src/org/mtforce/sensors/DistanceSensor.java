@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mtforce.main.Logger;
-import org.mtforce.main.Sensors;
 import org.mtforce.main.Logger.Status;
 
 /**
@@ -24,7 +23,7 @@ public class DistanceSensor extends Sensor
 	private ADC adc;											//Verweis auf ADC
 	
 	
-	public DistanceSensor()
+	protected DistanceSensor()
 	{
 		super();
 		

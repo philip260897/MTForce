@@ -1,7 +1,6 @@
 package org.mtforce.sensors;
 
 import org.mtforce.main.Logger;
-import org.mtforce.main.Sensors;
 import org.mtforce.main.Logger.Status;
 
 /**
@@ -16,7 +15,9 @@ public class LightSensor extends Sensor
 {
 	private ADC adc;
 	
-	public LightSensor()
+	
+	
+	protected LightSensor()
 	{
 		super();
 		adc=Sensors.getAdc();

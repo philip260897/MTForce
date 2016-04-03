@@ -4,8 +4,8 @@ import java.awt.Point;
 
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.interfaces.SPIManager;
-import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
+import org.mtforce.sensors.Sensors;
 
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
@@ -97,7 +97,7 @@ public class LedDriver
 	public static final byte kgsDIAGNOSTIC_DIGIT_7 	= 0x5B; //Diagnostic digit 7 Register
 	
 	private byte rgbOrder[][] = new byte[][] {	{3, 2, 1}, 	{6, 5, 4}	};	//Register/Port Map
-												//0: R, G, B  1: R, G, B
+											//0: R, G, B  1: R, G, B
 	private byte valueOrder[] = new byte[] {7,6,5,4,3,2,1,0};	//Digit/Port Map
 	private int numberOfDevices = 4;							//Anzahl 
 	private LedColor globalColor = LedColor.RED;				//Globale Farbe
@@ -131,6 +131,12 @@ public class LedDriver
 	{
 		LedDictionary.LoadDictionary();
 		
+		setGlobalColor(LedColor.BLUE);
+		LedDigit digit1 = LedDictionary.getDigit("1");
+		byte[] data = this.generateBytesFromDigit(digit1);
+		for(byte b : data)
+			System.out.println(Utils.byteToHexString(b));
+		
 		setShutdownModeAll(LedDriver.kgsSHDM_NORM_RESET_FEAT);
 		setScanLimitAll(LedDriver.kgsSCAN_LIMIT_7);
 		setDecodeModeAll(LedDriver.kgsDM_NO_DECODE);
@@ -141,7 +147,12 @@ public class LedDriver
 			for(LedColor color : LedColor.values()) {
 				setGlobalColor(color);
 				setAllLedsOnAll(true);
-				Thread.sleep(100);
+				/*for(int i = 0; i < 8; i++)
+				{
+					this.setIntensityAll(i, 15);
+					Thread.sleep(1000);
+					this.setIntensityAll(i, 0);
+				}*/
 			}
 		}
 	}

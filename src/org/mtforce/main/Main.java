@@ -6,6 +6,7 @@ import org.mtforce.enocean.OceanPacketReceivedEvent;
 import org.mtforce.enocean.RORGDecodeEvent;
 import org.mtforce.enocean.RORGDecoder;
 import org.mtforce.enocean.Response;
+import org.mtforce.impatouch.LedColor;
 import org.mtforce.impatouch.LedDriver;
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.sensors.ADC;
@@ -13,6 +14,7 @@ import org.mtforce.sensors.Barometer;
 import org.mtforce.sensors.DOF9;
 import org.mtforce.sensors.LightSensor;
 import org.mtforce.sensors.Sensor;
+import org.mtforce.sensors.Sensors;
 import org.mtforce.sensors.Thermometer;
 
 import com.pi4j.component.sensor.DistanceSensor;
@@ -33,22 +35,23 @@ public class Main
 			Sensors.initialize();
 			LedDriver driver = new LedDriver();
 			driver.initialize();
+			driver.setGlobalColor(LedColor.MAGENTA);
+			driver.writeString("TEST");
 			
+			ADC adc = new ADC();
 			
 			final RORGDecoder decoder = new RORGDecoder();
 			decoder.addRORGDecodeEventListener(new RORGDecodeEvent(){
-
 				@Override
 				public void thermometerReceived(double temperature) {
 					System.out.println("EnOcean Thermometer: "+temperature);
 				}
 
 				@Override
-				public void buttonReceived(int button) {
-					// TODO Auto-generated method stub
-					
-				}
-				
+				public void buttonReceived(int button1, int button2) {
+					System.out.println("Button1: "+button1);
+					System.out.println("Button2: "+button2);
+				}			
 			});
 			
 			EnOceanPi pi = new EnOceanPi();
