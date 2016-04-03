@@ -1,6 +1,5 @@
 package org.mtforce.sensors;
 
-import org.mtforce.interfaces.I2CArduinoManager;
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.main.Main;
 import org.mtforce.main.Sensors;

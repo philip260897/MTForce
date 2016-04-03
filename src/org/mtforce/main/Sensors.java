@@ -131,5 +131,7 @@ public final class Sensors
 		return barometer;
 	}
 	
-	
+	public static LightSensor getLightSensor() {
+		return lightSensor;
+	}
 }

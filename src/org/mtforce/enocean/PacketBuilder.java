@@ -6,20 +6,24 @@ import org.mtforce.main.Logger.Status;
 
 public class PacketBuilder 
 {
-	private String PREFIX = "PacketBuilder";
-	private boolean buildStart = false;
-	private boolean buildDone = false;
-	private int count = 0;
-	private int countData = 0;
-	private int countOptional = 0;
-	private byte[] headerDataLength = new byte[] {0x00,0x00};
-	private byte[] data;
-	private byte[] dataOptional;
-	private boolean enabled = true;
+	private String PREFIX = "PacketBuilder";					//Prefix fuer den Logger
+	private boolean buildStart = false;							//Gibt an, ob ein neues Packet aufgebaut wird
+	private boolean buildDone = false;							//Gibt an, ob ein Packet fertiggestellt wurde
+	private int count = 0;										//Zaehlervariable
+	private int countData = 0;									//Zaehlervariable fuer Packetdaten
+	private int countOptional = 0;								//Zaehlervariable fuer optionale Daten
+	private byte[] headerDataLength = new byte[] {0x00,0x00};	//Speichert die Packetdatenlaenge
+	private byte[] data;										//Speichert Packetdaten
+	private byte[] dataOptional;								//Speichert optionale Daten
+	private boolean enabled = true;								//Aktiviert oder deaktiviert den PacketBuilder
 	
 	public PacketBuilder(){}
-	public OceanPacket packet = new OceanPacket();
+	public OceanPacket packet = new OceanPacket();				//OceanPacket welches aufgebaut wird
 	
+	/**
+	 * Baut ein OceanPacket auf
+	 * @param b	Packet-Byte
+	 */
 	public void build(byte b)
 	{
 		if(!enabled)
@@ -86,19 +90,35 @@ public class PacketBuilder
 		}
 	}
 	
+	/**
+	 * Gibt das aufgebaute OceanPacket zurueck
+	 * @return	OceanPacket
+	 */
 	public OceanPacket getPacket() {
 		buildDone = false;
 		return packet;
 	}
 	
+	/**
+	 * Gibt an, ob das Packet vollstaendig ist
+	 * @return	Vollstaendigkeit des Packetes
+	 */
 	public boolean isPacketDone() {
 		return buildDone;
 	}
 	
+	/**
+	 * Aktiviert oder Deaktiviert den PacketBuilder
+	 * @param enabled	Aktviviert oder Deaktiviert den PacketBuilder
+	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 	
+	/**
+	 * Gibt an ob der PacketBuilder aktiv ist oder nicht
+	 * @return	PacketBuilder aktiv oder nicht
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
