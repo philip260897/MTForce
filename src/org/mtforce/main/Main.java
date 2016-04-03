@@ -62,7 +62,7 @@ public class Main
 			}*/
 
 			int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x4500}; 
-			Sensors.getBarometer().checkCRC(nprom, 0x4500);
+			Sensors.getBarometer().checkCRC(nprom, 0x450b);
 			
 			Barometer bar = Sensors.getBarometer();
 			if(bar.isEnabled())
@@ -70,7 +70,7 @@ public class Main
 				System.out.println("Temperatur: "+bar.getTemperature());
 			}
 			
-			ADC adc = Sensors.getAdc();
+			/*ADC adc = Sensors.getAdc();
 			if(adc.isEnabled())
 			{
 				//adc.setConfiguration(ADC.kgsSTD_CONFIG);
@@ -79,7 +79,7 @@ public class Main
 				//System.out.println(Utils.byteToHexString((byte)adc.getChannelSelection()));
 				System.out.println(adc.getChannelSelection() == ADC.kgsCONF_SELECT_CH4 ? "OK!" : "FAILED!");
 				System.out.println("Voltage: "+adc.getVoltage());
-			}
+			}*/
 			
 			/*DOF9 dof = Sensors.getDof9();
 			if(dof.isEnabled())

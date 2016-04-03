@@ -68,6 +68,8 @@ public class Barometer extends Sensor {
 			}
 			gCoeffizients = getCoeffizients();
 			System.out.println(checkCRC(gCoeffizients, getCRC()));
+			byte[] test = Utils.toBytes(getCRC(), 2);
+			System.out.println(Utils.byteToHexString(test[1]) + "  " + Utils.byteToHexString(test[0]));
 			setEnabled(true);
 		}
 		else
@@ -431,5 +433,39 @@ public class Barometer extends Sensor {
 		crc = (int) crc_read;
 		Logger.log("Barometer", "crc done "+Utils.byteToHexString((byte)(n_rem ^ 0x0)) + " read crc: "+Utils.byteToHexString((byte)crc));
 		return (char)(n_rem ^ 0x0);
+		
+		/*Logger.log("Barometer", "Starting crc");
+		int cnt; // simple counter
+		int n_rem; // crc reminder
+		int crc_read; // original value of the crc
+		char n_bit;
+		
+		n_rem = 0x00;
+		crc_read=coeff[7]; //save read CRC
+		coeff[7]=(0xFF00 & (coeff[7])); //CRC byte is replaced by 0
+		
+		for (cnt = 0; cnt < 16; cnt++) // operation is performed on bytes
+		{// choose LSB or MSB
+			if (cnt%2==1) n_rem ^= (short) ((coeff[cnt>>1]) & 0x00FF);
+			else n_rem ^= (short) (coeff[cnt>>1]>>8);
+			for (n_bit = 8; n_bit > 0; n_bit--)
+			{
+				if ( (n_rem & 0x8000) == 0x8000 )
+				{
+					n_rem = (n_rem << 1) ^ 0x3000;
+				}
+				else
+				{
+					n_rem = (n_rem << 1);
+				}
+			}
+		}
+		
+		n_rem= (0x000F & (n_rem >> 12)); // final 4-bit reminder is CRC code
+		coeff[7]=crc_read; // restore the crc_read to its original place
+		
+		Logger.log("Barometer", "crc done "+Utils.byteToHexString((byte)(n_rem ^ 0x0)) + " read crc: "+Utils.byteToHexString((byte)crc_read));
+		
+		return (char) (n_rem ^ 0x0);*/
 	}
 }
