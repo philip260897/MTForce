@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.pi4j.io.spi.SpiChannel;
 import com.pi4j.io.spi.SpiDevice;
 import com.pi4j.io.spi.SpiFactory;
+import com.pi4j.io.spi.SpiMode;
 
 /**
  * Beschreibung: Kommunikation ueber das SPI Interface
@@ -24,7 +25,7 @@ public class SPIManager implements CommunicationManager
 	@Override
     public void initialize() throws Exception
     {
-        spi = SpiFactory.getInstance(SpiChannel.CS0, 16000000, SpiDevice.DEFAULT_SPI_MODE);
+        spi = SpiFactory.getInstance(SpiChannel.CS0, SpiDevice.DEFAULT_SPI_SPEED/1000, SpiDevice.DEFAULT_SPI_MODE);
         
         if(spi == null)
         {
@@ -37,6 +38,7 @@ public class SPIManager implements CommunicationManager
 	{
 		try {
 			spi.write(bytes);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

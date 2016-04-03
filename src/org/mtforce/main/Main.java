@@ -3,11 +3,15 @@ package org.mtforce.main;
 import org.mtforce.enocean.EnOceanPi;
 import org.mtforce.enocean.OceanPacket;
 import org.mtforce.enocean.OceanPacketReceivedEvent;
+import org.mtforce.enocean.RORGDecodeEvent;
+import org.mtforce.enocean.RORGDecoder;
 import org.mtforce.enocean.Response;
+import org.mtforce.impatouch.LedDriver;
 import org.mtforce.interfaces.I2CManager;
 import org.mtforce.sensors.ADC;
 import org.mtforce.sensors.Barometer;
 import org.mtforce.sensors.DOF9;
+import org.mtforce.sensors.LightSensor;
 import org.mtforce.sensors.Sensor;
 import org.mtforce.sensors.Thermometer;
 
@@ -27,6 +31,11 @@ public class Main
 		try
 		{
 			Sensors.initialize();
+			LedDriver driver = new LedDriver();
+			driver.initialize();
+			driver.sendTest();
+			
+			//Sensors.initialize();
 			
 			/*Thermometer thermometer = Sensors.getThermometer();
 			thermometer.setConfiguration(Thermometer.kgsCONF_HYST_15 | Thermometer.kgsCONF_WIN_LOCK);
@@ -42,9 +51,9 @@ public class Main
 			}
 			
 			thermometer.setTUpperLimit(20.5);*/
-			Sensors.initialize();
+			//Sensors.initialize();
 			
-			DistanceSensor distanceSensor = Sensors.getDistanceSensor();
+			/*DistanceSensor distanceSensor = Sensors.getDistanceSensor();
 			double distanz = distanceSensor.getDistance();
 			
 			Thermometer thermometer = Sensors.getThermometer();
@@ -61,13 +70,28 @@ public class Main
 				
 			}
 			
-			/*for(Sensor sensor : Sensors.getSensors())
+			for(Sensor sensor : Sensors.getSensors())
 			{
 				if(sensor.isEnabled())
 				{
 					System.out.println(sensor.getClass().getSimpleName()+" AKTIVIERT!!!!!!!");
 				}
-			}
+			}*/
+			/*final RORGDecoder decoder = new RORGDecoder();
+			decoder.addRORGDecodeEventListener(new RORGDecodeEvent(){
+
+				@Override
+				public void thermometerReceived(double temperature) {
+					System.out.println("EnOcean Thermometer: "+temperature);
+				}
+
+				@Override
+				public void buttonReceived(int button) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+			});
 			
 			EnOceanPi pi = new EnOceanPi();
 			pi.init(Serial.DEFAULT_COM_PORT, 57600);
@@ -78,6 +102,8 @@ public class Main
 					@Override
 					public void packetReceived(OceanPacket packet) {
 						packet.println();
+						
+						decoder.decode(packet.getData());
 					}
 
 					@Override
@@ -95,7 +121,7 @@ public class Main
 				Response resp = pi.sendPacketForResponse(packet);
 			}*/
 
-			int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x4500}; 
+			/*int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x4500}; 
 			Sensors.getBarometer().checkCRC(nprom, 0x4500);
 			
 			Barometer bar = Sensors.getBarometer();
@@ -113,7 +139,7 @@ public class Main
 				//System.out.println(Utils.byteToHexString((byte)adc.getChannelSelection()));
 				System.out.println(adc.getChannelSelection() == ADC.kgsCONF_SELECT_CH4 ? "OK!" : "FAILED!");
 				System.out.println("Voltage: "+adc.getVoltage());
-			}
+			}*/
 			
 			/*DOF9 dof = Sensors.getDof9();
 			if(dof.isEnabled())
@@ -127,7 +153,14 @@ public class Main
 			
 			//testThermometer();
 			
-			System.in.read();
+			/*LightSensor s = Sensors.getLightSensor();
+			while(true)
+			{
+				System.out.println(s.getBrightness());
+				Thread.sleep(1000);
+			}*/
+			
+			//System.in.read();
 		}
 		catch(Exception ex)
 		{

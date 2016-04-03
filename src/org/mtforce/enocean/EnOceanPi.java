@@ -184,8 +184,7 @@ public class EnOceanPi
 	{
 		int i = serial.read();
 		builder.build((byte)i);
-		//for(OceanPacketReceivedEvent event : listeners)
-			//event.byteReceived((byte)i);
+
 		if(builder.isPacketDone()) 
 		{
 			OceanPacket packet = builder.getPacket();
