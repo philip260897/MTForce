@@ -33,12 +33,13 @@ public class Main
 		try
 		{
 			Sensors.initialize();
-			LedDriver driver = new LedDriver();
+			LedDriver driver = LedDriver.getInstance();
 			driver.initialize();
 			driver.setGlobalColor(LedColor.MAGENTA);
 			driver.writeString("TEST");
 			
-			ADC adc = new ADC();
+			LedDriver driver2 = LedDriver.getInstance();
+			System.out.println(driver2 == driver);
 			
 			final RORGDecoder decoder = new RORGDecoder();
 			decoder.addRORGDecodeEventListener(new RORGDecodeEvent(){
@@ -54,7 +55,7 @@ public class Main
 				}			
 			});
 			
-			EnOceanPi pi = new EnOceanPi();
+			EnOceanPi pi = EnOceanPi.getInstance();
 			pi.init(Serial.DEFAULT_COM_PORT, 57600);
 			if(pi.isEnabled())
 			{

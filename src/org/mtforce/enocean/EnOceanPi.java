@@ -41,10 +41,17 @@ public class EnOceanPi
 	private PacketBuilder builder;		//PacketBuilder welcher packete Parsed
 	private Response resp;				//Zuletzt erhaltene Antwort vom EnOcean
 	
+	private static EnOceanPi instance;
 	
-	public EnOceanPi()
+	protected EnOceanPi()
 	{
+		instance = this;
 		builder = new PacketBuilder();
+	}
+	
+	public static EnOceanPi getInstance() {
+		if(instance == null) new EnOceanPi();
+		return instance;
 	}
 	
 	/**

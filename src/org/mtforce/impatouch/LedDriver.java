@@ -105,9 +105,16 @@ public class LedDriver
 	private GpioController gpio;								//Referenz auf GpioController
 	private GpioPinDigitalOutput pin;							//LOAD Pin
 	
-	public LedDriver()
+	private static LedDriver instance;
+	
+	protected LedDriver()
 	{
-		
+		instance = this;
+	}
+	
+	public static LedDriver getInstance() {
+		if(instance == null) new LedDriver();
+		return instance;
 	}
 	
 	/**
