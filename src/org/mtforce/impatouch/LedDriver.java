@@ -7,6 +7,12 @@ import org.mtforce.interfaces.SPIManager;
 import org.mtforce.main.Sensors;
 import org.mtforce.main.Utils;
 
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
+
 /**
  * Beschreibung: Diese Klasse steuert die LED-Treiber auf dem Board. Aus den angegebenen Symbolen wird ein Bitstream generiert, welcher ueber SPI
  * 	in die Bausteine geschrieben wird.
@@ -32,14 +38,14 @@ public class LedDriver
 	public static final byte kgsSHDM_NORM_UC_FEAT		= (byte)0x81;	//Normal Mode, Feature-Register unveraendert
 	
 	//Scan-Limit
-	public static final byte kgsSCAN_LIMIT_0		=	0x00;
-	public static final byte kgsSCAN_LIMIT_1		=	0x01;
-	public static final byte kgsSCAN_LIMIT_2		=	0x02;
-	public static final byte kgsSCAN_LIMIT_3		=	0x03;
-	public static final byte kgsSCAN_LIMIT_4		=	0x04;
-	public static final byte kgsSCAN_LIMIT_5		=	0x05;
-	public static final byte kgsSCAN_LIMIT_6		=	0x06;
-	public static final byte kgsSCAN_LIMIT_7		=	0x07;
+	public static final byte kgsSCAN_LIMIT_0		=	0x00;	//Scan-Limit 0
+	public static final byte kgsSCAN_LIMIT_1		=	0x01;	//Scan-Limit 1
+	public static final byte kgsSCAN_LIMIT_2		=	0x02;	//Scan-Limit 2
+	public static final byte kgsSCAN_LIMIT_3		=	0x03;	//Scan-Limit 3
+	public static final byte kgsSCAN_LIMIT_4		=	0x04;	//Scan-Limit 4
+	public static final byte kgsSCAN_LIMIT_5		=	0x05;	//Scan-Limit 5
+	public static final byte kgsSCAN_LIMIT_6		=	0x06;	//Scan-Limit 6
+	public static final byte kgsSCAN_LIMIT_7		=	0x07;	//Scan-Limit 7
 	
 	//Features
 	public static final byte kgsFEAT_CLK_EN				=	0x01;	//USE SERIAL CLOCK
@@ -90,32 +96,142 @@ public class LedDriver
 	public static final byte kgsDIAGNOSTIC_DIGIT_6 	= 0x5A; //Diagnostic digit 6 Register
 	public static final byte kgsDIAGNOSTIC_DIGIT_7 	= 0x5B; //Diagnostic digit 7 Register
 	
-	private byte rgbOrder[][] = new byte[][] {	{2, 1, 0}, 	{5, 4, 3}	};
-											//0: R, G, B  1: R, G, B
-	private byte valueOrder[] = new byte[] {0,1,2,3,4,5,6,7};
-	
-	private I2CManager i2c;
-	private SPIManager spi;
+	private byte rgbOrder[][] = new byte[][] {	{3, 2, 1}, 	{6, 5, 4}	};	//Register/Port Map
+												//0: R, G, B  1: R, G, B
+	private byte valueOrder[] = new byte[] {7,6,5,4,3,2,1,0};	//Digit/Port Map
+	private int numberOfDevices = 4;							//Anzahl 
+	private LedColor globalColor = LedColor.RED;				//Globale Farbe
+	private SPIManager spi;										//Referenz auf SpiManager
+	private GpioController gpio;								//Referenz auf GpioController
+	private GpioPinDigitalOutput pin;							//LOAD Pin
 	
 	public LedDriver()
 	{
 		
 	}
 	
+	/**
+	 * Initialisiert den LEDTreiber. Referenz auf SpiManager, GpioController und Load Pin wird hergestellt.
+	 * LedDictionary wird initialisiert.
+	 */
 	public void initialize()
 	{
-		i2c = (I2CManager)Sensors.getI2C();
+		//i2c = (I2CManager)Sensors.getI2C();
+		LedDictionary.LoadDictionary();
 		spi = (SPIManager)Sensors.getSPI();
+		gpio = GpioFactory.getInstance();
+		pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, "LD", PinState.HIGH);
 	}
 	
 	/**
 	 * DEBUG: Schickt eine Testsymbol auf i2c (<- nur zum testen. spaeter spi)
+	 * @throws InterruptedException 
 	 */
-	public void sendTest()
+	public void sendTest() throws InterruptedException
 	{
 		LedDictionary.LoadDictionary();
-		LedDigit digit_4 = LedDictionary.getDigit("4");
-		i2c.write((byte)0xFF, (byte)0xFF, generateBytesFromDigit(digit_4));
+		
+		setShutdownModeAll(LedDriver.kgsSHDM_NORM_RESET_FEAT);
+		setScanLimitAll(LedDriver.kgsSCAN_LIMIT_7);
+		setDecodeModeAll(LedDriver.kgsDM_NO_DECODE);
+		setDisplayTestAll((byte)0x00);
+		setGlobalIntensityAll(0);
+
+		while(true) {
+			for(LedColor color : LedColor.values()) {
+				setGlobalColor(color);
+				setAllLedsOnAll(true);
+				Thread.sleep(100);
+			}
+		}
+	}
+	
+	/**
+	 * Laesst alle LEDs leuchten
+	 * @param on	Gibt an ob LEDs leuchten sollen oder nicht
+	 */
+	public void setAllLedsOnAll(boolean on)
+	{
+		byte[] b = generateBytesFromDigit(on ? LedDictionary.getDigit("ALL") : LedDictionary.getDigit("NONE") );
+		for(int i = 1; i < 9; i++)
+			writeAll(b[i-1], (byte)i);
+	}
+	
+	/**
+	 * Laesst alle LEDs einer Anzeigen leuchten
+	 * @param display	Index der Anzeige
+	 * @param on		Gibt an ob LEDs leuchten sollen oder nicht
+	 */
+	public void setAllLedsOn(int display, boolean on)
+	{
+		byte[] b = generateBytesFromDigit(on ? LedDictionary.getDigit("ALL") : LedDictionary.getDigit("NONE") );
+		for(int i = 1; i < 9; i++)
+			write(display, b[i-1], (byte)i);
+	}
+	
+	/**
+	 * Schreibt einen Char auf die angegeben Anzeige
+	 * @param display	Index der Anzeige
+	 * @param c			Char welcher dargestellt werden soll
+	 */
+	public void writeChar(int display, char c)
+	{
+		LedDigit digit = LedDictionary.getDigit(Character.toString(c));
+		byte[] data = this.generateBytesFromDigit(digit);
+		for(int j = 1; j < 9; j++)
+		{
+			write(display, data[j-1], (byte)j);
+		}
+	}
+	
+	/**
+	 * Schreibt die ersten 4 Charakter auf die 4 Anzeigen
+	 * @param text	Text welcher angezeigt werden soll
+	 */
+	public void writeString(String text)
+	{
+		int length = 4;
+		if(text.length() < length)
+			length = text.length();
+		for(int i = 0; i < length; i++)
+		{
+			writeChar(i, text.charAt(i));
+		}
+	}
+	
+	/**
+	 * Schreibt Daten in alle AS1116-Chips
+	 * @param data		Daten welche geschickt werden sollen
+	 * @param address	Register adresse in welche geschrieben werden sollen
+	 */
+	public void writeAll(byte data, byte address)
+	{
+		pin.setState(PinState.LOW);
+		for(int i = 0; i < numberOfDevices; i++)
+			spi.write(Utils.reverseBitsByte(data), Utils.reverseBitsByte(address));
+		pin.setState(PinState.HIGH);
+	}
+	
+	/**
+	 * Schreibt Daten in den angegebenen AS1116-Chip
+	 * @param display	Index der Anzeige
+	 * @param data		Daten welche geschrieben werden sollen
+	 * @param address	Adresse des registers in welches geschrieben werden sollen
+	 */
+	private void write(int display, byte data, byte address)
+	{
+		pin.setState(PinState.LOW);
+		int c = 0;
+		for (c = numberOfDevices-1; c > display; c--) {
+			spi.write((byte)0x00, (byte)0x00);
+		}
+
+		spi.write(Utils.reverseBitsByte(data), Utils.reverseBitsByte(address));
+
+		for (c =display-1; c >= 0; c--) {
+			spi.write((byte)0x00, (byte)0x00);   
+		}
+		pin.setState(PinState.HIGH);
 	}
 	
 	/**
@@ -129,92 +245,205 @@ public class LedDriver
 		for(Point p : digit.getPoints())
 		{
 			byte currB = values[valueOrder[(int)p.getY()]];
-			currB = Utils.setBit(currB, rgbOrder[(int)p.getX()][0]);
-			values[valueOrder[(int)p.getY()]] = currB;
+			
+			for(int i = 0; i < 3; i++)
+				if(globalColor.getValue()[i] == 0x01)
+					currB = Utils.setBit(currB, rgbOrder[(int)p.getX()][i]);
+			
+			values[valueOrder[(int)p.getY()]] |= currB;
 		}
 		return values;
 	}
 	
-	public void setDecodeMode(byte decodeMode)
+	/**
+	 * Setzt die Farbe aller Anzeigen
+	 * @param color	Farbe welche leuchten soll
+	 */
+	public void setGlobalColor(LedColor color) 
 	{
-		spi.write(decodeMode, (byte)(this.kgsDECODE_MODE | 0x40));
+		globalColor = color;
 	}
 	
-	//val 0...16
-	public void setGlobalIntensity(int intensity)
+	/**
+	 * Setzt den Dekodier-Mode aller Anzeigen
+	 * @param decodeMode	Dekodier-Mode
+	 */
+	public void setDecodeModeAll(byte decodeMode)
 	{
-		spi.write((byte)intensity, (byte)(this.kgsGLOBAL_INTENSITY | 0x40));
+		writeAll(decodeMode, (byte)LedDriver.kgsDECODE_MODE);
 	}
 	
-	public void setScanLimit(byte scanLimit)
+	/**
+	 * Setzt den Dekodier-Mode einer Anzeige
+	 * @param display		Index der Anzeige
+	 * @param decodeMode	Dekodier-Mode
+	 */
+	public void setDecodeMode(int display, byte decodeMode)
 	{
-		spi.write(scanLimit, (byte)(this.kgsSCAN_LIMIT | 0x40));
+		write(display, decodeMode, (byte)LedDriver.kgsDECODE_MODE);
 	}
 	
-	public void setShutdownMode(byte shdnMode)
+	/**
+	 * Setzt die globale Intensitaet der Anzeige
+	 * @param intensity	Intensitaet von 0...15
+	 */
+	public void setGlobalIntensityAll(int intensity)
 	{
-		spi.write(shdnMode, (byte)(this.kgsSHUTDOWN | 0x40));
+		writeAll((byte)intensity, (byte)LedDriver.kgsGLOBAL_INTENSITY);
 	}
 	
-	public void setFeature(byte feature)
+	/**
+	 * Setzt die globale Intensitaet einer bestimmten Anzeige
+	 * @param display	Index der Anzeige
+	 * @param intensity	Intensitaet von 0...15
+	 */
+	public void setGlobalIntensity(int display, int intensity)
 	{
-		spi.write(feature, (byte)(this.kgsFEATURE | 0x40));
+		write(display, (byte)intensity, (byte)LedDriver.kgsGLOBAL_INTENSITY);
 	}
 	
-	public void setDisplayTest(byte dispTest)
+	/**
+	 * Setzt das Scan-Limit (Welche Digits angezeigt werden sollen) aller Anzeigen
+	 * @param scanLimit	Scan-Limit
+	 */
+	public void setScanLimitAll(byte scanLimit)
 	{
-		spi.write(dispTest, (byte)(this.kgsDISPLAY_TEST | 0x40));
+		writeAll(scanLimit, (byte)LedDriver.kgsSCAN_LIMIT);
 	}
 	
-	private byte[] digitIntensities = new byte[8];
-	//digit 0..7
-	public void setIntensity(int digit, int intensity)
+	/**
+	 * Setzt das Scan-Limit (Welche Digits angezeigt werden sollen) einer bestimmten Anzeige
+	 * @param display	Index der Anzeige
+	 * @param scanLimit	Scan-Limit
+	 */
+	public void setScanLimit(int display, byte scanLimit)
+	{
+		write(display, scanLimit, (byte)LedDriver.kgsSCAN_LIMIT);
+	}
+	
+	/**
+	 * Setzt den Shutdown-Mode aller Anzeigen
+	 * @param shdnMode	Shutdown-Mode
+	 */
+	public void setShutdownModeAll(byte shdnMode)
+	{
+		writeAll(shdnMode, (byte)LedDriver.kgsSHUTDOWN);
+	}
+	
+	/**
+	 * Setzt den Shutdown-Mode einer bestimmten Anzeige
+	 * @param display	Index der Anzeige
+	 * @param shdnMode	Shutdown-Mode
+	 */
+	public void setShutdownMode(int display, byte shdnMode)
+	{
+		write(display, shdnMode, (byte)LedDriver.kgsSHUTDOWN);
+	}
+	
+	/**
+	 * Setzt die Features aller Anzeigen
+	 * @param feature	Features
+	 */
+	public void setFeatureAll(byte feature)
+	{
+		writeAll(feature, (byte)LedDriver.kgsFEATURE);
+	}
+	
+	/**
+	 * Setzt die Features einer bestimmten Anzeige
+	 * @param display	Index der Anzeige
+	 * @param feature	Features
+	 */
+	public void setFeature(int display, byte feature)
+	{
+		write(display, feature, (byte)LedDriver.kgsFEATURE);
+	}
+	
+	/**
+	 * Setzt den DisplayTest aller Anzeigen
+	 * @param dispTest	Display-Test
+	 */
+	public void setDisplayTestAll(byte dispTest)
+	{
+		writeAll(dispTest, (byte)LedDriver.kgsDISPLAY_TEST);
+	}
+	
+	/**
+	 * Setzt den DisplayTest einer bestimmten Anzeige
+	 * @param display	Index der Anzeige
+	 * @param dispTest	Display-Test
+	 */
+	public void setDisplayTest(int display, byte dispTest)
+	{
+		write(display, dispTest, (byte)LedDriver.kgsDISPLAY_TEST);
+	}
+	
+
+	private byte[][] digitIntensities = new byte[4][8];		//Merkt eingestellte Intensitaet
+	/**
+	 * Setzt die Intensitaet von einem Digit auf allen Anzeigen
+	 * @param digit		Digit welcher verstellt werden soll (0...7)
+	 * @param intensity	Intensitaet (0...15)
+	 */
+	public void setIntensityAll(int digit, int intensity)
+	{
+		for(int i = 0; i < this.numberOfDevices; i++)
+			setIntensity(i, digit, intensity);
+	}
+	
+	/**
+	 * Setzt die Intensitaet von einem Digit auf einer bestimmten Anzeige
+	 * @param display	Index der Anzeige
+	 * @param digit		Digit welcher verstellt werden soll (0...7)
+	 * @param intensity	Intensitaet (0...15)
+	 */
+	public void setIntensity(int display, int digit, int intensity)
 	{
 		if(digit > 16)
 			digit = 16;
-		digitIntensities[digit] = (byte)intensity;
+		digitIntensities[display][digit] = (byte)intensity;
 		
 		if(digit == 0)
 		{
-			byte b = (byte) (digitIntensities[1] << 4);
-			spi.write((byte)(b | intensity), (byte)(this.kgs01INTENSITY | 0x40));
+			byte b = (byte) (digitIntensities[display][1] << 4);
+			write(display,(byte)(b | intensity), (byte)(LedDriver.kgs01INTENSITY ));
 		}
 		if(digit == 1)
 		{
 			byte b = (byte) (intensity << 4);
-			spi.write((byte)(b | digitIntensities[0]), (byte)(this.kgs01INTENSITY | 0x40));
+			write(display,(byte)(b | digitIntensities[display][0]), (byte)(LedDriver.kgs01INTENSITY));
 		}
 		if(digit == 2)
 		{
-			byte b = (byte) (digitIntensities[3] << 4);
-			spi.write((byte)(b | intensity), (byte)(this.kgs23INTENSITY | 0x40));
+			byte b = (byte) (digitIntensities[display][3] << 4);
+			write(display,(byte)(b | intensity), (byte)(LedDriver.kgs23INTENSITY ));
 		}
 		if(digit == 3)
 		{
 			byte b = (byte) (intensity << 4);
-			spi.write((byte)(b | digitIntensities[2]), (byte)(this.kgs23INTENSITY | 0x40));
+			write(display,(byte)(b | digitIntensities[display][2]), (byte)(LedDriver.kgs23INTENSITY ));
 		}
 		
 		if(digit == 4)
 		{
-			byte b = (byte) (digitIntensities[5] << 4);
-			spi.write((byte)(b | intensity), (byte)(this.kgs45INTENSITY | 0x40));
+			byte b = (byte) (digitIntensities[display][5] << 4);
+			write(display,(byte)(b | intensity), (byte)(LedDriver.kgs45INTENSITY));
 		}
 		if(digit == 5)
 		{
 			byte b = (byte) (intensity << 4);
-			spi.write((byte)(b | digitIntensities[4]), (byte)(this.kgs45INTENSITY | 0x40));
+			write(display,(byte)(b | digitIntensities[display][4]), (byte)(LedDriver.kgs45INTENSITY));
 		}
 		
 		if(digit == 6)
 		{
-			byte b = (byte) (digitIntensities[7] << 4);
-			spi.write((byte)(b | intensity), (byte)(this.kgs67INTENSITY | 0x40));
+			byte b = (byte) (digitIntensities[display][7] << 4);
+			write(display,(byte)(b | intensity), (byte)(LedDriver.kgs67INTENSITY ));
 		}
 		if(digit == 7)
 		{
 			byte b = (byte) (intensity << 4);
-			spi.write((byte)(b | digitIntensities[6]), (byte)(this.kgs67INTENSITY | 0x40));
+			write(display,(byte)(b | digitIntensities[display][6]), (byte)(LedDriver.kgs67INTENSITY ));
 		}
 	}
 }

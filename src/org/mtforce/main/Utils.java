@@ -142,4 +142,17 @@ public class Utils
 	{
 		return "0x"+String.format("%02x", b & 0xff);
 	}
+	
+	 public static byte reverseBitsByte(byte x) {
+		 byte b = 0;
+		 for(int i = 0; i < 8; i++)
+		 {
+			 byte mask = (byte) (0x01<<i);
+			 if((x & mask) != 0)
+			 {
+				 b = (byte) (b | 0x01<<(7-i));
+			 }
+		 }
+		 return b;
+	 }
 }

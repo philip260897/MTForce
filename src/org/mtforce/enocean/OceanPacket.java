@@ -4,15 +4,15 @@ import org.mtforce.main.Utils;
 
 public class OceanPacket 
 {
-	private byte headerSyncByte = 0x55;
-	private byte[] headerDataLength = { 0x00, 0x00 };
-	private byte headerOptionalLength = 0x00;
-	private byte headerPacketType = 0x00;
-	private byte headerCRC8 = 0x00;
-	
-	private byte[] data;
-	private byte[] dataOptional;
-	private byte dataCRC8;
+	private byte headerSyncByte = 0x55;					//Synchronisationsbyte
+	private byte[] headerDataLength = { 0x00, 0x00 };	//Datenlaenge
+	private byte headerOptionalLength = 0x00;			//Optionale Datenlaenge
+	private byte headerPacketType = 0x00;				//Packettype
+	private byte headerCRC8 = 0x00;						//Header-CRC8
+		
+	private byte[] data;								//Daten
+	private byte[] dataOptional;						//Optionale Daten
+	private byte dataCRC8;								//Payload-CRC8
 	
 	public OceanPacket(byte data[], byte dataOptional[])
 	{
@@ -30,6 +30,9 @@ public class OceanPacket
 		
 	}
 	
+	/**
+	 * Generiert den Header anhand der Payload
+	 */
 	public void generateHeader()
 	{
 		if(data != null)
@@ -41,6 +44,10 @@ public class OceanPacket
 		dataCRC8 = this.calculateDataCrc8();
 	}
 	
+	/**
+	 * Berechnet den CRC8-Wert fuer den Header
+	 * @return	Gibt den CRC8-Wert zurueck
+	 */
     private byte calculateHeaderCrc8() {
         CRC8 crc8 = new CRC8();
         crc8.update(headerDataLength[1]);
@@ -50,6 +57,10 @@ public class OceanPacket
         return (byte) crc8.getValue();
     }
     
+    /**
+     * Berechnet den CRC8-Wert fuer die Payload
+     * @return	Gibt den CRC8-Wert zurueck
+     */
     private byte calculateDataCrc8() {
         CRC8 crc8 = new CRC8();
         if (data != null) {
@@ -61,56 +72,109 @@ public class OceanPacket
         return (byte) crc8.getValue();
     }
 	
+    /**
+     * Setzt den PacketType
+     * @param packetType	PacketType
+     */
 	public void setPacketType(byte packetType)
 	{
 		this.headerPacketType = packetType;
 	}
 	
+	/**
+	 * Gibt den PacketType zurueck
+	 * @return	PacketType
+	 */
 	public byte getPacketType()
 	{
 		return this.headerPacketType;
 	}
 
+	/**
+	 * Gibt die Datenlaenge zurueck
+	 * @return	Datenlaenge
+	 */
 	public byte[] getHeaderDataLength() {
 		return headerDataLength;
 	}
 
+	/**
+	 * Gibt die optionale Datenlaenge zurueck
+	 * @return	Optionale Datenlaenge
+	 */
 	public byte getHeaderOptionalLength() {
 		return headerOptionalLength;
 	}
 
+	/**
+	 * Gibt den Header CRC8-Wert zurueck
+	 * @return	CRC8-Wert
+	 */
 	public byte getHeaderCRC8() {
 		return headerCRC8;
 	}
 
+	/**
+	 * Gibt die Packetdaten zurueck
+	 * @return Packetdaten
+	 */
 	public byte[] getData() {
 		return data;
 	}
 
+	/**
+	 * Gibt die Optionalen Daten zurueck
+	 * @return	optionale Daten
+	 */
 	public byte[] getDataOptional() {
 		return dataOptional;
 	}
 
+	/**
+	 * Gibt den Payload CRC8-Wert zurueck
+	 * @return	CRC8-Wert
+	 */
 	public byte getDataCRC8() {
 		return dataCRC8;
 	}
 	
+	/**
+	 * Bestimmt die Packetdaten
+	 * @param data	Packetdaten
+	 */
 	public void setData(byte ...data) {
 		this.data = data;
 	}
 	
+	/**
+	 * Bestimmt die optionale Daten
+	 * @param dataOptional	Optionale Daten
+	 */
 	public void setDataOptional(byte ...dataOptional) {
 		this.dataOptional = dataOptional;
 	}
 	
+	/**
+	 * Gibt zurueck ob der CRC8 vom Header mit dem berechneten CRC8 uebereinstimmt
+	 * @return	uebereinstimmung des CRC8
+	 */
 	public boolean isHeaderValid() {
 		return headerCRC8 == this.calculateHeaderCrc8();
 	}
 	
+	/**
+	 * Gibt zurueck ob der CRC8 von der Playload mit dem berechneten CRC8 uebereinstimmt
+	 * @return	uebereinstimmung des CRC8
+	 */
 	public boolean isDataValid() {
 		return dataCRC8 == this.calculateDataCrc8();
 	}
 	
+	/**
+	 * Baut ein OceanPacket aus einem rohem Datenbuffer
+	 * @param bytes			Datenbuffer mit packetdaten
+	 * @throws Exception	Wenn kein valides Packet
+	 */
 	public void parsePacket(byte[] bytes) throws Exception
 	{
 		if(bytes[0] != 0x55)
@@ -133,6 +197,10 @@ public class OceanPacket
 		dataCRC8 = bytes[index];
 	}
 	
+	/**
+	 * Schreibt die rohdaten in ein Datenbuffer
+	 * @return	Datenbuffer mit rohdaten
+	 */
 	public byte[] toBytes()
 	{
 		int length = 7;
@@ -155,6 +223,9 @@ public class OceanPacket
 		return bytes;
 	}
 	
+	/**
+	 * Schreibt das Packet in die Console in einer Zeile
+	 */
 	public void println()
 	{
 		System.out.print("Header("+ (isHeaderValid() ? "VALID" : "INVALID")+")["+Utils.byteToHexString(headerDataLength[1])+""+Utils.byteToHexString(headerDataLength[0]).replace("0x", ""));
@@ -171,6 +242,9 @@ public class OceanPacket
 		System.out.println("] CRC8("+(isDataValid() ? "VALID" : "INVALID")+")"+"["+Utils.byteToHexString(dataCRC8)+"]");
 	}
 	
+	/**
+	 * Gibt das Packet in der Console aus
+	 */
 	public void print()
 	{
 		System.out.println("====HEADER====[" + (isHeaderValid() ? "VALID" : "INVALID")+"]");
@@ -204,34 +278,65 @@ public class OceanPacket
 		System.out.println("Calculated CRC8: "+Utils.byteToHexString(this.calculateDataCrc8()));
 	}
 
+	/**
+	 * Gibt das Synchronisationsbyte zurueck
+	 * @return	Synchronisationsbyte
+	 */
 	protected byte getHeaderSyncByte() {
 		return headerSyncByte;
 	}
 
+	/**
+	 * Setzt das Synchronisationsbyte
+	 * @param headerSyncByte	Synchronisationsbyte
+	 */
 	protected void setHeaderSyncByte(byte headerSyncByte) {
 		this.headerSyncByte = headerSyncByte;
 	}
 
+	/**
+	 * Gibt den PacketType zurueck
+	 * @return	PacketType
+	 */
 	protected byte getHeaderPacketType() {
 		return headerPacketType;
 	}
 
+	/**
+	 * Setzt den PacketType
+	 * @param headerPacketType	PacketType
+	 */
 	protected void setHeaderPacketType(byte headerPacketType) {
 		this.headerPacketType = headerPacketType;
 	}
 
+	/**
+	 * Setzt Datenlaenge
+	 * @param headerDataLength	Datenlaenge
+	 */
 	protected void setHeaderDataLength(byte[] headerDataLength) {
 		this.headerDataLength = headerDataLength;
 	}
 
+	/**
+	 * Setzt die optionale datenlaenge
+	 */
 	protected void setHeaderOptionalLength(byte headerOptionalLength) {
 		this.headerOptionalLength = headerOptionalLength;
 	}
 
+	/**
+	 * Setzt den CRC8-Wert vom Header
+	 * @param headerCRC8 CRC-Wert
+	 */
 	protected void setHeaderCRC8(byte headerCRC8) {
 		this.headerCRC8 = headerCRC8;
 	}
 
+	/**
+	 * Setzt den CRC8-Wert von der Payload
+	 * @param dataCRC8
+	 */
 	protected void setDataCRC8(byte dataCRC8) {
 		this.dataCRC8 = dataCRC8;
 	}

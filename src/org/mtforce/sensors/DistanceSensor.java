@@ -60,14 +60,13 @@ public class DistanceSensor extends Sensor
 	 */
 	private double getDistance()
 	{
-		//TODO: Spannungswert von ADC auslesen auf Kanal 1
-		double distance = 0;
-		
+		double distance = 0;	
 		if(adc.isEnabled())
 		{
-			distance = convertVoltageToDistance(5);
+			adc.selectChannel(ADC.kgsCONF_SELECT_CH2);
+			distance = adc.getVoltage();
+			distance = convertVoltageToDistance(distance);
 		}
-		
 		return distance;
 	}
 	
@@ -82,9 +81,9 @@ public class DistanceSensor extends Sensor
 		Double[] higher = getPoint(voltage, true);
 		
 		double k = (higher[0] - lower[0])/(higher[1] - lower[1]);
-		double distance = 1/((voltage)/k);
+		double distance = k * (1/voltage);
 		
-		return -1d;
+		return distance;
 	}
 	
 	/**
