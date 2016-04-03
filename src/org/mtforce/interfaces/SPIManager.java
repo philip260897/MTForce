@@ -25,7 +25,7 @@ public class SPIManager implements CommunicationManager
 	@Override
     public void initialize() throws Exception
     {
-        spi = SpiFactory.getInstance(SpiChannel.CS0, SpiDevice.DEFAULT_SPI_SPEED/1000, SpiDevice.DEFAULT_SPI_MODE);
+        spi = SpiFactory.getInstance(SpiChannel.CS0, SpiDevice.DEFAULT_SPI_SPEED/1000000, SpiDevice.DEFAULT_SPI_MODE);
         
         if(spi == null)
         {
@@ -33,28 +33,19 @@ public class SPIManager implements CommunicationManager
         }
     }
 
-	
+	/**
+	 * Schreibt die uebergebenen Bytes auf den SPI-Bus
+	 * @param bytes	Daten
+	 */
 	public void write(byte ...bytes)
 	{
-		try {
+		try 
+		{
 			spi.write(bytes);
-			
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 	}
-
-	//DEBUG: noch nicht fertig
-	/*public boolean write(byte address, byte val) {
-		// TODO Auto-generated method stub
-		//byte[] packet = new byte[] {address, val};
-		try {
-			spi.write(address, val);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
-	}*/
-
 }

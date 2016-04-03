@@ -33,51 +33,9 @@ public class Main
 			Sensors.initialize();
 			LedDriver driver = new LedDriver();
 			driver.initialize();
-			driver.sendTest();
 			
-			//Sensors.initialize();
 			
-			/*Thermometer thermometer = Sensors.getThermometer();
-			thermometer.setConfiguration(Thermometer.kgsCONF_HYST_15 | Thermometer.kgsCONF_WIN_LOCK);
-			
-			if(thermometer.getHysteresis() == Thermometer.kgsCONF_HYST_15)
-			{
-				//Etwas tun
-			}
-			
-			if(thermometer.isWindowLockSet())
-			{
-				//Etwas tun
-			}
-			
-			thermometer.setTUpperLimit(20.5);*/
-			//Sensors.initialize();
-			
-			/*DistanceSensor distanceSensor = Sensors.getDistanceSensor();
-			double distanz = distanceSensor.getDistance();
-			
-			Thermometer thermometer = Sensors.getThermometer();
-			if(thermometer.isEnabled())
-			{
-				
-				thermometer.setConfiguration(Thermometer.kgsCONF_HYST_15 | Thermometer.kgsCONF_ALERT_MOD);
-				thermometer.setTUpperLimit(30.0);
-				thermometer.setTLowerLimit(20.0);
-				thermometer.setTCritical(32.0);
-				thermometer.setConfiguration(thermometer.getConfiguration() | Thermometer.kgsCONF_CRIT_LOCK | Thermometer.kgsCONF_WIN_LOCK);
-			
-				int config = thermometer.getConfiguration();
-				
-			}
-			
-			for(Sensor sensor : Sensors.getSensors())
-			{
-				if(sensor.isEnabled())
-				{
-					System.out.println(sensor.getClass().getSimpleName()+" AKTIVIERT!!!!!!!");
-				}
-			}*/
-			/*final RORGDecoder decoder = new RORGDecoder();
+			final RORGDecoder decoder = new RORGDecoder();
 			decoder.addRORGDecodeEventListener(new RORGDecodeEvent(){
 
 				@Override
@@ -119,8 +77,9 @@ public class Main
 				packet.generateHeader();
 				packet.println();
 				Response resp = pi.sendPacketForResponse(packet);
-			}*/
+			}
 
+			driver.sendTest();
 			/*int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x4500}; 
 			Sensors.getBarometer().checkCRC(nprom, 0x4500);
 			
