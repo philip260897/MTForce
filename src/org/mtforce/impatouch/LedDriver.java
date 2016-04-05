@@ -112,6 +112,7 @@ public class LedDriver
 		instance = this;
 	}
 	
+	
 	public static LedDriver getInstance() {
 		if(instance == null) new LedDriver();
 		return instance;
@@ -139,16 +140,12 @@ public class LedDriver
 		LedDictionary.LoadDictionary();
 		
 		setGlobalColor(LedColor.BLUE);
-		LedDigit digit1 = LedDictionary.getDigit("1");
-		byte[] data = this.generateBytesFromDigit(digit1);
-		for(byte b : data)
-			System.out.println(Utils.byteToHexString(b));
 		
 		setShutdownModeAll(LedDriver.kgsSHDM_NORM_RESET_FEAT);
 		setScanLimitAll(LedDriver.kgsSCAN_LIMIT_7);
 		setDecodeModeAll(LedDriver.kgsDM_NO_DECODE);
 		setDisplayTestAll((byte)0x00);
-		setGlobalIntensityAll(0);
+		setGlobalIntensityAll(15);
 
 		while(true) {
 			for(LedColor color : LedColor.values()) {

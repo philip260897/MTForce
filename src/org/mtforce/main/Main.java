@@ -8,24 +8,15 @@ import org.mtforce.enocean.RORGDecoder;
 import org.mtforce.enocean.Response;
 import org.mtforce.impatouch.LedColor;
 import org.mtforce.impatouch.LedDriver;
-import org.mtforce.interfaces.I2CManager;
-import org.mtforce.sensors.ADC;
-import org.mtforce.sensors.Barometer;
-import org.mtforce.sensors.DOF9;
-import org.mtforce.sensors.LightSensor;
-import org.mtforce.sensors.Sensor;
 import org.mtforce.sensors.Sensors;
 import org.mtforce.sensors.Thermometer;
 
-import com.pi4j.component.sensor.DistanceSensor;
-import com.pi4j.io.i2c.I2CBus;
-import com.pi4j.io.i2c.I2CDevice;
-import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.io.serial.Serial;
 
 public class Main 
 {
-	//TODO: sendPacketForResponse Timeout einfuehren
+	//TODO: sendPacketForResponse Timeout einfuehren\
+	
 	public static void main(String[] args) 
 	{
 		Logger.console(true);
@@ -33,11 +24,31 @@ public class Main
 		try
 		{
 			Sensors.initialize();
+			
 			LedDriver driver = LedDriver.getInstance();
+			
 			driver.initialize();
-			driver.setGlobalColor(LedColor.MAGENTA);
+			driver.setGlobalColor(LedColor.CYAN);
+			driver.setAllLedsOnAll(false);
+			driver.setGlobalIntensityAll(15);
 			driver.writeString("TEST");
 			
+			for(LedColor color : LedColor.values()) {
+				driver.setGlobalColor(color);
+				driver.writeString("TEST");
+				Thread.sleep(0);
+			}
+			
+			driver.setAllLedsOnAll(false);
+			driver.setGlobalColor(LedColor.BLUE);
+			for(int i = 65; i <= 90; i++)
+			{
+				driver.setGlobalColor(LedColor.values()[i%LedColor.values().length]);
+				driver.writeChar((i-1)%4, (char)i);
+				Thread.sleep(200);
+			}
+			//driver.setAllLedsOnAll(false);
+			driver.sendTest();
 			LedDriver driver2 = LedDriver.getInstance();
 			System.out.println(driver2 == driver);
 			
@@ -82,8 +93,10 @@ public class Main
 				packet.println();
 				Response resp = pi.sendPacketForResponse(packet);
 			}
-
-			driver.sendTest();
+			
+			
+			//driver.setAllLedsOnAll(false);
+	
 			/*int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x4500}; 
 			Sensors.getBarometer().checkCRC(nprom, 0x4500);
 			Barometer bar = Sensors.getBarometer();

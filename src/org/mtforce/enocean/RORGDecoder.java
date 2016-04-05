@@ -10,7 +10,7 @@ import org.mtforce.main.Utils;
 
 public class RORGDecoder 
 {
-	private Map<String, Integer> knownIds = new HashMap<String, Integer>();
+	private Map<String,Integer> knownIds = new HashMap<String,Integer>();
 	private List<RORGDecodeEvent> listeners = new ArrayList<RORGDecodeEvent>();
 	
 	public RORGDecoder()

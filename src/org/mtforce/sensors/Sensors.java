@@ -33,6 +33,8 @@ public final class Sensors
 	private static CommunicationManager i2c = null;
 	private static CommunicationManager spi = null;
 	
+	private static boolean enabled = false;
+	
 	protected Sensors()
 	{
 		
@@ -64,9 +66,16 @@ public final class Sensors
 		
 		for(Sensor sensor : sensorList)
 			sensor.init();
+		
+		enabled = true;
 	}
 
 	
+	
+	public static boolean isEnabled() {
+		return enabled;
+	}
+
 	//=====Getter und Setter=====//
 	public static void setI2C(CommunicationManager manager) {
 		i2c = manager;
