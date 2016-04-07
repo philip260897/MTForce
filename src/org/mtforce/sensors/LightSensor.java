@@ -16,6 +16,9 @@ public class LightSensor extends Sensor
 		adc=Sensors.getAdc();
 	}
 	
+	/**
+	 * Initialisiert den Sensor
+	 */
 	@Override
 	public void init() 
 	{
