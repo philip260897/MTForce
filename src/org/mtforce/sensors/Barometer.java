@@ -7,37 +7,31 @@ import org.mtforce.main.Logger.Status;
 
 /**
  * Beschreibung: Barometer - Misst den Luftdruck
- * 
- * Konstanten: Komplett
- * Funktionen: Komplett
- * 
- * TODO: Modultest
- *	CRC CHECK TESTEN
  */
 public class Barometer extends Sensor {
 
-	public static final byte kgsADDRESS 					= 0x77;	//Addresse des Bausteins
+	public static final byte kgsADDRESS 					= 0x77;	//Adresse des Bausteins
 	
 	public static final byte kgsCMD_RESET 					= 0x1E; //PROM Resetten
 	public static final byte kgsCMD_READ_PROM 				= (byte) 0xA0;	//READ PROM - Befehl
-	public static final byte kgsCMD_CONVERSION_PRESSURE		= 0x40; //Umwandlung starten. Befehl setzt sich aux 0x40 verodert mit einer resoltuion zusammen
-	public static final byte kgsCMD_CONVERSION_TEMPERATURE	= 0x50; //Umwandlung starten. Befehl setzt sich aux 0x50 verodert mit einer resoltuion zusammen
+	public static final byte kgsCMD_CONVERSION_PRESSURE		= 0x40; //Umwandlung starten. Befehl setzt sich aus 0x40 verodert mit einer Resoltuion zusammen
+	public static final byte kgsCMD_CONVERSION_TEMPERATURE	= 0x50; //Umwandlung starten. Befehl setzt sich aus 0x50 verodert mit einer Resoltuion zusammen
 	public static final byte kgsCMD_READ					= 0x00;	//READ-Befehl
 	
-	public static final byte kgsRESOLUTION_256	= 0x00;				//ADC-Aufloesung 8-bit
-	public static final byte kgsRESOLUTION_512	= 0x01;				//ADC-Aufloesung 9-bit
-	public static final byte kgsRESOLUTION_1024	= 0x02;				//ADC-Aufloesung 10-bit
-	public static final byte kgsRESOLUTION_2048	= 0x03;				//ADC-Aufloesung 11-bit
-	public static final byte kgsRESOLUTION_4096	= 0x04; 			//ADC-Aufloesung 12-bit
+	public static final byte kgsRESOLUTION_256	= 0x00;				//ADC-Auflösung 8-bit
+	public static final byte kgsRESOLUTION_512	= 0x01;				//ADC-Auflösung 9-bit
+	public static final byte kgsRESOLUTION_1024	= 0x02;				//ADC-Auflösung 10-bit
+	public static final byte kgsRESOLUTION_2048	= 0x03;				//ADC-Auflösung 11-bit
+	public static final byte kgsRESOLUTION_4096	= 0x04; 			//ADC-Auflösung 12-bit
 	
-	public static final byte kgsPROM_COEFF_0 = 0x00;				//Addresse des Reserved-Register
-	public static final byte kgsPROM_COEFF_1 = 0x02;				//Addresse des Koeffizient 1
-	public static final byte kgsPROM_COEFF_2 = 0x04;				//Addresse des Koeffizient 2
-	public static final byte kgsPROM_COEFF_3 = 0x06;				//Addresse des Koeffizient 3
-	public static final byte kgsPROM_COEFF_4 = 0x08;				//Addresse des Koeffizient 4
-	public static final byte kgsPROM_COEFF_5 = 0x0A;				//Addresse des Koeffizient 5
-	public static final byte kgsPROM_COEFF_6 = 0x0C;				//Addresse des Koeffizient 6
-	public static final byte kgsPROM_CRC 	 = 0x0E;				//Addresse des CRC
+	public static final byte kgsPROM_COEFF_0 = 0x00;				//Adresse des Reserved-Register
+	public static final byte kgsPROM_COEFF_1 = 0x02;				//Adresse des Koeffizient 1
+	public static final byte kgsPROM_COEFF_2 = 0x04;				//Adresse des Koeffizient 2
+	public static final byte kgsPROM_COEFF_3 = 0x06;				//Adresse des Koeffizient 3
+	public static final byte kgsPROM_COEFF_4 = 0x08;				//Adresse des Koeffizient 4
+	public static final byte kgsPROM_COEFF_5 = 0x0A;				//Adresse des Koeffizient 5
+	public static final byte kgsPROM_COEFF_6 = 0x0C;				//Adresse des Koeffizient 6
+	public static final byte kgsPROM_CRC 	 = 0x0E;				//Adresse des CRC
 	
 	public static final int kgsWAIT_256  = 1;						//Umwandlungswartezeit der 8-bit Umwandlung
 	public static final int kgsWAIT_512  = 3;						//Umwandlungswartezeit der 9-bit Umwandlung
@@ -46,9 +40,9 @@ public class Barometer extends Sensor {
 	public static final int kgsWAIT_4096 = 10;						//Umwandlungswartezeit der 12-bit Umwandlung
 	
 	private I2CManager i2c;											//Verweis auf I2CManager
-	private byte gResolutionPressure	= kgsRESOLUTION_256;		//Von User eingestellte Umwandlungsaufloesung des Drucks
-	private byte gResolutionTemperature	= kgsRESOLUTION_256;		//Von User eingestellte Umwandlungsaufloesung der Temperatur
-	private int[] gCoeffizients			= new int[7];				//Koeffizienten fuer die Umrechnung speichern
+	private byte gResolutionPressure	= kgsRESOLUTION_256;		//Von User eingestellte Umwandlungsauflösung des Drucks
+	private byte gResolutionTemperature	= kgsRESOLUTION_256;		//Von User eingestellte Umwandlungsauflösung der Temperatur
+	private int[] gCoeffizients			= new int[7];				//Koeffizienten für die Umrechnung speichern
 	
 	protected Barometer() {}
 	
@@ -95,7 +89,7 @@ public class Barometer extends Sensor {
 	}
 	
 	/**
-	 * Umwandlungsaufloesung der Druckmessung setzten
+	 * Umwandlungsauflösung der Druckmessung setzten
 	 * @param resolution	Umwandlungskonstante (zwischen 0 - 4, falls > 4, wird 0 verwendet)
 	 */
 	public void setResolutionPressure(byte resolution)
@@ -115,7 +109,7 @@ public class Barometer extends Sensor {
 	}
 	
 	/**
-	 * Umwandlungsaufloesung der Temperaturmessung setzten
+	 * Umwandlungsauflösung der Temperaturmessung setzten
 	 * @param resolution	Umwandlungskonstante (zwischen 0 - 4, falls > 4, wird 0 verwendet)
 	 */
 	public void setResoltuionTemperature(byte resolution)
@@ -137,7 +131,7 @@ public class Barometer extends Sensor {
 	/**
 	 * Liest einen bestimmten Koeffizienten aus
 	 * @param coeffizient	Koeffizienten-Konstante
-	 * @return	gibt Koeffizient zurueck
+	 * @return				gibt Koeffizient zurück
 	 */
 	public int getCoeffizient(byte coeffizient)
 	{
@@ -192,7 +186,7 @@ public class Barometer extends Sensor {
 	
 	/**
 	 * Liest den CRC-Wert aus dem PROM aus
-	 * @return	gibt CRC-Wert zurueck
+	 * @return	gibt CRC-Wert zurück
 	 */
 	public int getCRC()
 	{
@@ -203,7 +197,7 @@ public class Barometer extends Sensor {
 	/**
 	 * Berechnet die Temperatur-Differenz
 	 * @param adcValue	ADC-Wert der Temperaturmessung
-	 * @return	gibt Temperatur-Differenz zurueck
+	 * @return	gibt Temperatur-Differenz zurück
 	 */
 	public int calculateTemperatureDifference(int adcValue)
 	{
@@ -214,7 +208,7 @@ public class Barometer extends Sensor {
 	 * Berechnet die Temperatur-Differenz
 	 * @param adcValue	ADC-Wert der Temperaturmessung
 	 * @param coeff5	Koeffizient 5
-	 * @return	gibt Temperatur-Differenz zurueck
+	 * @return			gibt Temperatur-Differenz zurück
 	 */
 	public int calculateTemperatureDifference(int adcValue, int coeff5)
 	{
@@ -225,7 +219,7 @@ public class Barometer extends Sensor {
 	/**
 	 * Berechnet Temperatur
 	 * @param temperatureDifference	Ausgerechnete Temperatur-Differenz
-	 * @return	gibt Temperatur zurueck in Celsius * 10^2
+	 * @return	gibt Temperatur zurück in Celsius * 10^2
 	 */
 	public int calculateTemperature(int temperatureDifference)
 	{
@@ -236,7 +230,7 @@ public class Barometer extends Sensor {
 	 * Berechnet Temperatur
 	 * @param temperatureDifference	Ausgerechnete Temperatur-Differenz
 	 * @param coeff6				Koeffizient 6
-	 * @return	gibt Temperatur zurueck in Celsius * 10^2
+	 * @return	gibt Temperatur zurück in Celsius * 10^2
 	 */
 	public int calculateTemperature(int temperatureDifference, int coeff6)
 	{
@@ -246,8 +240,8 @@ public class Barometer extends Sensor {
 	
 	/**
 	 * Berechnet den Pressure-Offset
-	 * @param temperatureDifference	Ausgerechnete Temperatur-Deffierenz
-	 * @return	gibt den Pressure-Offset zurueck
+	 * @param temperatureDifference	Ausgerechnete Temperatur-Differenz
+	 * @return	gibt den Pressure-Offset zurück
 	 */
 	public long calculatePressureOffset(int temperatureDifference)
 	{
@@ -259,7 +253,7 @@ public class Barometer extends Sensor {
 	 * @param temperatureDifference	Ausgerechnete Temperatur-Differenz
 	 * @param coeff2				Koeffizient 2
 	 * @param coeff4				Koeffizient 4
-	 * @return	gibt den Pressure-Offset zurueck
+	 * @return	gibt den Pressure-Offset zurück
 	 */
 	public long calculatePressureOffset(int temperatureDifference, int coeff2, int coeff4)
 	{
@@ -281,7 +275,7 @@ public class Barometer extends Sensor {
 	 * @param temperatureDifference	Ausgerechnete Temperatur-Differenz
 	 * @param coeff1				Koeffizient 1
 	 * @param coeff3				Koeffizient 3
-	 * @return gibt Pressure-Sensitivity zurueck
+	 * @return gibt Pressure-Sensitivity zurück
 	 */
 	public long calculatePressureSensitivity(int temperatureDifference, int coeff1, int coeff3)
 	{
@@ -293,7 +287,7 @@ public class Barometer extends Sensor {
 	 * @param adcValue				ADC-Wert der Druckmessung
 	 * @param pressureSensitivity	Ausgerechnete Pressure-Sensitivity
 	 * @param pressureOffset		Ausgerechnete Pressure-Offset
-	 * @return gibt Druck in mbar*10^2 zurueck
+	 * @return gibt Druck in mbar*10^2 zurück
 	 */
 	public int calculatePressure(int adcValue, long pressureSensitivity, long pressureOffset)
 	{
@@ -301,10 +295,10 @@ public class Barometer extends Sensor {
 	}
 	
 	/**
-	 * Berechnet Temperaturwert mit einer erhoehten Genauigkeit
+	 * Berechnet Temperaturwert mit einer erhöhten Genauigkeit
 	 * @param temperature			Ausgerechneter Temperaturwert
 	 * @param temperatureDifference	Ausgerechnete Temperaturdifferenz
-	 * @return	gibt Temperaturwert in Celsius * 10^2 zurueck
+	 * @return	gibt Temperaturwert in Celsius * 10^2 zurück
 	 */
 	public int calculateTemperatureCompensated(int temperature, int temperatureDifference)
 	{
@@ -317,7 +311,7 @@ public class Barometer extends Sensor {
 	}
 	
 	/**
-	 * Berechnet Druckwert mit einer erhoehten genauigkeit
+	 * Berechnet Druckwert mit einer erhöhten Genauigkeit
 	 * @param adcPressure			ADC-Wert der Druckmessung
 	 * @param temperature			Ausgerechneter Temperaturwert
 	 * @param pressureSensitivity	Ausgerechnete Pressure-Sensitivity
@@ -344,7 +338,7 @@ public class Barometer extends Sensor {
 	}
 	
 	/**
-	 * Misst den Temperaturwert und gibt ihn zurueck
+	 * Misst den Temperaturwert und gibt ihn zurück
 	 * @return	Temperatur in Celsius
 	 */
 	public double getTemperature()
@@ -380,8 +374,8 @@ public class Barometer extends Sensor {
 	}
 	
 	/**
-	 * Legt den Thread schlafen je nach momentaner ADC-Aufloesung
-	 * @param resolution	Momentane ADC-Aufloesung
+	 * Legt den Thread schlafen je nach momentaner ADC-Auflösung
+	 * @param resolution	Momentane ADC-Auflösung
 	 */
 	private void sleepForResult(byte resolution)
 	{
@@ -406,9 +400,9 @@ public class Barometer extends Sensor {
 	}
 	
 	/**
-	 * Ueberprueft die Koeffizienten auf Bitfehler
-	 * @param coeff	Koeffizienten die ueberprueft werden sollen
-	 * @param crc	CRC zum ueberpruefen
+	 * Überprüft die Koeffizienten auf Bitfehler
+	 * @param coeff	Koeffizienten die überprüft werden sollen
+	 * @param crc	CRC zum überprüfen
 	 * @return		?
 	 */
 	public char checkCRC(int[] coeff, int crc)

@@ -8,22 +8,17 @@ import org.mtforce.main.Logger.Status;
 
 /**
  * Beschreibung: 4-Kanal ADC
- * 		Kanal 1: Distanzsensor
- * 		Kanal 2: Lichtsnsor
+ * 		Kanal 1: Distanz-Sensor
+ * 		Kanal 2: Licht-Sensor
  * 
  * Konstanten: Komplett
  * Funktionen: NICHT Komplett
  * 
- * FUERS PROTOKOLL: Wenn in one-Shot konversion => Siehe Datenblatt fuer konversion befor auslesen
- * 					
- * 
- * TODO: Modultest
- * 	getVoltage(int Kanal) 	- Spannungswert von bestimmten Kanal einlesen
- * 	getVoltage()			- Spannungswert von momentan ausgewaehlten Kanal einlesen
+ * FUERS PROTOKOLL: Wenn in one-Shot Konversion => Siehe Datenblatt für Konversion bevor auslesen
  */
 public class ADC extends Sensor 
 {
-	public static final byte kgsADDRESS					= 0x69;	//Bausteinaddresse
+	public static final byte kgsADDRESS					= 0x69;	//Bausteinadresse
 	public static final byte kgsSTD_CONFIG				= (byte) 0x90;	//Standard Konfiguration
 	
 	public static final byte kgsCONF_PGA_GAIN_x1		= 0x00;	//PGA Gain Selection Bits PGA=1
@@ -99,7 +94,7 @@ public class ADC extends Sensor
 	}
 	
 	/**
-	 * Aendert den Kanal auf dem man Spannungswerte misst
+	 * Ändert den Kanal auf dem man Spannungswerte misst
 	 * @param channel	Kanal auf dem gemessen werden soll
 	 */
 	public void selectChannel(byte channel)
@@ -117,8 +112,8 @@ public class ADC extends Sensor
 	}
 	
 	/**
-	 * Returned die Gain-Konfiguration
-	 * @return	Gibt die Gain-Konstante zurueck
+	 * Gibt die Gain-Konfiguration zurück
+	 * @return	Gibt die Gain-Konstante zurück
 	 */
 	public int getGain()
 	{
@@ -128,8 +123,8 @@ public class ADC extends Sensor
 	}
 	
 	/**
-	 * Returned die Conversions-Konfiguration
-	 * @return	Gibt die Conversion-Mode-Konstante zurueck
+	 * Gibt die Conversions-Konfiguration zurück
+	 * @return	Gibt die Conversion-Mode-Konstante zurück
 	 */
 	public int getConvMode()
 	{
@@ -138,8 +133,8 @@ public class ADC extends Sensor
 	}
 	
 	/**
-	 * Returned das Ready Bit
-	 * @return Gibt das "Ready" bit zurueck
+	 * Gibt das Ready Bit zurück
+	 * @return Gibt das "Ready" bit zurück
 	 */
 	public int getReadyBit()
 	{
@@ -148,8 +143,8 @@ public class ADC extends Sensor
 	}
 	
 	/***
-	 * Returned die SampleRate-Konfiguration
-	 * @return Gibt die Samplerate-Konstante zurueck
+	 * Gibt die SampleRate-Konfiguration zurück
+	 * @return Gibt die Samplerate-Konstante zurück
 	 */
 	public int getSampleRate()
 	{
@@ -159,8 +154,8 @@ public class ADC extends Sensor
 	}
 	
 	/**
-	 * Returned die Channel-Konfiguration
-	 * @return	Gibt die Channel-Select-Konstante zurueck
+	 * Gibt die Channel-Konfiguration zurück
+	 * @return	Gibt die Channel-Select-Konstante zurück
 	 */
 	public int getChannelSelection()
 	{
