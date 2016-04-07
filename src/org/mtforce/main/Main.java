@@ -8,9 +8,17 @@ import org.mtforce.enocean.RORGDecoder;
 import org.mtforce.enocean.Response;
 import org.mtforce.impatouch.LedColor;
 import org.mtforce.impatouch.LedDriver;
+import org.mtforce.sensors.DOF9;
 import org.mtforce.sensors.Sensors;
 import org.mtforce.sensors.Thermometer;
 
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalInput;
+import com.pi4j.io.gpio.PinPullResistance;
+import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
+import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.pi4j.io.serial.Serial;
 
 public class Main 
@@ -24,10 +32,17 @@ public class Main
 		try
 		{
 			Sensors.initialize();
-			
+
 			LedDriver driver = LedDriver.getInstance();
-			
 			driver.initialize();
+			driver.setGlobalColor(LedColor.RED);
+			for(int i = 65; i <= 90; i++)
+			{
+				driver.writeChar((i-1)%4, (char)i);
+				Thread.sleep(1000);
+			}
+			
+			driver.setGlobalIntensityAll(15);
 			driver.setGlobalColor(LedColor.CYAN);
 			driver.setAllLedsOnAll(false);
 			driver.setGlobalIntensityAll(15);
@@ -47,12 +62,20 @@ public class Main
 				driver.writeChar((i-1)%4, (char)i);
 				Thread.sleep(200);
 			}
-			//driver.setAllLedsOnAll(false);
-			driver.sendTest();
-			LedDriver driver2 = LedDriver.getInstance();
-			System.out.println(driver2 == driver);
 			
-			final RORGDecoder decoder = new RORGDecoder();
+			DOF9 dof = Sensors.getDof9();
+			while(true) {
+				System.out.println("Feld X: "+dof.getMAGNETO_XOUT());
+				System.out.println("Feld Y: "+dof.getMAGNETO_YOUT());
+				System.out.println("Feld Z: "+dof.getMAGNETO_ZOUT());
+				Thread.sleep(1000);
+			}
+			
+			//driver.setAllLedsOnAll(false);
+			//driver.sendTest();
+
+			
+			/*final RORGDecoder decoder = new RORGDecoder();
 			decoder.addRORGDecodeEventListener(new RORGDecodeEvent(){
 				@Override
 				public void thermometerReceived(double temperature) {
@@ -74,8 +97,6 @@ public class Main
 				{
 					@Override
 					public void packetReceived(OceanPacket packet) {
-						packet.println();
-						
 						decoder.decode(packet.getData());
 					}
 
@@ -84,16 +105,37 @@ public class Main
 						
 					}
 				});
-				
-				OceanPacket packet = new OceanPacket();
-				packet.setPacketType(EnOceanPi.PACKETTYPE_COMMON_COMMAND);
-				packet.setData((byte)0x02);
-				packet.setDataOptional(null);
-				packet.generateHeader();
-				packet.println();
-				Response resp = pi.sendPacketForResponse(packet);
 			}
 			
+	        final GpioController gpio = GpioFactory.getInstance();
+	        final GpioPinDigitalInput alertInput = gpio.provisionDigitalInputPin(RaspiPin.GPIO_28, PinPullResistance.PULL_UP);
+	        alertInput.addListener(new GpioPinListenerDigital() {
+				@Override
+				public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+					System.out.println("Alert: "+event.getState().getName());
+				}
+	        });
+			
+	        Thread.sleep(1000);
+	        
+			Thermometer therm = Sensors.getThermometer();
+			therm.setConfiguration(Thermometer.kgsCONF_INT_CLEAR | Thermometer.kgsCONF_ALERT_SEL | Thermometer.kgsCONF_ALERT_CNT | Thermometer.kgsCONF_ALERT_MOD);
+			therm.setTCritical(20.0);
+			therm.setResolution(Thermometer.kgsRES_0625);
+			System.out.println(therm.getTemperature());
+			
+			double tupper = therm.getTUpperLimit();
+			double tlower = therm.getTLowerLimit();
+			double tcrit = therm.getTCriticalLimit();
+			
+
+	        
+	        System.out.println(" ... complete the GPIO #02 circuit and see the listener feedback here in the console.");
+	        
+	        // keep program running until user aborts (CTRL-C)
+	        for (;;) {
+	            Thread.sleep(500);
+	        }
 			
 			//driver.setAllLedsOnAll(false);
 	
