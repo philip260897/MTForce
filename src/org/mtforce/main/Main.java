@@ -8,6 +8,7 @@ import org.mtforce.enocean.RORGDecoder;
 import org.mtforce.enocean.Response;
 import org.mtforce.impatouch.LedColor;
 import org.mtforce.impatouch.LedDriver;
+import org.mtforce.sensors.Barometer;
 import org.mtforce.sensors.DOF9;
 import org.mtforce.sensors.Sensors;
 import org.mtforce.sensors.Thermometer;
@@ -32,6 +33,7 @@ public class Main
 		try
 		{
 			Sensors.initialize();
+
 
 			LedDriver driver = LedDriver.getInstance();
 			driver.initialize();
@@ -137,16 +139,16 @@ public class Main
 	            Thread.sleep(500);
 	        }
 			
-			//driver.setAllLedsOnAll(false);
+			//driver.setAllLedsOnAll(false);*/
 	
-			/*int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x4500}; 
-			Sensors.getBarometer().checkCRC(nprom, 0x4500);
-			Barometer bar = Sensors.getBarometer();
-			if(bar.isEnabled())
-			{
-				System.out.println("Temperatur: "+bar.getTemperature());
-			}
-			
+//			int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x4500}; 
+//			Sensors.getBarometer().checkCRC(nprom, 0x450b);
+//			Barometer bar = Sensors.getBarometer();
+//			if(bar.isEnabled())
+//			{
+//				System.out.println("Temperatur: "+bar.getTemperature() + "°C\nDruck: " + bar.getPressure() + "mbar");
+//			}
+//			
 			/*ADC adc = Sensors.getAdc();
 			if(adc.isEnabled())
 			{
