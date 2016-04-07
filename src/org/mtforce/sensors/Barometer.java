@@ -163,6 +163,32 @@ public class Barometer extends Sensor {
 		coeff[4] = this.getCoeffizient(kgsPROM_COEFF_4);
 		coeff[5] = this.getCoeffizient(kgsPROM_COEFF_5);
 		coeff[6] = this.getCoeffizient(kgsPROM_COEFF_6);
+		byte[] test = Utils.toBytes(coeff[0], 2);
+		System.out.println(Utils.byteToHexString(test[1]) + "  " + Utils.byteToHexString(test[0]));
+		test = Utils.toBytes(coeff[1], 2);
+		System.out.println(Utils.byteToHexString(test[1]) + "  " + Utils.byteToHexString(test[0]));
+		test = Utils.toBytes(coeff[2], 2);
+		System.out.println(Utils.byteToHexString(test[1]) + "  " + Utils.byteToHexString(test[0]));
+		test = Utils.toBytes(coeff[3], 2);
+		System.out.println(Utils.byteToHexString(test[1]) + "  " + Utils.byteToHexString(test[0]));
+		test = Utils.toBytes(coeff[4], 2);
+		System.out.println(Utils.byteToHexString(test[1]) + "  " + Utils.byteToHexString(test[0]));
+		test = Utils.toBytes(coeff[5], 2);
+		System.out.println(Utils.byteToHexString(test[1]) + "  " + Utils.byteToHexString(test[0]));
+		test = Utils.toBytes(coeff[6], 2);
+		System.out.println(Utils.byteToHexString(test[1]) + "  " + Utils.byteToHexString(test[0]));
+		test = Utils.toBytes(getCRC(), 2);
+		System.out.println(Utils.byteToHexString(test[1]) + "  " + Utils.byteToHexString(test[0]));
+		
+		/*int coeff[] = new int[7];
+		coeff[0] = this.getCoeffizient(kgsPROM_COEFF_0);
+		coeff[1] = 46372;
+		coeff[2] = 43981;
+		coeff[3] = 29059;
+		coeff[4] = 27842;
+		coeff[5] = 31553;
+		coeff[6] = 28165;*/
+		
 		return coeff;
 	}
 	
@@ -345,8 +371,7 @@ public class Barometer extends Sensor {
 		int adcValue 	= getAdcValue();
 		int tempDiff	= calculateTemperatureDifference(adcValue);
 		int temp		= calculateTemperature(tempDiff, 28165);
-		
-		
+				
 		this.startConversionPressure();
 		sleepForResult(this.gResolutionPressure);
 		adcValue 	= getAdcValue();

@@ -57,7 +57,7 @@ public class DistanceSensor extends Sensor
 	 * Gibt den Momentanen Distanzwert des Distanzsensors zurueck
 	 * @return	Distanzwert in cm
 	 */
-	private double getDistance()
+	public double getDistance()
 	{
 		double distance = 0;	
 		if(adc.isEnabled())
