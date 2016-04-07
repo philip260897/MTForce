@@ -4,18 +4,11 @@ import org.mtforce.main.Logger;
 import org.mtforce.main.Logger.Status;
 
 /**
- * Beschreibung: Analoger Helligkeitssensor, haengt am ADC auf Kanal 2
- * 
- * Konstanten: NICHT Komplett
- * Funktionen: NICHT Komplett
- * 
- * TODO: Modultest, Kommentare hinzufuegen
+ * Beschreibung: Analoger Helligkeitssensor, hängt am ADC auf Kanal 2
  */
 public class LightSensor extends Sensor
 {
-	private ADC adc;
-	
-	
+	private ADC adc;	//Referenz auf ADC
 	
 	protected LightSensor()
 	{
@@ -37,12 +30,16 @@ public class LightSensor extends Sensor
 		}
 	}
 	
+	/**
+	 * Gibt die Helligkeit (Hell/Dunkel) zurück
+	 * @return	Hell oder Dunkel
+	 */
 	public String getBrightness()
 	{
 		String[] brightness = {"Dunkel", "Hell"};
 		adc.selectChannel(ADC.kgsCONF_SELECT_CH1);
 		try {
-			Thread.sleep(100);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

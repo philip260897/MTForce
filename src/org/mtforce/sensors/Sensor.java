@@ -2,24 +2,34 @@ package org.mtforce.sensors;
 
 public class Sensor 
 {
-	private boolean enabled = false;									//True wenn Sensor Aktiv, False wenn Inaktiv
+	private boolean enabled = false;	//True wenn Sensor Aktiv, False wenn Inaktiv
 	
 	public Sensor()
 	{
 		
 	}
 	
-	public void init()													//Deaktiviert den Sensor
+	/**
+	 * Deaktiviert den Sensor
+	 */
+	public void init()
 	{
 		setEnabled(false);
 	}
 	
-	public boolean isEnabled()											//Gibt zurueck ob Sensor aktiv oder inaktiv ist
+	/**
+	 * Gibt zurück ob der Sensor aktiv ist oder nicht
+	 * @return
+	 */
+	public boolean isEnabled()
 	{
 		return enabled;
 	}
 	
-	public void setEnabled(boolean enabled)								//Setzt ob Sensor aktiv oder inaktiv ist
+	/**
+	 * Setzt ob Sensor aktiv oder inaktiv ist
+	 */
+	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
 	}
