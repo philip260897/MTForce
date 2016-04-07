@@ -68,9 +68,7 @@ public class Barometer extends Sensor {
 				e.printStackTrace();
 			}
 			gCoeffizients = getCoeffizients();
-			System.out.println(checkCRC(gCoeffizients, getCRC()));
 			byte[] test = Utils.toBytes(getCRC(), 2);
-			System.out.println(Utils.byteToHexString(test[1]) + "  " + Utils.byteToHexString(test[0]));
 			setEnabled(true);
 		}
 		else

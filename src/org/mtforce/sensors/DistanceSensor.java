@@ -63,6 +63,12 @@ public class DistanceSensor extends Sensor
 		if(adc.isEnabled())
 		{
 			adc.selectChannel(ADC.kgsCONF_SELECT_CH2);
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			distance = adc.getVoltage();
 			distance = convertVoltageToDistance(distance);
 		}

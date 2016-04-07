@@ -25,7 +25,7 @@ public class SPIManager implements CommunicationManager
 	@Override
     public void initialize() throws Exception
     {
-        spi = SpiFactory.getInstance(SpiChannel.CS0, SpiDevice.DEFAULT_SPI_SPEED/1000000, SpiDevice.DEFAULT_SPI_MODE);
+        spi = SpiFactory.getInstance(SpiChannel.CS0, SpiDevice.DEFAULT_SPI_SPEED*10, SpiDevice.DEFAULT_SPI_MODE);
         
         if(spi == null)
         {
