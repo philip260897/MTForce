@@ -1,7 +1,7 @@
 package org.mtforce.main;
 
 /**
- * Beschreibung: Diese Klasse beinhaltet haeufig verwendete Hilfsmethoden zur Bit und Byte manipulation
+ * Beschreibung: Diese Klasse beinhaltet häufig verwendete Hilfsmethoden zur Bit und Byte manipulation
  * 
  * Konstanten: Komplett
  * Funktionen: Komplett (Erweiterbar)
@@ -12,8 +12,8 @@ public class Utils
 	/**
 	 * Ein bestimmtest Bit in einem Byte an einer Position setzten
 	 * @param b			Das Byte welches manipuliert werden soll
-	 * @param index		Welches bit manipuliert werden soll
-	 * @return			Gibt das manipulierte Byte zurueck
+	 * @param index		Welches Bit manipuliert werden soll
+	 * @return			Gibt das manipulierte Byte zurück
 	 */
 	public static byte setBit(byte b, int index){
 		byte mask = (byte) (0x01<<index);
@@ -25,7 +25,7 @@ public class Utils
 	 * Wandelt einen Integer in ein Byte-Array um
 	 * @param integer	Integer welcher umgewandelt werden soll
 	 * @param var		Anzahl in wie viele bytes (bzw. wie viele bytes umgewandelt werden sollen)
-	 * @return			Gibt das Byte-Array zurueck
+	 * @return			Gibt das Byte-Array zurück
 	 */
 	public static byte[] toBytes(int integer, int var){ //Wandelt eine Integer-Zahl in ein byte array mit integer-Anzahl an bytes um
 		byte lastByte[] = new byte[var];
@@ -37,7 +37,7 @@ public class Utils
 	/**
 	 * Wandelt ein Byte-Array in einen Integer um
 	 * @param b	Byte-Array
-	 * @return	Gibt den Integer-Wert zurueck
+	 * @return	Gibt den Integer-Wert zurück
 	 */
 	public static int toInt(byte []b){ //Wandelt ein Byte-Array mit max. 4 bytes in einen+E127 Integer um
 		int combInt = 0;
@@ -49,11 +49,11 @@ public class Utils
 	}
 	
 	/**
-	 * Gibt nur Bits in einer bestimmten reichweite zurueck
+	 * Gibt nur Bits in einer bestimmten Reichweite zurück
 	 * @param b		Byte aus dem bestimmte bits isoliert werden sollen
 	 * @param start	Anfangswert der Reichweite
 	 * @param stop	Endwert der Reichweite
-	 * @return		Gibt die in der Reichweite definierten Bits zurueck in einem Byte
+	 * @return		Gibt die in der Reichweite definierten Bits zurück in einem Byte
 	 */
 	public static byte isolateBits(byte b, int start, int stop){ //Retourniert ein Byte mit allen Bits 0 auser die Bits welche zwischen start und stop stehen
 		byte mask = 0x00;		
@@ -71,10 +71,10 @@ public class Utils
 	}
 
 	/**
-	 * Ueberprueft ob ein bestimmtes Bit an einer bestimmten Stelle gesetzt ist
-	 * @param b	Byte das ueberprueft werden soll
-	 * @param i	Index des Bits das ueberprueft werden soll
-	 * @return	Gibt True, wenn das bit==1 ist, oder False wenn das bit==0 ist zurueck
+	 * Überprüft ob ein bestimmtes Bit an einer bestimmten Stelle gesetzt ist
+	 * @param b	Byte das überprüft werden soll
+	 * @param i	Index des Bits das überprüft werden soll
+	 * @return	Gibt True, wenn das bit==1 ist, oder False wenn das bit==0 ist zurück
 	 */
 	public static boolean isBitSet(byte b, int i) //Retourniert True, wenn das bit an Index i 1 ist, ansonsten False
 	{
@@ -83,7 +83,7 @@ public class Utils
 	}
 	
 	/**
-	 * Vergleicht 2 Byte-Arrays auf exakte gleichheit
+	 * Vergleicht 2 Byte-Arrays auf exakte Gleichheit
 	 * @param a	Byte-Array A
 	 * @param b	Byte-Array B
 	 * @return	True wenn Array A und B exakt gleich sind, False wenn nicht
@@ -102,7 +102,7 @@ public class Utils
 	 * Wandelt einen Dezimalwert in Q-Notation um
 	 * @param number	Dezimalwert der Umgewandelt werden soll
 	 * @param n			16-nQn (Anzahl der Kommastellen)
-	 * @return			Gibt einen Integer mit der Q-Notation zurueck
+	 * @return			Gibt einen Integer mit der Q-Notation zurück
 	 */
 	public static int doubleToQNotation(double number, int n)
 	{
@@ -113,7 +113,7 @@ public class Utils
 	 * Wandelt Q-Notation in einen Dezimalwert um
 	 * @param number	Q-Notation Zahl
 	 * @param n			16-nQn (Anzahl der Kommastellen)
-	 * @return			Gibt den Dezimalwert in double zurueck
+	 * @return			Gibt den Dezimalwert in double zurück
 	 */
 	public static double qNotationToDouble(int number, int n)
 	{
@@ -121,9 +121,9 @@ public class Utils
 	}
 	
 	/**
-	 * Kehrt die reihnfolge des Byte-Arrays um
+	 * Kehrt die Reihenfolge des Byte-Arrays um
 	 * @param array	Byte-Array welches umgedreht werden soll
-	 * @return		Gibt das verkehrte Byte-Array zurueck
+	 * @return		Gibt das verkehrte Byte-Array zurück
 	 */
 	public static byte[] reverseBytes(byte[] array)
 	{
@@ -136,14 +136,19 @@ public class Utils
 	/**
 	 * Wandelt ein Byte in einen Hex-String um
 	 * @param b	Byte welches als String dargestellt werden soll
-	 * @return	Gibt den Hex-String zurueck
+	 * @return	Gibt den Hex-String zurück
 	 */
 	public static String byteToHexString(byte b)
 	{
 		return "0x"+String.format("%02x", b & 0xff);
 	}
 	
-	 public static byte reverseBitsByte(byte x) {
+	/**
+	 * Dreht die Reihenfolge der Bits in einem Byte um
+	 * @param x	Byte welches manipuliert werden soll
+	 * @return	Gibt das manipulierte Byte zurück
+	 */
+	public static byte reverseBitsByte(byte x) {
 		 byte b = 0;
 		 for(int i = 0; i < 8; i++)
 		 {
