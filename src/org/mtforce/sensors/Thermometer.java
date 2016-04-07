@@ -217,8 +217,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Liest Upper Limit aus Register aus
-	 * @param return	Upper Limit in Grad Celsius
+	 * Liest Upper-Limit aus Register aus
+	 * @param return	Upper-Limit in Grad Celsius
 	 */
 	public double getTUpperLimit()
 	{
@@ -227,8 +227,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Schreibt das gewünschte Lower Limit ins Register
-	 * @param limit		Upper Lower in Grad Celsius
+	 * Schreibt das gewünschte Lower-Limit ins Register
+	 * @param limit		Lower-Limit in Grad Celsius
 	 */
 	public void setTLowerLimit(double limit)
 	{
@@ -236,8 +236,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * gettet Lower Limit
-	 * @param return	Lower Limit in Grad Celsius
+	 * Liest Lower-Limit aus Register aus
+	 * @param return	Lower-Limit in Grad Celsius
 	 */
 	public double getTLowerLimit()
 	{
@@ -246,8 +246,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Schreibt die gewünschte Critical Temperature ins Register
-	 * @param limit		Critical Temperature in Grad Celsius
+	 * Schreibt die gewünschte Critical-Temperature ins Register
+	 * @param limit		Critical-Temperature in Grad Celsius
 	 */
 	public void setTCritical(double limit)
 	{
@@ -255,8 +255,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * gettet Critical Temperature
-	 * @param return	Critical Temperature in Grad Celsius
+	 * Liest Critical-Temperature aus Register aus
+	 * @param return	Critical-Temperature in Grad Celsius
 	 */
 	public double getTCriticalLimit()
 	{
@@ -267,7 +267,7 @@ public class Thermometer extends Sensor
 	//=====Ta======IMPLEMENTED
 	
 	/**
-	 * Returned ob TemperatureCritical-Bit gesetzt ist
+	 * Gibt zurück ob Temperature-Critical-Bit gesetzt ist
 	 * COMMENT: True wenn Temperatur das gewünschte Critical Limit überschreitet
 	 * @return boolean ob gesetzt
 	 */
@@ -278,7 +278,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob TemperatureUpper-Bit gesetzt ist
+	 * Gibt zurück ob TemperatureUpper-Bit gesetzt ist
 	 * COMMENT: True wenn Temperatur das gewünschte Upper Limit überschreitet
 	 * @return boolean ob gesetzt
 	 */
@@ -289,7 +289,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob TemperatureLower-Bit gesetzt ist
+	 * Gibt zurück ob TemperatureLower-Bit gesetzt ist
 	 * COMMENT: True wenn Temperatur das gewünschte Lower Limit überschreitet
 	 * @return boolean ob gesetzt
 	 */
@@ -300,7 +300,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned die Temperatur
+	 * Gibt die Temperatur zurück
 	 * @return Temperatur
 	 */
 	public double getTemperature()
@@ -312,7 +312,7 @@ public class Thermometer extends Sensor
 	//====Manufacturer ID============IMPLEMENTED
 	
 	/**
-	 * Returned die Manufacturer ID
+	 * Gibt die Manufacturer ID zurück
 	 * @return Manufacturer ID
 	 */
 	public int getManufacturerID()
@@ -324,7 +324,7 @@ public class Thermometer extends Sensor
 	//====Device ID and Revision======IMPLEMENTED
 	
 	/**
-	 * Returned die Device ID
+	 * Gibt die Device ID zurück
 	 * @return Device ID
 	 */
 	public int getDeviceID()
@@ -334,7 +334,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned die Devision
+	 * Gibt die Devision zurück
 	 * @return Devision
 	 */
 	public int getRevision()
@@ -346,7 +346,7 @@ public class Thermometer extends Sensor
 	//======RESOLUTIOn=====
 	
 	/**
-	 * gewünschte Auflösung setzen
+	 * Gewünschte Auflösung einstellen
 	 * @param 	gewünschte Auflösung
 	 */
 	public void setResolution(byte resolution)
@@ -355,7 +355,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned die Auflösung
+	 * Gibt die Auflösung zurück
 	 * @return resolution
 	 */
 	public byte getResolution()
@@ -368,8 +368,8 @@ public class Thermometer extends Sensor
 	
 	/**
 	 * Konvertiert einen Double Wert in Q-Notation
-	 * @param limit Parameter welcher Wert konvertiert werden soll
-	 * @return 	Konvertiertes Ergebnis in Q-Notation
+	 * @param limit	Parameter welcher Wert konvertiert werden soll
+	 * @return		Konvertiertes Ergebnis in Q-Notation
 	 */
 	private byte[] formatWriteLimits(double limit)
 	{
@@ -387,8 +387,8 @@ public class Thermometer extends Sensor
 	
 	/**
 	 * Q-Notation zu double Wert
-	 * @param packet Parameter welcher Wert konvertiert werden soll
-	 * @return d	Konvertiertes Ergebnis
+	 * @param packet	Parameter welcher Wert konvertiert werden soll
+	 * @return d		Konvertiertes Ergebnis
 	 */
 	private double formatReadLimits(byte[] packet)
 	{
@@ -401,23 +401,5 @@ public class Thermometer extends Sensor
 		if(Utils.isBitSet(packet[1], 4))
 			d *= -1;
 		return d;
-	}
-	
-	/**
-	 * Schreibt den Wert value in das Register red und liest anschliesend den Wert aus dem Register reg um festzustellen ob der schreibvorgang erfolgreich war.
-	 * bcount gibt an, wie viele byte von value ins Register geschrieben werden.
-	 * @param iReg
-	 * @param iValue
-	 * @param iBcount
-	 * @return
-	 */
-	private boolean checkRegister(byte iReg, int iValue, int iBcount)
-	{
-		byte[] txPacket = Utils.toBytes(iValue, iBcount);
-		i2c.write(kgsADDRESS, iReg, txPacket, true);
-		
-		byte[] rxPacket = i2c.read(kgsADDRESS, iReg, 2, true);
-		
-		return Utils.compareBytes(txPacket, rxPacket);
 	}
 }
