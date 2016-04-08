@@ -5,9 +5,9 @@ package org.mtforce.enocean;
 import java.util.zip.Checksum;
 
 /**
- * Own implementation of CRC8 (license problems with others.
- * 
- * @author thomas
+ * ACHTUNG: 
+ * Klasse übernommen von: https://github.com/pascalmartin/java-enocean-library/blob/master/src/main/java/org/opencean/core/utils/CRC8.java
+ * Originale Author: Thomas
  */
 public class CRC8 implements Checksum {
 
