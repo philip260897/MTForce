@@ -42,7 +42,7 @@ public class RORGDecoder
 	 */
 	public void decode(byte[] telegram)
 	{
-		System.out.println(Utils.byteToHexString(telegram[0]));
+		//System.out.println(Utils.byteToHexString(telegram[0]));
 		if(telegram[0] == (byte)0xa5) //4BS Telegram
 		{
 			if(telegram.length == 10)

@@ -180,7 +180,7 @@ public class ADC extends Sensor
 		if(config == ADC.kgsCONF_RES_14) res = 8192;
 		if(config == ADC.kgsCONF_RES_16) res = 32768;
 		
-		System.out.println(Utils.byteToHexString(packet[0]) + " " + Utils.byteToHexString(packet[1]));
+		//System.out.println(Utils.byteToHexString(packet[0]) + " " + Utils.byteToHexString(packet[1]));
 		
 		double volts = (double)wert * (2.048/res);
 		return volts;

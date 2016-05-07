@@ -1,5 +1,7 @@
 package org.mtforce.main;
 
+import java.util.Date;
+
 import org.mtforce.enocean.EnOceanPi;
 import org.mtforce.enocean.OceanPacket;
 import org.mtforce.enocean.OceanPacketReceivedEvent;
@@ -8,8 +10,10 @@ import org.mtforce.enocean.RORGDecoder;
 import org.mtforce.enocean.Response;
 import org.mtforce.impatouch.LedColor;
 import org.mtforce.impatouch.LedDriver;
+import org.mtforce.sensors.ADC;
 import org.mtforce.sensors.Barometer;
 import org.mtforce.sensors.DOF9;
+import org.mtforce.sensors.LightSensor;
 import org.mtforce.sensors.Sensors;
 import org.mtforce.sensors.Thermometer;
 
@@ -25,7 +29,7 @@ import com.pi4j.io.serial.Serial;
 public class Main 
 {
 	//TODO: sendPacketForResponse Timeout einfuehren\
-	
+	private static boolean on = false;
 	public static void main(String[] args) 
 	{
 		Logger.console(true);
@@ -33,153 +37,153 @@ public class Main
 		try
 		{
 			Sensors.initialize();
-
-
-			LedDriver driver = LedDriver.getInstance();
+			
+			final LedDriver driver = LedDriver.getInstance();
 			driver.initialize();
+			driver.setShutdownModeAll(LedDriver.kgsSHDM_NORM_RESET_FEAT);
+			
+			driver.setGlobalIntensityAll(0);
+			driver.setGlobalColor(LedColor.WHITE);
+			driver.setAllLedsOnAll(false);
+			//driver.setGlobalIntensityAll(15);
+			driver.setScanLimitAll(LedDriver.kgsSCAN_LIMIT_7);
+			//driver.writeString("TEST");
+
+
+			Thread ledThread = new Thread(new Runnable(){
+				@Override
+				public void run() 
+				{
+					try
+					{
+
+						
+						/*for(LedColor color : LedColor.values()) {
+							driver.setGlobalColor(color);
+							driver.writeString("TEST");
+							Thread.sleep(1000);
+						}
+						
+						driver.setAllLedsOnAll(false);
+						driver.setGlobalColor(LedColor.BLUE);
+						for(int i = 65; i <= 90; i++)
+						{
+							driver.setGlobalColor(LedColor.values()[i%LedColor.values().length]);
+							driver.writeChar((i-1)%4, (char)i);
+							Thread.sleep(500);
+						}
+						driver.setGlobalColor(LedColor.MAGENTA);
+						driver.setAllLedsOnAll(true);
+						Thread.sleep(3000);
+						driver.setAllLedsOnAll(false);*/
+						while(true)
+						{
+							synchronized(LedDriver.getInstance()) {
+								for(LedColor color : LedColor.values()) {
+									LedDriver.getInstance().wait();
+									driver.setGlobalColor(color);
+									driver.setAllLedsOnAll(true);
+								}
+							}
+						}
+					}
+					catch(Exception ex) 
+					{
+						ex.printStackTrace();
+					}
+				}
+				
+			});
+			ledThread.start();
+			
+			Thread sensorThread = new Thread(new Runnable(){
+				@Override
+				public void run() {
+					while(true) {
+						long startMillis = System.currentTimeMillis();
+						DOF9 dof = Sensors.getDof9();
+						LightSensor ls = Sensors.getLightSensor();
+						ADC adc = Sensors.getAdc();
+						adc.setConfiguration((byte) (ADC.kgsCONF_RES_12 | ADC.kgsSTD_CONFIG));
+						
+						for(int i = 0; i < 100; i++)
+						{
+							if(dof.isEnabled()) {
+								dof.getACCEL_XOUT();
+								dof.getACCEL_YOUT();
+								dof.getACCEL_ZOUT();
+							}
+							if(ls.isEnabled())
+								ls.getBrightness();
+						}
+						System.out.println("100 Cycles in " + ((double)(System.currentTimeMillis() - startMillis))/1000d + " sec");
+					}
+				}
+			});
+			//sensorThread.start();
+			
+			final RORGDecoder rorgDecoder = new RORGDecoder();
+		
+			rorgDecoder.addRORGDecodeEventListener(new RORGDecodeEvent(){
+
+				@Override
+				public void thermometerReceived(double temperature) {
+					// TODO Auto-generated method stub
+					System.out.println("EnOcean Temperatur: "+temperature);
+				}
+
+				@Override
+				public void buttonReceived(int button1, int button2) {
+					// TODO Auto-generated method stub
+					synchronized(LedDriver.getInstance())
+					{
+						LedDriver.getInstance().notifyAll();
+					}
+				}
+				
+			});
+			
+			EnOceanPi en = EnOceanPi.getInstance();
+			en.init(Serial.DEFAULT_COM_PORT, 57600);
+			en.addOceanPacketReceivedEvent(new OceanPacketReceivedEvent(){
+
+				@Override
+				public void packetReceived(OceanPacket packet) {
+					// TODO Auto-generated method stub
+					//driver.setAllLedsOnAll((on = !on));
+
+					rorgDecoder.decode(packet.getData());
+				}
+
+				@Override
+				public void responseReceived(Response response) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+			});
+			
+			/*driver.setGlobalIntensityAll(3);
+			driver.setDecodeModeAll(LedDriver.kgsDM_NO_DECODE);
+			driver.setScanLimitAll(LedDriver.kgsSCAN_LIMIT_7);
 			driver.setGlobalColor(LedColor.RED);
-			for(int i = 65; i <= 90; i++)
+			
+			
+			
+			while(true)
 			{
-				driver.writeChar((i-1)%4, (char)i);
-				Thread.sleep(1000);
-			}
+				driver.setAllLedsOnAll(true);
+			}*/
 			
-			driver.setGlobalIntensityAll(15);
-			driver.setGlobalColor(LedColor.CYAN);
-			driver.setAllLedsOnAll(false);
-			driver.setGlobalIntensityAll(15);
-			driver.writeString("TEST");
-			
-			for(LedColor color : LedColor.values()) {
-				driver.setGlobalColor(color);
-				driver.writeString("TEST");
-				Thread.sleep(0);
-			}
-			
-			driver.setAllLedsOnAll(false);
-			driver.setGlobalColor(LedColor.BLUE);
-			for(int i = 65; i <= 90; i++)
-			{
-				driver.setGlobalColor(LedColor.values()[i%LedColor.values().length]);
-				driver.writeChar((i-1)%4, (char)i);
-				Thread.sleep(200);
-			}
-			
-			DOF9 dof = Sensors.getDof9();
+
+			/*DOF9 dof = Sensors.getDof9();
 			while(true) {
 				System.out.println("Feld X: "+dof.getMAGNETO_XOUT());
 				System.out.println("Feld Y: "+dof.getMAGNETO_YOUT());
 				System.out.println("Feld Z: "+dof.getMAGNETO_ZOUT());
 				Thread.sleep(1000);
-			}
-			
-			//driver.setAllLedsOnAll(false);
-			//driver.sendTest();
-
-			
-			/*final RORGDecoder decoder = new RORGDecoder();
-			decoder.addRORGDecodeEventListener(new RORGDecodeEvent(){
-				@Override
-				public void thermometerReceived(double temperature) {
-					System.out.println("EnOcean Thermometer: "+temperature);
-				}
-
-				@Override
-				public void buttonReceived(int button1, int button2) {
-					System.out.println("Button1: "+button1);
-					System.out.println("Button2: "+button2);
-				}			
-			});
-			
-			EnOceanPi pi = EnOceanPi.getInstance();
-			pi.init(Serial.DEFAULT_COM_PORT, 57600);
-			if(pi.isEnabled())
-			{
-				pi.addOceanPacketReceivedEvent(new OceanPacketReceivedEvent()
-				{
-					@Override
-					public void packetReceived(OceanPacket packet) {
-						decoder.decode(packet.getData());
-					}
-
-					@Override
-					public void responseReceived(Response response) {
-						
-					}
-				});
-			}
-			
-	        final GpioController gpio = GpioFactory.getInstance();
-	        final GpioPinDigitalInput alertInput = gpio.provisionDigitalInputPin(RaspiPin.GPIO_28, PinPullResistance.PULL_UP);
-	        alertInput.addListener(new GpioPinListenerDigital() {
-				@Override
-				public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-					System.out.println("Alert: "+event.getState().getName());
-				}
-	        });
-			
-	        Thread.sleep(1000);
-	        
-			Thermometer therm = Sensors.getThermometer();
-			therm.setConfiguration(Thermometer.kgsCONF_INT_CLEAR | Thermometer.kgsCONF_ALERT_SEL | Thermometer.kgsCONF_ALERT_CNT | Thermometer.kgsCONF_ALERT_MOD);
-			therm.setTCritical(20.0);
-			therm.setResolution(Thermometer.kgsRES_0625);
-			System.out.println(therm.getTemperature());
-			
-			double tupper = therm.getTUpperLimit();
-			double tlower = therm.getTLowerLimit();
-			double tcrit = therm.getTCriticalLimit();
-			
-
-	        
-	        System.out.println(" ... complete the GPIO #02 circuit and see the listener feedback here in the console.");
-	        
-	        // keep program running until user aborts (CTRL-C)
-	        for (;;) {
-	            Thread.sleep(500);
-	        }
-			
-			//driver.setAllLedsOnAll(false);*/
-	
-//			int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x4500}; 
-//			Sensors.getBarometer().checkCRC(nprom, 0x450b);
-//			Barometer bar = Sensors.getBarometer();
-//			if(bar.isEnabled())
-//			{
-//				System.out.println("Temperatur: "+bar.getTemperature() + "°C\nDruck: " + bar.getPressure() + "mbar");
-//			}
-//			
-			/*ADC adc = Sensors.getAdc();
-			if(adc.isEnabled())
-			{
-				//adc.setConfiguration(ADC.kgsSTD_CONFIG);
-				adc.setConfiguration((byte)(ADC.kgsCONF_SELECT_CH4 | ADC.kgsSTD_CONFIG | ADC.kgsCONF_RES_12));
-				Thread.sleep(100);
-				//System.out.println(Utils.byteToHexString((byte)adc.getChannelSelection()));
-				System.out.println(adc.getChannelSelection() == ADC.kgsCONF_SELECT_CH4 ? "OK!" : "FAILED!");
-				System.out.println("Voltage: "+adc.getVoltage());
 			}*/
-			
-			/*DOF9 dof = Sensors.getDof9();
-			if(dof.isEnabled())
-			{
-				for(int i = 0; i < 10000; i++) {
-					//System.out.println(dof.getGYRO_XOUT() + " " + dof.getGYRO_YOUT() + " " + dof.getGYRO_ZOUT());
-					System.out.println(dof.getACCEL_XOUT() + " " + dof.getACCEL_YOUT() + " " + dof.getACCEL_ZOUT());
-					Thread.sleep(50);
-				}
-			}*/
-			
-			//testThermometer();
-			
-			/*LightSensor s = Sensors.getLightSensor();
-			while(true)
-			{
-				System.out.println(s.getBrightness());
-				Thread.sleep(1000);
-			}*/
-			
-			//System.in.read();
+
 		}
 		catch(Exception ex)
 		{

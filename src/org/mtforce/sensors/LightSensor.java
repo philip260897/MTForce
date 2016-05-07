@@ -42,12 +42,13 @@ public class LightSensor extends Sensor
 		String[] brightness = {"Dunkel", "Hell"};
 		adc.selectChannel(ADC.kgsCONF_SELECT_CH1);
 		try {
-			Thread.sleep(50);
+			Thread.sleep(5);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		double voltage = adc.getVoltage() / 2 * 5;
+		//System.out.println(voltage);
 		return voltage < 0.700 ? brightness[0] + " " + voltage : brightness[1] + " " + voltage;
 	}
 }
