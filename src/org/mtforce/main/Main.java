@@ -8,19 +8,8 @@ import org.mtforce.enocean.RORGDecoder;
 import org.mtforce.enocean.Response;
 import org.mtforce.impatouch.LedColor;
 import org.mtforce.impatouch.LedDriver;
-import org.mtforce.interfaces.I2CManager;
-import org.mtforce.sensors.ADC;
-import org.mtforce.sensors.Barometer;
-import org.mtforce.sensors.DOF9;
-import org.mtforce.sensors.LightSensor;
-import org.mtforce.sensors.Sensor;
 import org.mtforce.sensors.Sensors;
 import org.mtforce.sensors.Thermometer;
-
-import com.pi4j.component.sensor.DistanceSensor;
-import com.pi4j.io.i2c.I2CBus;
-import com.pi4j.io.i2c.I2CDevice;
-import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.io.serial.Serial;
 
 public class Main 
@@ -28,7 +17,7 @@ public class Main
 	//TODO: sendPacketForResponse Timeout einfuehren
 	public static void main(String[] args) 
 	{
-		Logger.console(true);
+		/*Logger.console(true);
 		
 		try
 		{
@@ -120,14 +109,14 @@ public class Main
 			{
 				System.out.println(s.getBrightness());
 				Thread.sleep(1000);
-			}*/
+			}
 			
 			//System.in.read();
 		}
 		catch(Exception ex)
 		{
 			ex.printStackTrace();
-		}
+		}*/
 	}
 	
 	private static void testThermometer()
