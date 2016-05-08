@@ -8,24 +8,19 @@ import com.pi4j.io.spi.SpiFactory;
 import com.pi4j.io.spi.SpiMode;
 
 /**
- * Beschreibung: Kommunikation ueber das SPI Interface
- * 
- * Konstanten: Komplett
- * Funktionen: NICHT Komplett
- * 
- * TODO: write und read funktionen, Modultest
+ * Beschreibung: Kommunikation über das SPI Interface
  */
 public class SPIManager implements CommunicationManager
 {
 	private static SpiDevice spi = null;
 	
 	/**
-	 * Initialisiert den SPIManager auf 16MHz, CH0, DEFAULT_SPI_MODE
+	 * Initialisiert den SPIManager auf 10MHz, CH0, DEFAULT_SPI_MODE
 	 */
 	@Override
     public void initialize() throws Exception
     {
-        spi = SpiFactory.getInstance(SpiChannel.CS0, SpiDevice.DEFAULT_SPI_SPEED/1000000, SpiDevice.DEFAULT_SPI_MODE);
+        spi = SpiFactory.getInstance(SpiChannel.CS0, SpiDevice.DEFAULT_SPI_SPEED*10, SpiDevice.DEFAULT_SPI_MODE);
         
         if(spi == null)
         {
@@ -34,7 +29,7 @@ public class SPIManager implements CommunicationManager
     }
 
 	/**
-	 * Schreibt die uebergebenen Bytes auf den SPI-Bus
+	 * Schreibt die übergebenen Bytes auf den SPI-Bus
 	 * @param bytes	Daten
 	 */
 	public void write(byte ...bytes)

@@ -30,10 +30,10 @@ public class HumiditySensor extends Sensor
 	public final static int  kgsREAD_ID_2ND_BYTE 		= 0xFCC9;			//Read Electronic ID 2nd Byte
 	public final static int  kgsREAD_FIRMWARE_REV		= 0x84B8;			//Read Firmware Revision
 	
-	public final static byte kgsCONF_MEASURE_RES_12_14	= 0x00;				//Messaufloesung RH: 12 bit, Temp: 14 bit
-	public final static byte kgsCONF_MEASURE_RES_8_12	= 0x01;				//Messaufloesung RH: 8  bit, Temp: 12 bit
-	public final static byte kgsCONF_MEASURE_RES_10_13	= (byte) 0x80;		//Messaufloesung RH: 10 bit, Temp: 13 bit
-	public final static byte kgsCONF_MEASURE_RES_11_11	= (byte) 0x81;		//Messaufloesung RH: 11 bit, Temp: 11 bit
+	public final static byte kgsCONF_MEASURE_RES_12_14	= 0x00;				//Messauflösung RH: 12 bit, Temp: 14 bit
+	public final static byte kgsCONF_MEASURE_RES_8_12	= 0x01;				//Messauflösung RH: 8  bit, Temp: 12 bit
+	public final static byte kgsCONF_MEASURE_RES_10_13	= (byte) 0x80;		//Messauflösung RH: 10 bit, Temp: 13 bit
+	public final static byte kgsCONF_MEASURE_RES_11_11	= (byte) 0x81;		//Messauflösung RH: 11 bit, Temp: 11 bit
 	public final static byte kgsCONF_HEATER_ENABLE		= 0x04;				//Heizung anschalten
 	
 	private I2CManager gI2c;												//Verweis auf I2CManager
@@ -58,7 +58,7 @@ public class HumiditySensor extends Sensor
 	}
 
 	/**
-	 * Sensor zuruecksetzten
+	 * Sensor zurücksetzten
 	 */
 	public void reset()
 	{
@@ -76,7 +76,7 @@ public class HumiditySensor extends Sensor
 	
 	/**
 	 * Benutzterkonfiguration auslesen (Siehe Datenblatt)
-	 * @return	Gibt das Konfigurationsbyte zurueck
+	 * @return	Gibt das Konfigurationsbyte zurück
 	 */
 	public byte getUserConfiguration()
 	{
@@ -86,8 +86,8 @@ public class HumiditySensor extends Sensor
 	}
 	
 	/**
-	 * Gibt die eingestellte Messaufloesung zurueck
-	 * @return	Gibt die eingestellte Messaufloesung zurueck (Siehe Datenblatt)
+	 * Gibt die eingestellte Messauflösung zurück
+	 * @return	Gibt die eingestellte Messauflösung zurück (Siehe Datenblatt)
 	 */
 	public byte getMeasurementResolution()
 	{
@@ -97,7 +97,7 @@ public class HumiditySensor extends Sensor
 	}
 	
 	/**
-	 * Gibt zurueck ob die Heizung eingestellt ist oder nicht
+	 * Gibt zurück ob die Heizung eingestellt ist oder nicht
 	 * @return	True, wenn Heizung=ein; False, wenn Heizung=aus
 	 */
 	public boolean isHeaterEnabled()
@@ -117,7 +117,7 @@ public class HumiditySensor extends Sensor
 	}
 	
 	/**
-	 * Gibt den momentanen Heizungswert zurueck
+	 * Gibt den momentanen Heizungswert zurück
 	 * @return	Heizungswert von 0-16
 	 */
 	public int getHeaterValue()
@@ -127,9 +127,10 @@ public class HumiditySensor extends Sensor
 		return (int)lsb;
 	}
 	
+	@Deprecated
 	/**
-	 * Misst den momentanten Feuchtigkeitswert und Temperaturwert und gibt nur den Feuchtigkeitswert zurueck
-	 * @return	feuchtigkeitswert als double
+	 * Misst den momentanen Feuchtigkeitswert und Temperaturwert und gibt nur den Feuchtigkeitswert zurück
+	 * @return	Feuchtigkeitswert als double
 	 */
 	public double getHumidityHoldMasterMode()
 	{
@@ -141,8 +142,8 @@ public class HumiditySensor extends Sensor
 	}
 	
 	/**
-	 * Misst den momentanten Feuchtigkeitswert und Temperaturwert und gibt nur den Feuchtigkeitswert zurueck
-	 * @return	feuchtigkeitswert als double
+	 * Misst den momentanen Feuchtigkeitswert und Temperaturwert und gibt nur den Feuchtigkeitswert zurück
+	 * @return	Feuchtigkeitswert als double
 	 */
 	public double getHumidityNoHoldMasterMode()
 	{
@@ -154,7 +155,7 @@ public class HumiditySensor extends Sensor
 	}
 	
 	/**
-	 * Misst den momentanten  Temperaturwert und gibt ihn zurueck
+	 * Misst den momentanen  Temperaturwert und gibt ihn zurück
 	 * @return	feuchtigkeitswert als double
 	 */
 	public double getTemperatureHoldMasterMode()
@@ -167,7 +168,7 @@ public class HumiditySensor extends Sensor
 	}
 	
 	/**
-	 * Misst den momentanten  Temperaturwert und gibt ihn zurueck
+	 * Misst den momentanen  Temperaturwert und gibt ihn zurück
 	 * @return	feuchtigkeitswert als double
 	 */
 	public double getTemperatureNoHoldMasterMode()
@@ -180,7 +181,7 @@ public class HumiditySensor extends Sensor
 	}
 	
 	/**
-	 * Gibt den Temperaturwert zurueck von der vorherigen Feuchtigkeitsmessung
+	 * Gibt den Temperaturwert zurück von der vorherigen Feuchtigkeitsmessung
 	 * @return	Temperaturwert als double
 	 */
 	public double getPreviousTemperature()
@@ -194,7 +195,7 @@ public class HumiditySensor extends Sensor
 	
 	/**
 	 * Liest die Serial-Number aus des Bausteins
-	 * @return	Serial-Number in 8 bytes (Siehe Datenblatt)
+	 * @return	Serial-Number in 8 Bytes (Siehe Datenblatt)
 	 */
 	public byte[] getSerialNumber()
 	{
@@ -212,7 +213,7 @@ public class HumiditySensor extends Sensor
 	
 	/**
 	 * Liest die Firmware-Revision aus
-	 * @return	Firmware-Revision als byte (siehe Datenblatt fuer interpretation)
+	 * @return	Firmware-Revision als Byte (siehe Datenblatt für Interpretation)
 	 */
 	public byte getFirmwareRevision()
 	{
@@ -221,9 +222,9 @@ public class HumiditySensor extends Sensor
 	}
 	
 	/**
-	 * Wandelt den empfangenen code des Bausteins in einen Luftfeuchtigkeitswert um
+	 * Wandelt den empfangenen Code des Bausteins in einen Luftfeuchtigkeitswert um
 	 * @param humidity_code	Messwert des Bausteins
-	 * @return				Gibt den Luftfeuchtigkeitswert zurueck
+	 * @return				Gibt den Luftfeuchtigkeitswert zurück
 	 */
 	private double convertCodeToHumidity(int humidity_code)
 	{
@@ -231,9 +232,9 @@ public class HumiditySensor extends Sensor
 	}
 	
 	/**
-	 * Wandelt den empfangenen code des Bausteins in einen Temperaturwert um
+	 * Wandelt den empfangenen Code des Bausteins in einen Temperaturwert um
 	 * @param temp_code		Messwert des Bausteins
-	 * @return				Gibt den Temperaturwert zurueck
+	 * @return				Gibt den Temperaturwert zurück
 	 */
 	private double convertCodeToTemperature(int temp_code)
 	{

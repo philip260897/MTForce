@@ -23,7 +23,7 @@ public class EnOceanPi
 	public static final byte PACKETTYPE_RESERVED_1 			= 0x00; //RESERVED
 	public static final byte PACKETTYPE_RADIO 				= 0x01; //Radio telegram
 	public static final byte PACKETTYPE_RESPONSE 			= 0x02; //Response to any packet
-	public static final byte PACKETTYPE_RADIO_SUB_TEL 		= 0x03; //Radio subtelegram
+	public static final byte PACKETTYPE_RADIO_SUB_TEL 		= 0x03; //Radio Subtelegram
 	public static final byte PACKETTYPE_EVENT 				= 0x04; //Event message
 	public static final byte PACKETTYPE_COMMON_COMMAND 		= 0x05; //Common command
 	public static final byte PACKETTYPE_SMART_ACK_COMMAND 	= 0x06; //Smart Ack command
@@ -36,9 +36,9 @@ public class EnOceanPi
 	private boolean enabled = false;	//Gibt an ob EnOcean aktiviert ist oder nicht
 	
 	private List<OceanPacketReceivedEvent> listeners = new ArrayList<OceanPacketReceivedEvent>();	//Speichert alle EventListener
-	private Thread threadListener;		//Thread welcher fuer die Serielle Kommunikation verantwortlich ist
+	private Thread threadListener;		//Thread welcher für die Serielle Kommunikation verantwortlich ist
 	
-	private PacketBuilder builder;		//PacketBuilder welcher packete Parsed
+	private PacketBuilder builder;		//PacketBuilder welcher Pakete Parsed
 	private Response resp;				//Zuletzt erhaltene Antwort vom EnOcean
 	
 	private static EnOceanPi instance;
@@ -55,8 +55,8 @@ public class EnOceanPi
 	}
 	
 	/**
-	 * Fuegt einen neuen EventListener hinzu
-	 * @param listener	EventListener welcher hinzugefuegt werden soll
+	 * Fügt einen neuen EventListener hinzu
+	 * @param listener	EventListener welcher hinzugefügt werden soll
 	 */
 	public void addOceanPacketReceivedEvent(OceanPacketReceivedEvent listener)
 	{
@@ -75,13 +75,12 @@ public class EnOceanPi
 	/**
 	 * Initialisiert den EnOcean
 	 * @param comPort	COM-Port welcher mit dem EnOcean verbunden ist
-	 * @param baud		Baudrate mit der der datentransfer ablaeuft
+	 * @param baud		Baudrate mit der der Datentransfer abläuft
 	 */
 	public void init(String comPort, int baud)
 	{
 		if(enabled)
 		{
-			//System.out.println("[EnOceanPi] Init error! Already initialized!");
 			Logger.log(Status.ERROR, PREFIX, "Init error! Already initialized!");
 			return;
 		}
@@ -135,7 +134,7 @@ public class EnOceanPi
 	 * Schickt ein Packet und wartet auf eine Antwort vom EnOcean. Achtung! Diese Methode Blockiert bis eine Antwort kommt oder 
 	 * ein Timeout von 1 Sekunde erreicht wurde
 	 * @param packet	Packet welches geschickt werden soll
-	 * @return			Gibt die Antwort vom EnOcean zurueck, oder NULL wenn timeout
+	 * @return			Gibt die Antwort vom EnOcean zurück, oder NULL wenn timeout
 	 */
 	public Response sendPacketForResponse(OceanPacket packet) {
 		return this.sendPacketForResponse(packet, 1000);
@@ -146,7 +145,7 @@ public class EnOceanPi
 	 * die Timeoutzeit erreicht wurde
 	 * @param packet	Packet welches geschickt werden soll
 	 * @param timeout	Zeit nachdem die Blockade aufgehoben wird wenn keine Antwort rechtzeitig kommt
-	 * @return			Gibt die Antwort vom EnOcean zurueck, oder NULL wenn timeout
+	 * @return			Gibt die Antwort vom EnOcean zurück, oder NULL wenn timeout
 	 */
 	public Response sendPacketForResponse(OceanPacket packet, int timeout)
 	{
@@ -166,7 +165,7 @@ public class EnOceanPi
 	}
 	
 	/**
-	 * Schliest die serielle Kommunikation mit dem EnOcean
+	 * Schließt die serielle Kommunikation mit dem EnOcean
 	 */
 	public void close()
 	{

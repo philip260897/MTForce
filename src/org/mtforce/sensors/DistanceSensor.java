@@ -7,14 +7,8 @@ import org.mtforce.main.Logger;
 import org.mtforce.main.Logger.Status;
 
 /**
- * Beschreibung: Analoger Distanzsensor, haengt am ADC
+ * Beschreibung: Analoger Distanz-Sensor, hängt am ADC auf Kanal 1
  * 	Spannungswerte werden linear Interpoliert nach der Kennlinie im Datenblatt
- * 
- * Konstanten: Komplett
- * Funktionen: Komplett
- * 
- * TODO: 	Modultest
- * 			getDistance() -	Geschrieben aber nicht getestet
  */
 
 public class DistanceSensor extends Sensor
@@ -54,15 +48,21 @@ public class DistanceSensor extends Sensor
 	}
 	
 	/**
-	 * Gibt den Momentanen Distanzwert des Distanzsensors zurueck
+	 * Gibt den momentanen Distanzwert des Distanz-Sensors zurück
 	 * @return	Distanzwert in cm
 	 */
-	private double getDistance()
+	public double getDistance()
 	{
 		double distance = 0;	
 		if(adc.isEnabled())
 		{
 			adc.selectChannel(ADC.kgsCONF_SELECT_CH2);
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			distance = adc.getVoltage();
 			distance = convertVoltageToDistance(distance);
 		}
@@ -72,7 +72,7 @@ public class DistanceSensor extends Sensor
 	/**
 	 * Wandelt einen Spannungswert in einen Distanzwert um
 	 * @param voltage	Spannung in Volt
-	 * @return			Gibt einen Distanzwert in cm zurueck
+	 * @return			Gibt einen Distanzwert in cm zurück
 	 */
 	private double convertVoltageToDistance(double voltage)
 	{
@@ -86,10 +86,10 @@ public class DistanceSensor extends Sensor
 	}
 	
 	/**
-	 * Gibt einen darueberliegenden oder darunterliegenden Referenzwert zurueck. Benoetigt fuer Lineare Interpolation
+	 * Gibt einen darüberliegenden oder darunterliegenden Referenzwert zurück. Benötigt für Lineare Interpolation
 	 * @param voltage	Spannungswert in Volt
-	 * @param above		Waehlt den ueberliegenden Referenzwert aus oder den darunterliegenden
-	 * @return			Gibt ein Double-Array zurueck welches x und y Koordinaten zurueck
+	 * @param above		Wählt den darüberliegenden Referenzwert aus oder den darunterliegenden
+	 * @return			Gibt ein Double-Array zurück welches x und y Koordinaten zurück
 	 */
 	private Double[] getPoint(double voltage, boolean above)
 	{

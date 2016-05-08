@@ -17,21 +17,21 @@ import org.mtforce.interfaces.SPIManager;
  */
 public final class Sensors 
 {
-	private static List<Sensor> sensorList = new ArrayList<Sensor>();
+	private static List<Sensor> sensorList = new ArrayList<Sensor>();		//Enthält referenz auf jeden Sensor
 	
-	private static ADC adc = new ADC();
-	private static DistanceSensor distanceSensor = new DistanceSensor();
-	private static LightSensor lightSensor = new LightSensor();
-	//private static Ser7Seg ser7seg = new Ser7Seg();
-	//private static IOExpander ipExp = new IOExpander();
-	private static HumiditySensor humidity = new HumiditySensor();
-	private static DOF9 dof9 = new DOF9();
-	private static Barometer barometer = new Barometer();
-	private static Thermometer thermometer = new Thermometer();
+	private static ADC adc = new ADC();										//ADC
+	private static DistanceSensor distanceSensor = new DistanceSensor();	//Distanz-Sensor
+	private static LightSensor lightSensor = new LightSensor();				//Helligkeits-Sensor
+	private static HumiditySensor humidity = new HumiditySensor();			//Luftfeuchtigkeits-Sensor
+	private static DOF9 dof9 = new DOF9();									//Beschleunigungs-, Gyroskope-, Hall-Sensor
+	private static Barometer barometer = new Barometer();					//Luftdruck-Sensor
+	private static Thermometer thermometer = new Thermometer();				//Temperatur-Sensor
 	
 	
-	private static CommunicationManager i2c = null;
-	private static CommunicationManager spi = null;
+	private static CommunicationManager i2c = null;							//I2CManager
+	private static CommunicationManager spi = null;							//SPIManager
+	
+	private static boolean enabled = false;									
 	
 	protected Sensors()
 	{
@@ -39,7 +39,7 @@ public final class Sensors
 	}
 	
 	/**
-	 * Initialisiert Alle Sensoren und die CommunicationManager (I2C, SPI)
+	 * Initialisiert alle Sensoren und die CommunicationManager (I2C, SPI)
 	 * @throws Exception	Falls ein Fehler bei der Initialisierung vorkommt
 	 */
 	public static void initialize() throws Exception
@@ -47,8 +47,6 @@ public final class Sensors
 		sensorList.add(adc);
 		sensorList.add(distanceSensor);
 		sensorList.add(lightSensor);
-		//sensorList.add(ser7seg);
-		//sensorList.add(ipExp);
 		sensorList.add(thermometer);
 		sensorList.add(humidity);
 		sensorList.add(dof9);
@@ -64,9 +62,18 @@ public final class Sensors
 		
 		for(Sensor sensor : sensorList)
 			sensor.init();
+		
+		enabled = true;
 	}
 
-	
+	/**
+	 * Gibt an, ob Sensors Aktiv ist oder nicht. Sensors wird aktiv, sobald die initialize()-Methode aufgerufen wurde
+	 * @return	Aktiv oder nicht
+	 */
+	public static boolean isEnabled() {
+		return enabled;
+	}
+
 	//=====Getter und Setter=====//
 	public static void setI2C(CommunicationManager manager) {
 		i2c = manager;
@@ -91,18 +98,10 @@ public final class Sensors
 	public static DistanceSensor getDistanceSensor() {
 		return distanceSensor;
 	}
-
-	/*public static IOExpander getIOExpander() {
-		return ipExp;
-	}*/
 	
 	public static Thermometer getThermometer() {
 		return thermometer;
 	}
-	
-	/*public static Ser7Seg getSer7Seg() {
-		return ser7seg;
-	}*/
 	
 	public static ADC getAdc() {
 		return adc;

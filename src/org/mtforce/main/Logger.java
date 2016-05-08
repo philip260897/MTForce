@@ -49,8 +49,9 @@ public class Logger
 		log(Status.MESSAGE, prefix, message, true);
 	}
 	
-	public static void save() throws IOException
+	public static void save()
 	{
+		try{
 		FileWriter fw;
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 		fw = new FileWriter("C:\\Users\\Ben\\log_" + timeStamp + ".txt");
@@ -60,6 +61,7 @@ public class Logger
 			bw.newLine();
 		}	    
 	    bw.close();
+		}catch(Exception ex){ex.printStackTrace();}
 	}
 	
 	public enum Status 

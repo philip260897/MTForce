@@ -6,12 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.mtforce.main.Logger;
 import org.mtforce.main.Utils;
 
 public class RORGDecoder 
 {
-	private Map<String, Integer> knownIds = new HashMap<String, Integer>();
-	private List<RORGDecodeEvent> listeners = new ArrayList<RORGDecodeEvent>();
+	private Map<String,Integer> knownIds = new HashMap<String,Integer>();			//Liste aller bekannten IDs
+	private List<RORGDecodeEvent> listeners = new ArrayList<RORGDecodeEvent>();		//Liste aller EventListener
 	
 	public RORGDecoder()
 	{
@@ -19,17 +20,29 @@ public class RORGDecoder
 		knownIds.put("Button", Utils.toInt(new byte[]{0x01, (byte) 0xa1, 0x31, (byte) 0xc0}));
 	}
 	
+	/**
+	 * Fügt einen neuen EventListener hinzu
+	 * @param listener	EventListener
+	 */
 	public void addRORGDecodeEventListener(RORGDecodeEvent listener) {
 		this.listeners.add(listener);
 	}
 	
+	/**
+	 * Entfernt einen EventListener
+	 * @param listener	EventListener
+	 */
 	public void removeRORGDecodeEventListener(RORGDecodeEvent listener) {
 		this.listeners.remove(listener);
 	}
 	
+	/**
+	 * Dekodiert ein Telegram. Momentan unterstützt 4BS und RPS
+	 * @param telegram	Telegram welches dekodiert werden soll
+	 */
 	public void decode(byte[] telegram)
 	{
-		System.out.println(Utils.byteToHexString(telegram[0]));
+		//System.out.println(Utils.byteToHexString(telegram[0]));
 		if(telegram[0] == (byte)0xa5) //4BS Telegram
 		{
 			if(telegram.length == 10)
@@ -44,17 +57,17 @@ public class RORGDecoder
 					}
 					else
 					{
-						System.out.println("Teach-In Telegram");
+						Logger.log(Logger.Status.WARNING,"RORGDecoder" , "Teach-In Telegram received. Ignoring!");
 					}
 				}
 				else
 				{
-					System.out.println("Invalid ID!");
+					Logger.log(Logger.Status.WARNING, "RORGDecoder", "ID des Funkmoduls nicht bekannt!");
 				}
 			}
 			else
 			{
-				System.out.println("Invalid Length");
+				Logger.log(Logger.Status.WARNING, "RORGDecoder", "Paket hat eine Invalide länge");
 			}
 		}
 		else if(telegram[0] == (byte)0xf6)
@@ -83,21 +96,30 @@ public class RORGDecoder
 			}
 			else
 			{
-				System.out.println("Wrong length");
+				Logger.log(Logger.Status.WARNING, "RORGDecoder", "Paket hat eine Invalide länge");
 			}
 		}
 		else
 		{
-			System.out.println("unsupported telegram");
+			Logger.log(Logger.Status.WARNING, "RORGDecoder", "Telegram wird nicht unterstützt");
 		}
 	}
 	
+	/**
+	 * Löst das Temperaturempfangen-Event aus
+	 * @param temp	Empfangene Temperatur
+	 */
 	public void fireTemperatureEvent(double temp)
 	{
 		for(RORGDecodeEvent event: listeners)
 			event.thermometerReceived(temp);
 	}
 	
+	/**
+	 * Löst das Buttonpress-Event aus
+	 * @param button1	Button-State von Button1
+	 * @param button2	Button-State von Button2
+	 */
 	public void fireButtonEvent(int button1, int button2)
 	{
 		for(RORGDecodeEvent event: listeners)

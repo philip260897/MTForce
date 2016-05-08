@@ -29,15 +29,15 @@ public class Thermometer extends Sensor
 	public static final int kgsCONF_ALERT_STAT	=	0x0010; //Alert-Status-Bit
 	public static final int kgsCONF_ALERT_CNT	= 	0x0008;	//Alert-Output Aktiv
 	public static final int kgsCONF_ALERT_SEL	=	0x0004;	//Alert-Output Komparator Aktiv
-	public static final int kgsCONF_ALERT_POL	=	0x0002;	//Alert-Polaritaet Aktiv-HIGH
+	public static final int kgsCONF_ALERT_POL	=	0x0002;	//Alert-Polarität Aktiv-HIGH
 	public static final int kgsCONF_ALERT_MOD	=	0x0001;	//Alert-Mode Interrupt
 	public static final int kgsCONF_DEFAULT		=	0x0000;	//Standardkonfiguration
 	
-	public static final byte kgsREG_RES		=	0x08;	//Umwandlungsaufloesung-Register
-	public static final byte kgsRES_5		=	0x00;	//Aufloesung 0.5°C
-	public static final byte kgsRES_25		=	0x01;	//Aufloesung 0.25°C
-	public static final byte kgsRES_125		=	0x02;	//Aufloesung 0.125°C
-	public static final byte kgsRES_0625	=	0x03;	//Aufloesung 0.0625°C
+	public static final byte kgsREG_RES		=	0x08;	//Umwandlungsauflösungs-Register
+	public static final byte kgsRES_5		=	0x00;	//Auflösung 0.5°C
+	public static final byte kgsRES_25		=	0x01;	//Auflösung 0.25°C
+	public static final byte kgsRES_125		=	0x02;	//Auflösung 0.125°C
+	public static final byte kgsRES_0625	=	0x03;	//Auflösung 0.0625°C
 	
 	public static final byte kgsREG_TUPPER		=	0x02;	//Temperatur-Obergrenze-Register
 	public static final byte kgsREG_TLOWER		=	0x03;	//Temperatur-Untergrenze-Register
@@ -71,7 +71,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Setzt die Standard Konfiguration
+	 * Setzt die Standard-Konfiguration
 	 * WICHTIG: Nur vor dem Initialisieren aufrufen! 
 	 * @param defaultConfiguration	Konstante Konfiguration
 	 */
@@ -92,8 +92,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Führt read aus und schreibt das gelesene in einen Integer
-	 * @return	gelesener Integer Wert
+	 * Führt read aus und schreibt das Eingelesene in einen Integer
+	 * @return	gelesener Integer-Wert
 	 */
 	public int getConfiguration()
 	{
@@ -105,7 +105,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Gibt die Hysteresen-Konfiguration aus
+	 * Liest die Hysteresen-Konfiguration aus
 	 * @return 	Hysteresen-Konfiguration Integer
 	 */
 	public int getHysteresis()
@@ -116,7 +116,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob das Shutdown-Bit gesetzt ist
+	 * Gibt zurück ob das Shutdown-Bit gesetzt ist
 	 * @return	boolean ob gesetzt
 	 */
 	public boolean isShutdownSet()
@@ -126,7 +126,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob CriticalLock-Bit gesetzt ist
+	 * Gibt zurück ob CriticalLock-Bit gesetzt ist
 	 * @return boolean ob gesetzt
 	 */
 	public boolean isCriticalLockSet()
@@ -136,7 +136,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob Window-Bit gesetzt ist
+	 * Gibt zurück ob Window-Bit gesetzt ist
 	 * @return boolean ob gesetzt
 	 */
 	public boolean isWindowLockSet()
@@ -146,7 +146,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob InterruptClear-Bit gesetzt ist
+	 * Gibt zurück ob InterruptClear-Bit gesetzt ist
 	 * @return boolean ob gesetzt
 	 */
 	public boolean isInterruptClearSet()
@@ -156,7 +156,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob AlertOutputStatus-Bit gesetzt ist
+	 * Gibt zurück ob AlertOutputStatus-Bit gesetzt ist
 	 * @return boolean ob gesetzt
 	 */
 	public boolean isAlertOutputStatusSet()
@@ -166,7 +166,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob AlertOutputControl-Bit gesetzt ist
+	 * Gibt zurück ob AlertOutputControl-Bit gesetzt ist
 	 * @return boolean ob gesetzt
 	 */
 	public boolean isAlertOutputControlSet()
@@ -176,7 +176,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob AlertOutputSelectSet-Bit gesetzt ist
+	 * Gibt zurück ob AlertOutputSelectSet-Bit gesetzt ist
 	 * @return boolean ob gesetzt
 	 */
 	public boolean isAlertOutputSelectSet()
@@ -186,7 +186,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob AlertOutputPolaritySet-Bit gesetzt ist
+	 * Gibt zurück ob AlertOutputPolaritySet-Bit gesetzt ist
 	 * @return boolean ob gesetzt
 	 */
 	public boolean isAlertOutputPolaritySet()
@@ -196,7 +196,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob AlertOutputModeSet-Bit gesetzt ist
+	 * Gibt zurück ob AlertOutputModeSet-Bit gesetzt ist
 	 * @return boolean ob gesetzt
 	 */
 	public boolean isAlertOutputModeSet()
@@ -208,7 +208,7 @@ public class Thermometer extends Sensor
 	//=====Temperature Limits=====IMPLEMENTED
 	
 	/**
-	 * Schreibt das gewünschte Upper Limit ins Register
+	 * Schreibt das gewünschte Upper-Limit ins Register
 	 * @param limit		Upper Limit in Grad Celsius
 	 */
 	public void setTUpperLimit(double limit)
@@ -217,8 +217,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * gettet Upper Limit
-	 * @param return	Upper Limit in Grad Celsius
+	 * Liest Upper-Limit aus Register aus
+	 * @param return	Upper-Limit in Grad Celsius
 	 */
 	public double getTUpperLimit()
 	{
@@ -227,8 +227,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Schreibt das gewünschte Lower Limit ins Register
-	 * @param limit		Upper Lower in Grad Celsius
+	 * Schreibt das gewünschte Lower-Limit ins Register
+	 * @param limit		Lower-Limit in Grad Celsius
 	 */
 	public void setTLowerLimit(double limit)
 	{
@@ -236,8 +236,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * gettet Lower Limit
-	 * @param return	Lower Limit in Grad Celsius
+	 * Liest Lower-Limit aus Register aus
+	 * @param return	Lower-Limit in Grad Celsius
 	 */
 	public double getTLowerLimit()
 	{
@@ -246,8 +246,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Schreibt die gewünschte Critical Temperature ins Register
-	 * @param limit		Critical Temperature in Grad Celsius
+	 * Schreibt die gewünschte Critical-Temperature ins Register
+	 * @param limit		Critical-Temperature in Grad Celsius
 	 */
 	public void setTCritical(double limit)
 	{
@@ -255,8 +255,8 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * gettet Critical Temperature
-	 * @param return	Critical Temperature in Grad Celsius
+	 * Liest Critical-Temperature aus Register aus
+	 * @param return	Critical-Temperature in Grad Celsius
 	 */
 	public double getTCriticalLimit()
 	{
@@ -267,7 +267,7 @@ public class Thermometer extends Sensor
 	//=====Ta======IMPLEMENTED
 	
 	/**
-	 * Returned ob TemperatureCritical-Bit gesetzt ist
+	 * Gibt zurück ob Temperature-Critical-Bit gesetzt ist
 	 * COMMENT: True wenn Temperatur das gewünschte Critical Limit überschreitet
 	 * @return boolean ob gesetzt
 	 */
@@ -278,7 +278,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob TemperatureUpper-Bit gesetzt ist
+	 * Gibt zurück ob TemperatureUpper-Bit gesetzt ist
 	 * COMMENT: True wenn Temperatur das gewünschte Upper Limit überschreitet
 	 * @return boolean ob gesetzt
 	 */
@@ -289,7 +289,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned ob TemperatureLower-Bit gesetzt ist
+	 * Gibt zurück ob TemperatureLower-Bit gesetzt ist
 	 * COMMENT: True wenn Temperatur das gewünschte Lower Limit überschreitet
 	 * @return boolean ob gesetzt
 	 */
@@ -300,7 +300,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned die Temperatur
+	 * Gibt die Temperatur zurück
 	 * @return Temperatur
 	 */
 	public double getTemperature()
@@ -312,7 +312,7 @@ public class Thermometer extends Sensor
 	//====Manufacturer ID============IMPLEMENTED
 	
 	/**
-	 * Returned die Manufacturer ID
+	 * Gibt die Manufacturer ID zurück
 	 * @return Manufacturer ID
 	 */
 	public int getManufacturerID()
@@ -324,7 +324,7 @@ public class Thermometer extends Sensor
 	//====Device ID and Revision======IMPLEMENTED
 	
 	/**
-	 * Returned die Device ID
+	 * Gibt die Device ID zurück
 	 * @return Device ID
 	 */
 	public int getDeviceID()
@@ -334,7 +334,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned die Devision
+	 * Gibt die Devision zurück
 	 * @return Devision
 	 */
 	public int getRevision()
@@ -346,7 +346,7 @@ public class Thermometer extends Sensor
 	//======RESOLUTIOn=====
 	
 	/**
-	 * gewünschte Auflösung setzen
+	 * Gewünschte Auflösung einstellen
 	 * @param 	gewünschte Auflösung
 	 */
 	public void setResolution(byte resolution)
@@ -355,7 +355,7 @@ public class Thermometer extends Sensor
 	}
 	
 	/**
-	 * Returned die Auflösung
+	 * Gibt die Auflösung zurück
 	 * @return resolution
 	 */
 	public byte getResolution()
@@ -368,8 +368,8 @@ public class Thermometer extends Sensor
 	
 	/**
 	 * Konvertiert einen Double Wert in Q-Notation
-	 * @param limit Parameter welcher Wert konvertiert werden soll
-	 * @return 	Konvertiertes Ergebnis in Q-Notation
+	 * @param limit	Parameter welcher Wert konvertiert werden soll
+	 * @return		Konvertiertes Ergebnis in Q-Notation
 	 */
 	private byte[] formatWriteLimits(double limit)
 	{
@@ -387,8 +387,8 @@ public class Thermometer extends Sensor
 	
 	/**
 	 * Q-Notation zu double Wert
-	 * @param packet Parameter welcher Wert konvertiert werden soll
-	 * @return d	Konvertiertes Ergebnis
+	 * @param packet	Parameter welcher Wert konvertiert werden soll
+	 * @return d		Konvertiertes Ergebnis
 	 */
 	private double formatReadLimits(byte[] packet)
 	{
@@ -401,23 +401,5 @@ public class Thermometer extends Sensor
 		if(Utils.isBitSet(packet[1], 4))
 			d *= -1;
 		return d;
-	}
-	
-	/**
-	 * Schreibt den Wert value in das Register red und liest anschliesend den Wert aus dem Register reg um festzustellen ob der schreibvorgang erfolgreich war.
-	 * bcount gibt an, wie viele byte von value ins Register geschrieben werden.
-	 * @param iReg
-	 * @param iValue
-	 * @param iBcount
-	 * @return
-	 */
-	private boolean checkRegister(byte iReg, int iValue, int iBcount)
-	{
-		byte[] txPacket = Utils.toBytes(iValue, iBcount);
-		i2c.write(kgsADDRESS, iReg, txPacket, true);
-		
-		byte[] rxPacket = i2c.read(kgsADDRESS, iReg, 2, true);
-		
-		return Utils.compareBytes(txPacket, rxPacket);
 	}
 }

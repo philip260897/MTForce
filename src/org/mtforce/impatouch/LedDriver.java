@@ -14,28 +14,28 @@ import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
 /**
- * Beschreibung: Diese Klasse steuert die LED-Treiber auf dem Board. Aus den angegebenen Symbolen wird ein Bitstream generiert, welcher ueber SPI
+ * Beschreibung: Diese Klasse steuert die LED-Treiber auf dem Board. Aus den angegebenen Symbolen wird ein Bitstream generiert, welcher über SPI
  * 	in die Bausteine geschrieben wird.
  * 
  * Konstanten: Komplett
  * Funktionen: NICHT Komplett
  * 
- * TODO: Alle Sensoren hinzufuegen, getter und setter, Modultest
+ * TODO: Alle Sensoren hinzufügen, getter und setter, Modultest
  */
 public class LedDriver 
 {
 	//Decode-Modes
 	public static final byte kgsDM_NO_DECODE	= 0x00;	//7-Segmentanzeigen werden nicht dekodiert
-	public static final byte kgsDM_DECODE_0		= 0x01; //Code-B/HEX dekodieren nur fuer digit 0
-	public static final byte kgsDM_DECODE_0_2	= 0x07; //Code-B/HEX dekodieren nur fuer 0-2
-	public static final byte kgsDM_DECODE_0_5	= 0x3F; //Code-B/HEX dekodieren nur fuer 0-5
-	public static final byte kgsDM_DECODE_0_2_5 = 0x25; //Code-B/HEX dekodieren nur fuer 0, 2, 5
+	public static final byte kgsDM_DECODE_0		= 0x01; //Code-B/HEX dekodieren nur für digit 0
+	public static final byte kgsDM_DECODE_0_2	= 0x07; //Code-B/HEX dekodieren nur für 0-2
+	public static final byte kgsDM_DECODE_0_5	= 0x3F; //Code-B/HEX dekodieren nur für 0-5
+	public static final byte kgsDM_DECODE_0_2_5 = 0x25; //Code-B/HEX dekodieren nur für 0, 2, 5
 	
 	//Shutdown-Modes
-	public static final byte kgsSHDM_SHD_RESET_FEAT		= 0x00;			//Shutdown Mode, Resetet Feature-Register auf Default-Werte
-	public static final byte kgsSHDM_SHD_UC_FEAT		= (byte)0x80;	//Shutdown Mode, Feature-Register unveraendert
-	public static final byte kgsSHDM_NORM_RESET_FEAT	= 0x01;			//Normal Mode, Resetet Feature-Register auf Default-Werte
-	public static final byte kgsSHDM_NORM_UC_FEAT		= (byte)0x81;	//Normal Mode, Feature-Register unveraendert
+	public static final byte kgsSHDM_SHD_RESET_FEAT		= 0x00;			//Shutdown Mode, Resettet Feature-Register auf Default-Werte
+	public static final byte kgsSHDM_SHD_UC_FEAT		= (byte)0x80;	//Shutdown Mode, Feature-Register unverändert
+	public static final byte kgsSHDM_NORM_RESET_FEAT	= 0x01;			//Normal Mode, Resettet Feature-Register auf Default-Werte
+	public static final byte kgsSHDM_NORM_UC_FEAT		= (byte)0x81;	//Normal Mode, Feature-Register unverändert
 	
 	//Scan-Limit
 	public static final byte kgsSCAN_LIMIT_0		=	0x00;	//Scan-Limit 0
@@ -112,6 +112,7 @@ public class LedDriver
 		instance = this;
 	}
 	
+	
 	public static LedDriver getInstance() {
 		if(instance == null) new LedDriver();
 		return instance;
@@ -123,49 +124,15 @@ public class LedDriver
 	 */
 	public void initialize()
 	{
-		//i2c = (I2CManager)Sensors.getI2C();
 		LedDictionary.LoadDictionary();
 		spi = (SPIManager)Sensors.getSPI();
 		gpio = GpioFactory.getInstance();
 		pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, "LD", PinState.HIGH);
+		//pin.setState(PinState.LOW);
 	}
 	
 	/**
-	 * DEBUG: Schickt eine Testsymbol auf i2c (<- nur zum testen. spaeter spi)
-	 * @throws InterruptedException 
-	 */
-	public void sendTest() throws InterruptedException
-	{
-		LedDictionary.LoadDictionary();
-		
-		setGlobalColor(LedColor.BLUE);
-		LedDigit digit1 = LedDictionary.getDigit("1");
-		byte[] data = this.generateBytesFromDigit(digit1);
-		for(byte b : data)
-			System.out.println(Utils.byteToHexString(b));
-		
-		setShutdownModeAll(LedDriver.kgsSHDM_NORM_RESET_FEAT);
-		setScanLimitAll(LedDriver.kgsSCAN_LIMIT_7);
-		setDecodeModeAll(LedDriver.kgsDM_NO_DECODE);
-		setDisplayTestAll((byte)0x00);
-		setGlobalIntensityAll(0);
-
-		while(true) {
-			for(LedColor color : LedColor.values()) {
-				setGlobalColor(color);
-				setAllLedsOnAll(true);
-				/*for(int i = 0; i < 8; i++)
-				{
-					this.setIntensityAll(i, 15);
-					Thread.sleep(1000);
-					this.setIntensityAll(i, 0);
-				}*/
-			}
-		}
-	}
-	
-	/**
-	 * Laesst alle LEDs leuchten
+	 * Lässt alle LEDs leuchten
 	 * @param on	Gibt an ob LEDs leuchten sollen oder nicht
 	 */
 	public void setAllLedsOnAll(boolean on)
@@ -176,7 +143,7 @@ public class LedDriver
 	}
 	
 	/**
-	 * Laesst alle LEDs einer Anzeigen leuchten
+	 * Lässt alle LEDs einer Anzeigen leuchten
 	 * @param display	Index der Anzeige
 	 * @param on		Gibt an ob LEDs leuchten sollen oder nicht
 	 */
@@ -220,14 +187,14 @@ public class LedDriver
 	/**
 	 * Schreibt Daten in alle AS1116-Chips
 	 * @param data		Daten welche geschickt werden sollen
-	 * @param address	Register adresse in welche geschrieben werden sollen
+	 * @param address	Register Adresse in welche geschrieben werden sollen
 	 */
 	public void writeAll(byte data, byte address)
 	{
-		pin.setState(PinState.LOW);
+		pin.setState(PinState.HIGH);
 		for(int i = 0; i < numberOfDevices; i++)
 			spi.write(Utils.reverseBitsByte(data), Utils.reverseBitsByte(address));
-		pin.setState(PinState.HIGH);
+		pin.setState(PinState.LOW);
 	}
 	
 	/**
@@ -238,7 +205,7 @@ public class LedDriver
 	 */
 	private void write(int display, byte data, byte address)
 	{
-		pin.setState(PinState.LOW);
+		pin.setState(PinState.HIGH);
 		int c = 0;
 		for (c = numberOfDevices-1; c > display; c--) {
 			spi.write((byte)0x00, (byte)0x00);
@@ -249,13 +216,13 @@ public class LedDriver
 		for (c =display-1; c >= 0; c--) {
 			spi.write((byte)0x00, (byte)0x00);   
 		}
-		pin.setState(PinState.HIGH);
+		pin.setState(PinState.LOW);
 	}
 	
 	/**
-	 * Generiert den Bitstream der benoetigt wird fuer ein Symbol
-	 * @param digit	Symbold welches in ein Bitstream umgewandel werden soll
-	 * @return		Gibt den generierten bitstream in Byte-Arrays zurueck
+	 * Generiert den Bitstream der benötigt wird für ein Symbol
+	 * @param digit	Symbol welches in ein Bitstream umgewandelt werden soll
+	 * @return		Gibt den generierten Bitstream in Byte-Arrays zurück
 	 */
 	private byte[] generateBytesFromDigit(LedDigit digit)
 	{
@@ -302,8 +269,8 @@ public class LedDriver
 	}
 	
 	/**
-	 * Setzt die globale Intensitaet der Anzeige
-	 * @param intensity	Intensitaet von 0...15
+	 * Setzt die globale Intensität der Anzeige
+	 * @param intensity	Intensität von 0...15
 	 */
 	public void setGlobalIntensityAll(int intensity)
 	{
@@ -311,9 +278,9 @@ public class LedDriver
 	}
 	
 	/**
-	 * Setzt die globale Intensitaet einer bestimmten Anzeige
+	 * Setzt die globale Intensität einer bestimmten Anzeige
 	 * @param display	Index der Anzeige
-	 * @param intensity	Intensitaet von 0...15
+	 * @param intensity	Intensität von 0...15
 	 */
 	public void setGlobalIntensity(int display, int intensity)
 	{
@@ -399,9 +366,9 @@ public class LedDriver
 
 	private byte[][] digitIntensities = new byte[4][8];		//Merkt eingestellte Intensitaet
 	/**
-	 * Setzt die Intensitaet von einem Digit auf allen Anzeigen
+	 * Setzt die Intensität von einem Digit auf allen Anzeigen
 	 * @param digit		Digit welcher verstellt werden soll (0...7)
-	 * @param intensity	Intensitaet (0...15)
+	 * @param intensity	Intensität (0...15)
 	 */
 	public void setIntensityAll(int digit, int intensity)
 	{
@@ -410,10 +377,10 @@ public class LedDriver
 	}
 	
 	/**
-	 * Setzt die Intensitaet von einem Digit auf einer bestimmten Anzeige
+	 * Setzt die Intensität von einem Digit auf einer bestimmten Anzeige
 	 * @param display	Index der Anzeige
 	 * @param digit		Digit welcher verstellt werden soll (0...7)
-	 * @param intensity	Intensitaet (0...15)
+	 * @param intensity	Intensität (0...15)
 	 */
 	public void setIntensity(int display, int digit, int intensity)
 	{

@@ -6,14 +6,14 @@ import org.mtforce.main.Logger.Status;
 
 public class PacketBuilder 
 {
-	private String PREFIX = "PacketBuilder";					//Prefix fuer den Logger
+	private String PREFIX = "PacketBuilder";					//Prefix für den Logger
 	private boolean buildStart = false;							//Gibt an, ob ein neues Packet aufgebaut wird
 	private boolean buildDone = false;							//Gibt an, ob ein Packet fertiggestellt wurde
-	private int count = 0;										//Zaehlervariable
-	private int countData = 0;									//Zaehlervariable fuer Packetdaten
-	private int countOptional = 0;								//Zaehlervariable fuer optionale Daten
-	private byte[] headerDataLength = new byte[] {0x00,0x00};	//Speichert die Packetdatenlaenge
-	private byte[] data;										//Speichert Packetdaten
+	private int count = 0;										//Zählervariable
+	private int countData = 0;									//Zählervariable für Paketdaten
+	private int countOptional = 0;								//Zählervariable für optionale Daten
+	private byte[] headerDataLength = new byte[] {0x00,0x00};	//Speichert die Paketdatenlänge
+	private byte[] data;										//Speichert Paketdaten
 	private byte[] dataOptional;								//Speichert optionale Daten
 	private boolean enabled = true;								//Aktiviert oder deaktiviert den PacketBuilder
 	
@@ -60,10 +60,6 @@ public class PacketBuilder
 							System.out.println("[PacketBuilder] Data CRC8 is invalid!");
 						buildDone = true;
 						buildStart = false;
-						//System.out.println("Data Length: "+Utils.toInt(headerDataLength));
-						//System.out.println("Data Optional: "+(int)packet.getHeaderOptionalLength());
-						//System.out.println("CRC8: "+Utils.byteToHexString(packet.getDataCRC8()) + " "+ Utils.byteToHexString(packet.calculateDataCrc8()));
-						//System.out.println("[PacketBuilder] Building done!");
 						Logger.log(PREFIX, "Building done!");
 					}
 				}
@@ -84,14 +80,13 @@ public class PacketBuilder
 			}
 			else
 			{
-				//System.out.println("[PacketBuilder] Ignoring transmission: "+Utils.byteToHexString(b));
 				Logger.log(Status.WARNING, PREFIX, "Ignoring transmission: "+Utils.byteToHexString(b));
 			}
 		}
 	}
 	
 	/**
-	 * Gibt das aufgebaute OceanPacket zurueck
+	 * Gibt das aufgebaute OceanPacket zurück
 	 * @return	OceanPacket
 	 */
 	public OceanPacket getPacket() {
@@ -100,16 +95,16 @@ public class PacketBuilder
 	}
 	
 	/**
-	 * Gibt an, ob das Packet vollstaendig ist
-	 * @return	Vollstaendigkeit des Packetes
+	 * Gibt an, ob das Paket vollständig ist
+	 * @return	Vollständigkeit des Paketes
 	 */
 	public boolean isPacketDone() {
 		return buildDone;
 	}
 	
 	/**
-	 * Aktiviert oder Deaktiviert den PacketBuilder
-	 * @param enabled	Aktviviert oder Deaktiviert den PacketBuilder
+	 * Aktiviert oder deaktiviert den PacketBuilder
+	 * @param enabled	Aktiviert oder deaktiviert den PacketBuilder
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;

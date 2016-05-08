@@ -5,8 +5,8 @@ import org.mtforce.main.Utils;
 public class OceanPacket 
 {
 	private byte headerSyncByte = 0x55;					//Synchronisationsbyte
-	private byte[] headerDataLength = { 0x00, 0x00 };	//Datenlaenge
-	private byte headerOptionalLength = 0x00;			//Optionale Datenlaenge
+	private byte[] headerDataLength = { 0x00, 0x00 };	//Datenlänge
+	private byte headerOptionalLength = 0x00;			//Optionale Datenlänge
 	private byte headerPacketType = 0x00;				//Packettype
 	private byte headerCRC8 = 0x00;						//Header-CRC8
 		
@@ -45,8 +45,8 @@ public class OceanPacket
 	}
 	
 	/**
-	 * Berechnet den CRC8-Wert fuer den Header
-	 * @return	Gibt den CRC8-Wert zurueck
+	 * Berechnet den CRC8-Wert für den Header
+	 * @return	Gibt den CRC8-Wert zurück
 	 */
     private byte calculateHeaderCrc8() {
         CRC8 crc8 = new CRC8();
@@ -58,8 +58,8 @@ public class OceanPacket
     }
     
     /**
-     * Berechnet den CRC8-Wert fuer die Payload
-     * @return	Gibt den CRC8-Wert zurueck
+     * Berechnet den CRC8-Wert für die Payload
+     * @return	Gibt den CRC8-Wert zurück
      */
     private byte calculateDataCrc8() {
         CRC8 crc8 = new CRC8();
@@ -82,7 +82,7 @@ public class OceanPacket
 	}
 	
 	/**
-	 * Gibt den PacketType zurueck
+	 * Gibt den PacketType zurück
 	 * @return	PacketType
 	 */
 	public byte getPacketType()
@@ -91,23 +91,23 @@ public class OceanPacket
 	}
 
 	/**
-	 * Gibt die Datenlaenge zurueck
-	 * @return	Datenlaenge
+	 * Gibt die Datenlänge zurück
+	 * @return	Datenlänge
 	 */
 	public byte[] getHeaderDataLength() {
 		return headerDataLength;
 	}
 
 	/**
-	 * Gibt die optionale Datenlaenge zurueck
-	 * @return	Optionale Datenlaenge
+	 * Gibt die optionale Datenlänge zurück
+	 * @return	Optionale Datenlänge
 	 */
 	public byte getHeaderOptionalLength() {
 		return headerOptionalLength;
 	}
 
 	/**
-	 * Gibt den Header CRC8-Wert zurueck
+	 * Gibt den Header CRC8-Wert zurück
 	 * @return	CRC8-Wert
 	 */
 	public byte getHeaderCRC8() {
@@ -115,15 +115,15 @@ public class OceanPacket
 	}
 
 	/**
-	 * Gibt die Packetdaten zurueck
-	 * @return Packetdaten
+	 * Gibt die Paketdaten zurück
+	 * @return Paketdaten
 	 */
 	public byte[] getData() {
 		return data;
 	}
 
 	/**
-	 * Gibt die Optionalen Daten zurueck
+	 * Gibt die Optionalen Daten zurück
 	 * @return	optionale Daten
 	 */
 	public byte[] getDataOptional() {
@@ -131,7 +131,7 @@ public class OceanPacket
 	}
 
 	/**
-	 * Gibt den Payload CRC8-Wert zurueck
+	 * Gibt den Payload CRC8-Wert zurück
 	 * @return	CRC8-Wert
 	 */
 	public byte getDataCRC8() {
@@ -139,8 +139,8 @@ public class OceanPacket
 	}
 	
 	/**
-	 * Bestimmt die Packetdaten
-	 * @param data	Packetdaten
+	 * Bestimmt die Paketdaten
+	 * @param data	Paketdaten
 	 */
 	public void setData(byte ...data) {
 		this.data = data;
@@ -155,24 +155,24 @@ public class OceanPacket
 	}
 	
 	/**
-	 * Gibt zurueck ob der CRC8 vom Header mit dem berechneten CRC8 uebereinstimmt
-	 * @return	uebereinstimmung des CRC8
+	 * Gibt zurück ob der CRC8 vom Header mit dem berechneten CRC8 übereinstimmt
+	 * @return	Übereinstimmung des CRC8
 	 */
 	public boolean isHeaderValid() {
 		return headerCRC8 == this.calculateHeaderCrc8();
 	}
 	
 	/**
-	 * Gibt zurueck ob der CRC8 von der Playload mit dem berechneten CRC8 uebereinstimmt
-	 * @return	uebereinstimmung des CRC8
+	 * Gibt zurück ob der CRC8 von der Payload mit dem berechneten CRC8 übereinstimmt
+	 * @return	Übereinstimmung des CRC8
 	 */
 	public boolean isDataValid() {
 		return dataCRC8 == this.calculateDataCrc8();
 	}
 	
 	/**
-	 * Baut ein OceanPacket aus einem rohem Datenbuffer
-	 * @param bytes			Datenbuffer mit packetdaten
+	 * Baut ein OceanPacket aus einem rohem Datenpuffer
+	 * @param bytes			Datenpuffer mit Paketdaten
 	 * @throws Exception	Wenn kein valides Packet
 	 */
 	public void parsePacket(byte[] bytes) throws Exception
@@ -198,8 +198,8 @@ public class OceanPacket
 	}
 	
 	/**
-	 * Schreibt die rohdaten in ein Datenbuffer
-	 * @return	Datenbuffer mit rohdaten
+	 * Schreibt die Rohdaten in ein Datenpuffer
+	 * @return	Datenpuffer mit Rohdaten
 	 */
 	public byte[] toBytes()
 	{
@@ -243,7 +243,7 @@ public class OceanPacket
 	}
 	
 	/**
-	 * Gibt das Packet in der Console aus
+	 * Gibt das Packet in die Console aus
 	 */
 	public void print()
 	{
@@ -279,7 +279,7 @@ public class OceanPacket
 	}
 
 	/**
-	 * Gibt das Synchronisationsbyte zurueck
+	 * Gibt das Synchronisationsbyte zurück
 	 * @return	Synchronisationsbyte
 	 */
 	protected byte getHeaderSyncByte() {
@@ -295,7 +295,7 @@ public class OceanPacket
 	}
 
 	/**
-	 * Gibt den PacketType zurueck
+	 * Gibt den PacketType zurück
 	 * @return	PacketType
 	 */
 	protected byte getHeaderPacketType() {
@@ -311,15 +311,15 @@ public class OceanPacket
 	}
 
 	/**
-	 * Setzt Datenlaenge
-	 * @param headerDataLength	Datenlaenge
+	 * Setzt Datenlänge
+	 * @param headerDataLength	Datenlänge
 	 */
 	protected void setHeaderDataLength(byte[] headerDataLength) {
 		this.headerDataLength = headerDataLength;
 	}
 
 	/**
-	 * Setzt die optionale datenlaenge
+	 * Setzt die optionale Datenlänge
 	 */
 	protected void setHeaderOptionalLength(byte headerOptionalLength) {
 		this.headerOptionalLength = headerOptionalLength;
