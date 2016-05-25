@@ -128,7 +128,8 @@ public class LedDriver
 		spi = (SPIManager)Sensors.getSPI();
 		gpio = GpioFactory.getInstance();
 		pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, "LD", PinState.HIGH);
-		//pin.setState(PinState.LOW);
+		//TODO pin.setState(PinState.LOW);
+		pin.setState(PinState.HIGH); //DEBUG
 	}
 	
 	/**
