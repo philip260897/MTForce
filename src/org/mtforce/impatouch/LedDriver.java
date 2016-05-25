@@ -205,7 +205,8 @@ public class LedDriver
 	 */
 	private void write(int display, byte data, byte address)
 	{
-		pin.setState(PinState.HIGH);
+		//TODO: pin.setState(PinState.HIGH);
+		pin.setState(PinState.LOW); //DEBUG
 		int c = 0;
 		for (c = numberOfDevices-1; c > display; c--) {
 			spi.write((byte)0x00, (byte)0x00);
@@ -216,7 +217,8 @@ public class LedDriver
 		for (c =display-1; c >= 0; c--) {
 			spi.write((byte)0x00, (byte)0x00);   
 		}
-		pin.setState(PinState.LOW);
+		//TODO: pin.setState(PinState.LOW);
+		pin.setState(PinState.HIGH); //DEBUG
 	}
 	
 	/**
