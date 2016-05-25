@@ -1,7 +1,5 @@
 package org.mtforce.main;
 
-import java.util.Date;
-
 import org.mtforce.enocean.EnOceanPi;
 import org.mtforce.enocean.OceanPacket;
 import org.mtforce.enocean.OceanPacketReceivedEvent;
@@ -11,19 +9,10 @@ import org.mtforce.enocean.Response;
 import org.mtforce.impatouch.LedColor;
 import org.mtforce.impatouch.LedDriver;
 import org.mtforce.sensors.ADC;
-import org.mtforce.sensors.Barometer;
 import org.mtforce.sensors.DOF9;
 import org.mtforce.sensors.LightSensor;
 import org.mtforce.sensors.Sensors;
 import org.mtforce.sensors.Thermometer;
-
-import com.pi4j.io.gpio.GpioController;
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalInput;
-import com.pi4j.io.gpio.PinPullResistance;
-import com.pi4j.io.gpio.RaspiPin;
-import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
-import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.pi4j.io.serial.Serial;
 
 public class Main 
@@ -168,12 +157,7 @@ public class Main
 			driver.setScanLimitAll(LedDriver.kgsSCAN_LIMIT_7);
 			driver.setGlobalColor(LedColor.RED);
 			
-			
-			
-			while(true)
-			{
-				driver.setAllLedsOnAll(true);
-			}*/
+
 			
 
 			/*DOF9 dof = Sensors.getDof9();
