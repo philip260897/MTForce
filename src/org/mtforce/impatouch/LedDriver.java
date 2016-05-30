@@ -21,6 +21,9 @@ import com.pi4j.io.gpio.RaspiPin;
  * Funktionen: NICHT Komplett
  * 
  * TODO: Alle Sensoren hinzufügen, getter und setter, Modultest
+ * 
+ * Zum invertieren des LD signals muss man folgende Zeilen aendern:
+ * 	195, 200, 212, 224
  */
 public class LedDriver 
 {
