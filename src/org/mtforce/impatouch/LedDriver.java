@@ -128,7 +128,7 @@ public class LedDriver
 		spi = (SPIManager)Sensors.getSPI();
 		gpio = GpioFactory.getInstance();
 		pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, "LD", PinState.HIGH);
-		//TODO pin.setState(PinState.LOW);
+		//pin.setState(PinState.LOW); //TODO
 		pin.setState(PinState.HIGH); //DEBUG
 	}
 	
@@ -192,10 +192,13 @@ public class LedDriver
 	 */
 	public void writeAll(byte data, byte address)
 	{
-		pin.setState(PinState.HIGH);
+		//pin.setState(PinState.HIGH); //TODO
+		pin.setState(PinState.LOW); //DEBUG
 		for(int i = 0; i < numberOfDevices; i++)
 			spi.write(Utils.reverseBitsByte(data), Utils.reverseBitsByte(address));
-		pin.setState(PinState.LOW);
+		
+		//pin.setState(PinState.LOW); //TODO
+		pin.setState(PinState.HIGH); //DEBUG
 	}
 	
 	/**
@@ -206,7 +209,7 @@ public class LedDriver
 	 */
 	private void write(int display, byte data, byte address)
 	{
-		//TODO: pin.setState(PinState.HIGH);
+		//pin.setState(PinState.HIGH); //TODO
 		pin.setState(PinState.LOW); //DEBUG
 		int c = 0;
 		for (c = numberOfDevices-1; c > display; c--) {
@@ -218,7 +221,7 @@ public class LedDriver
 		for (c =display-1; c >= 0; c--) {
 			spi.write((byte)0x00, (byte)0x00);   
 		}
-		//TODO: pin.setState(PinState.LOW);
+		//pin.setState(PinState.LOW); //TODO
 		pin.setState(PinState.HIGH); //DEBUG
 	}
 	
